@@ -21,7 +21,7 @@ START
 
             ; SR: XXXXXIII XXXXXXXX
             ORI.W   #$0700,SR
-            
+
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
@@ -44,10 +44,10 @@ START
 
 ; --- SYNC ---------------------------------------------------------------------
 
-            TST.B   (SCRINTCT)
+.WINT       TST.B   (SCRINTCT)
             BEQ     .WINT
-            CLR.B   (SCRINTCT)            
-
+            CLR.B   (SCRINTCT)
+            
             ; THE FOLLOWING SYNC STRATEGY IS ****WRONG****
             ;MOVE.B  #23,D0
             ;MOVE.L  #1,D1
@@ -76,7 +76,7 @@ START
             ADD.W   #16,D4
             TRAP    #15
             
-            TRAP    #SCRUPTN                     ; UPDATE DOUBLE BUFFER
+            TRAP    #SCRUPTN                ; UPDATE DOUBLE BUFFER
 
             BRA     .LOOP
 
@@ -89,9 +89,7 @@ START
 
 
 
-
-
 *~Font name~Fixedsys~
-*~Font size~9~
+*~Font size~24~
 *~Tab type~0~
 *~Tab size~4~

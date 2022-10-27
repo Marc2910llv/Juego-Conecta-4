@@ -9,18 +9,17 @@ SYSINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            
-            MOVE.L  #SCRPLOT,($80)
-            MOVE.L  #KBDUPD,($84)
+            MOVE.L  #SCRPLOT,($80+SCRUPTN*4)
+            MOVE.L  #KBDUPD,($80+KBDUPTN*4)
             MOVE.L  #SCRTIM,($60+SCRINTN*4)
             MOVE.L  #MOUISR,($60+MOUINTN*4)
-            
+
             JSR     SCRINIT
             JSR     KBDINIT
             JSR     MOUINIT
             
             MOVE.W  SR,-(A7)
-            ANDI.W  #$D8FF,(A7) ;USER MODE AND ENABLE INTERRUPTS
+            ANDI.W  #$D8FF,(A7)	;USER MODE AND ENABLE INTERRUPTS
             RTE
             
 ; ------------------------------------------------------------------------------
@@ -49,14 +48,14 @@ MOUISR
             MOVE.B  #61,D0
             CLR.L   D1
             TRAP    #15
-            MOVE.L  D1,(MOUSEPOSX)
+            MOVE.L  D1,(MOUPOSX)
             MOVEM.L (A7)+,D0-D1
             RTE
             
 ; ------------------------------------------------------------------------------
 SCRINIT
 ; INIT SCREEN. SET SCREEN RESOLUTION, SET WINDOWED MODE, CLEAR SCREEN,
-; ENABLE DOUBLE BUFFER.
+; ENABLE DOUBLE BUFFER, ENABLE TIMED INTERRUPT.
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -78,15 +77,20 @@ SCRINIT
             MOVE.W  #$FF00,D1
             TRAP    #15
             
-            ; INSTALL SCRISR INTO SCRINTNMN
-            MOVE.L  #SCRISR,($60+SCRINTNM*4)
-            
-            ; ENABLE TIMER
-            
             ; ENABLE DOUBLE BUFFER
             MOVE.B  #92,D0
             MOVE.B  #17,D1
             TRAP    #15
+            
+            ; ENABLE TIMED INTERRUPT
+            MOVE.B  #32,D0
+            MOVE.B  #6,D1
+            MOVE.B  #$80|SCRINTN,D2
+            MOVE.L  #1000/SCRFPS,D3
+            TRAP    #15
+            
+            ; CLEAR INTERRUPT COUNTER
+            CLR.B   (SCRINTCT)
             
             MOVEM.L (A7)+,D0-D1
             
@@ -109,6 +113,16 @@ SCRPLOT
             MOVE.W  #$FF00,D1
             TRAP    #15
             MOVEM.W (A7)+,D0-D1
+            RTE
+
+; ------------------------------------------------------------------------------
+SCRTIM
+; TIMED INTERRUPT SERVICE ROUTINE
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            ADDQ.B  #1,(SCRINTCT)
             RTE
 
 ; ------------------------------------------------------------------------------
@@ -176,6 +190,6 @@ KBDUPD
 
 
 *~Font name~Fixedsys~
-*~Font size~9~
+*~Font size~24~
 *~Tab type~0~
 *~Tab size~4~

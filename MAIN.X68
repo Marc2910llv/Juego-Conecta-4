@@ -35,7 +35,7 @@ START
 
 ; READ INPUT DEVICES
 
-            TRAP    #1
+            TRAP    #KBDUPTN
 
 ; UPDATE GAME LOGIC
 
@@ -44,10 +44,14 @@ START
 
 ; --- SYNC ---------------------------------------------------------------------
 
+            TST.B   (SCRINTCT)
+            BEQ     .WINT
+            CLR.B   (SCRINTCT)            
+
             ; THE FOLLOWING SYNC STRATEGY IS ****WRONG****
-            MOVE.B  #23,D0
-            MOVE.L  #1,D1
-            TRAP    #15
+            ;MOVE.B  #23,D0
+            ;MOVE.L  #1,D1
+            ;TRAP    #15
 
 ; --- PLOT ---------------------------------------------------------------------
 
@@ -55,7 +59,24 @@ START
             JSR     BALPLOT
             JSR     PADPLOT
             
-            TRAP    #0                      ; UPDATE DOUBLE BUFFER
+            MOVE.B  #80,D0
+            MOVE.L  #$00000020,D1
+            TRAP    #15
+            ADDQ.B  #1,D0
+            MOVE.L  #$000000ff,D1
+            TRAP    #15
+            MOVE.B  #88,D0
+            MOVE.W  (MOUPOSX),D1
+            MOVE.W  (MOUPOSY),D2
+            MOVE.W  D1,D3
+            MOVE.W  D2,D4
+            SUB.W   #16,D1
+            SUB.W   #16,D2
+            ADD.W   #16,D3
+            ADD.W   #16,D4
+            TRAP    #15
+            
+            TRAP    #SCRUPTN                     ; UPDATE DOUBLE BUFFER
 
             BRA     .LOOP
 
@@ -65,6 +86,7 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
 
 
 

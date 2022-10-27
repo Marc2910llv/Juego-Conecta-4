@@ -18,6 +18,10 @@ KBDFIRE2    EQU     'M'
 KBDFIRE3    EQU     $10
 KBDPAUSE    EQU     'P'
 
+MOUEVTMV    EQU     4
+MOUEVTBU    EQU     2
+MOUEVTBD    EQU     1
+
 *~Font name~Fixedsys~
 *~Font size~24~
 *~Tab type~0~

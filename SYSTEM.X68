@@ -9,14 +9,48 @@ SYSINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            JSR     SCRINIT
-            JSR     KBDINIT
             
             MOVE.L  #SCRPLOT,($80)
             MOVE.L  #KBDUPD,($84)
+            MOVE.L  #SCRTIM,($60+SCRINTN*4)
+            MOVE.L  #MOUISR,($60+MOUINTN*4)
+            
+            JSR     SCRINIT
+            JSR     KBDINIT
+            JSR     MOUINIT
             
             MOVE.W  SR,-(A7)
-            ANDI.W  #$D8FF,(A7)
+            ANDI.W  #$D8FF,(A7) ;USER MODE AND ENABLE INTERRUPTS
+            RTE
+            
+; ------------------------------------------------------------------------------
+MOUINIT
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+
+            CLR.L   (MOUPOSY)
+            
+            MOVE.B  #60,D0
+            MOVE.W  #MOUINTN<<8|MOUEVTMV,D1
+            TRAP    #15
+            
+            RTS
+            
+; ------------------------------------------------------------------------------
+MOUISR
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+
+            MOVEM.L D0-D1,-(A7)
+            MOVE.B  #61,D0
+            CLR.L   D1
+            TRAP    #15
+            MOVE.L  D1,(MOUSEPOSX)
+            MOVEM.L (A7)+,D0-D1
             RTE
             
 ; ------------------------------------------------------------------------------
@@ -139,6 +173,7 @@ KBDUPD
             ROXL.B  #1,D2
             DBRA.W  D3,.LOOP
             RTS
+
 
 *~Font name~Fixedsys~
 *~Font size~9~

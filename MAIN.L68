@@ -1,0 +1,799 @@
+00001356 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 27/10/2022 17:48:02
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; TITLE       :
+00000000                             3  ; DESCRIPTION :
+00000000                             4  ; AUTHOR      :
+00000000                             5  ; HISTORY     :
+00000000                             6  ; ==============================================================================
+00000000                             7  
+00001000                             8              ORG     $1000
+00001000                             9              
+00001000                            10              INCLUDE "CONST.X68"
+00001000                            11  ; ==============================================================================
+00001000                            12  ; GAME CONSTANTS
+00001000                            13  ; ==============================================================================
+00001000                            14  
+00001000                            15  ; --- BALL RELATED CONTANTS ----------------------------------------------------
+00001000                            16  
+00001000  =00000008                 17  BALRAD      EQU     8                       ; BALL RADIUS
+00001000  =00AA0000                 18  BALPCOL     EQU     $00AA0000               ; BALL CONTOUR COLOR
+00001000  =00FF0000                 19  BALFCOL     EQU     $00FF0000               ; BALL FILL COLOR
+00001000  =00000003                 20  BALSPEED    EQU     3                       ; MAGNITUDE OF THE X AND Y VEL.
+00001000                            21  
+00001000                            22  ; --- PAD RELATED CONSTANTS ----------------------------------------------------
+00001000                            23  
+00001000  =00000010                 24  PADWIDTH    EQU     16                      ; PAD WIDTH
+00001000  =00000040                 25  PADHEIGH    EQU     64                      ; PAD HEIGHT
+00001000  =00000030                 26  PADPOSX     EQU     48                      ; PAD X POSITION
+00001000  =00000007                 27  PADSPEED    EQU     7                       ; MAGNITUDE OF THE Y DISPLACEMENT
+00001000  =0000FF00                 28  PADPCOL     EQU     $0000FF00               ; PAD CONTOUR COLOR
+00001000  =0000AA00                 29  PADFCOL     EQU     $0000AA00               ; PAD FILL COLOR
+00001000                            30  
+00001000                            31  ; --- SCOREBOARD RELATED CONSTANTS ---------------------------------------------
+00001000                            32  
+00001000  =00000000                 33  SCOFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
+00001000  =00000101                 34  SCOLINE1    EQU     $0101                   ; FIRST TEXT LINE COORDINATES
+00001000  =00000102                 35  SCOLINE2    EQU     $0102                   ; SECOND TEXT LINE COORDINATES
+00001000  =00000102                 36  -------------------- end include --------------------
+00001000                            37              INCLUDE "SYSCONST.X68"
+00001000                            38  ; ==============================================================================
+00001000                            39  ; SYSTEM CONSTANTS
+00001000                            40  ; ==============================================================================
+00001000                            41  
+00001000                            42  ; --- SCREEN RELATED CONSTANTS -------------------------------------------------
+00001000                            43  
+00001000  =00000280                 44  SCRWIDTH    EQU     640                     ; SCREEN WIDTH
+00001000  =000001E0                 45  SCRHEIGH    EQU     480                     ; SCREEN HEIGHT
+00001000  =00000032                 46  SCRFPS      EQU     50                      ; SCREEN FRAMES PER SECOND
+00001000                            47  
+00001000                            48  ; --- KEYCODES -----------------------------------------------------------------
+00001000                            49  
+00001000  =00000025                 50  KBDLEFT     EQU     $25
+00001000  =00000026                 51  KBDUP       EQU     $26
+00001000  =00000027                 52  KBDRIGHT    EQU     $27
+00001000  =00000028                 53  KBDDOWN     EQU     $28
+00001000  =00000020                 54  KBDFIRE1    EQU     ' '
+00001000  =0000004D                 55  KBDFIRE2    EQU     'M'
+00001000  =00000010                 56  KBDFIRE3    EQU     $10
+00001000  =00000050                 57  KBDPAUSE    EQU     'P'
+00001000                            58  
+00001000  =00000004                 59  MOUEVTMV    EQU     4
+00001000  =00000002                 60  MOUEVTBU    EQU     2
+00001000  =00000001                 61  MOUEVTBD    EQU     1
+00001000                            62  
+00001000                            63  ; --- TRAP NUMBERS -------------------------------------------------------------
+00001000                            64  
+00001000  =00000000                 65  SCRUPTN     EQU     0                       ; SCREEN UPDATE TRAP NUMBER
+00001000  =00000001                 66  KBDUPTN     EQU     1                       ; KEYBOARD UPDATE TRAP NUMBER
+00001000                            67  
+00001000                            68  ; --- INTERRUPT NUMBERS --------------------------------------------------------
+00001000                            69  
+00001000  =00000001                 70  SCRINTN     EQU     1                       ; TIMED INTERRUPT NUMBER
+00001000  =00000001                 71  -------------------- end include --------------------
+00001000                            72              INCLUDE "SYSTEM.X68"
+00001000                            73  ; ==============================================================================
+00001000                            74  ; SYSTEM
+00001000                            75  ; ==============================================================================
+00001000                            76              
+00001000                            77  ; ------------------------------------------------------------------------------
+00001000                            78  SYSINIT
+00001000                            79  ; INITIALIZE SYSTEM.
+00001000                            80  ; INPUT    : NONE
+00001000                            81  ; OUTPUT   : NONE
+00001000                            82  ; MODIFIES : NONE
+00001000                            83  ; ------------------------------------------------------------------------------
+00001000  21FC 000010AA 0080        84              MOVE.L  #SCRPLOT,($80+SCRUPTN*4)
+00001008  21FC 000010DA 0084        85              MOVE.L  #KBDUPD,($80+KBDUPTN*4)
+00001010  21FC 000010C4 0064        86              MOVE.L  #SCRTIM,($60+SCRINTN*4)
+Line 87 ERROR: Invalid syntax
+00001018                            87              MOVE.L  #MOUISR,($60+MOUINTN*4)
+00001018                            88  
+00001018  4EB9 00001066             89              JSR     SCRINIT
+0000101E  4EB9 000010CC             90              JSR     KBDINIT
+00001024  4EB9 0000103C             91              JSR     MOUINIT
+0000102A                            92              
+0000102A  40E7                      93              MOVE.W  SR,-(A7)
+0000102C  0257 D8FF                 94              ANDI.W  #$D8FF,(A7)             ;USER MODE AND ENABLE INTERRUPTS
+00001030  4E73                      95              RTE
+00001032                            96              
+00001032                            97  ; ------------------------------------------------------------------------------
+Line 98 ERROR: Symbol value differs between first and second pass
+00001032                            98  MOUINIT
+00001032                            99  ; INPUT    : NONE
+00001032                           100  ; OUTPUT   : NONE
+00001032                           101  ; MODIFIES : NONE
+00001032                           102  ; ------------------------------------------------------------------------------
+00001032                           103  
+00001032  42B9 000013E0            104              CLR.L   (MOUPOSY)
+00001038                           105              
+00001038  103C 003C                106              MOVE.B  #60,D0
+Line 107 ERROR: Invalid syntax
+0000103C                           107              MOVE.W  #MOUINTN<<8|MOUEVTMV,D1
+0000103C  4E4F                     108              TRAP    #15
+0000103E                           109              
+0000103E  4E75                     110              RTS
+00001040                           111              
+00001040                           112  ; ------------------------------------------------------------------------------
+Line 113 ERROR: Symbol value differs between first and second pass
+00001040                           113  MOUISR
+00001040                           114  ; INPUT    : NONE
+00001040                           115  ; OUTPUT   : NONE
+00001040                           116  ; MODIFIES : NONE
+00001040                           117  ; ------------------------------------------------------------------------------
+00001040                           118  
+00001040  48E7 C000                119              MOVEM.L D0-D1,-(A7)
+00001044  103C 003D                120              MOVE.B  #61,D0
+00001048  4281                     121              CLR.L   D1
+0000104A  4E4F                     122              TRAP    #15
+0000104C  23C1 000013E2            123              MOVE.L  D1,(MOUPOSX)
+00001052  4CDF 0003                124              MOVEM.L (A7)+,D0-D1
+00001056  4E73                     125              RTE
+00001058                           126              
+00001058                           127  ; ------------------------------------------------------------------------------
+Line 128 ERROR: Symbol value differs between first and second pass
+00001058                           128  SCRINIT
+00001058                           129  ; INIT SCREEN. SET SCREEN RESOLUTION, SET WINDOWED MODE, CLEAR SCREEN,
+00001058                           130  ; ENABLE DOUBLE BUFFER, ENABLE TIMED INTERRUPT.
+00001058                           131  ; INPUT    : NONE
+00001058                           132  ; OUTPUT   : NONE
+00001058                           133  ; MODIFIES : NONE
+00001058                           134  ; ------------------------------------------------------------------------------
+00001058                           135  
+00001058  48E7 C000                136              MOVEM.L D0-D1,-(A7)
+0000105C                           137  
+0000105C                           138              ; SET SCREEN RESOLUTION
+0000105C  103C 0021                139              MOVE.B  #33,D0
+00001060  223C 028001E0            140              MOVE.L  #SCRWIDTH<<16|SCRHEIGH,D1
+00001066  4E4F                     141              TRAP    #15
+00001068                           142              
+00001068                           143              ; SET WINDOWED MODE
+00001068  7201                     144              MOVE.L  #1,D1
+0000106A  4E4F                     145              TRAP    #15
+0000106C                           146              
+0000106C                           147              ; CLEAR SCREEN
+0000106C  103C 000B                148              MOVE.B  #11,D0
+00001070  323C FF00                149              MOVE.W  #$FF00,D1
+00001074  4E4F                     150              TRAP    #15
+00001076                           151              
+00001076                           152              ; ENABLE DOUBLE BUFFER
+00001076  103C 005C                153              MOVE.B  #92,D0
+0000107A  123C 0011                154              MOVE.B  #17,D1
+0000107E  4E4F                     155              TRAP    #15
+00001080                           156              
+00001080                           157              ; ENABLE TIMED INTERRUPT
+00001080  103C 0020                158              MOVE.B  #32,D0
+00001084  123C 0006                159              MOVE.B  #6,D1
+00001088  143C 0081                160              MOVE.B  #$80|SCRINTN,D2
+0000108C  7614                     161              MOVE.L  #1000/SCRFPS,D3
+0000108E  4E4F                     162              TRAP    #15
+00001090                           163              
+00001090                           164              ; CLEAR INTERRUPT COUNTER
+00001090  4239 000013DE            165              CLR.B   (SCRINTCT)
+00001096                           166              
+00001096  4CDF 0003                167              MOVEM.L (A7)+,D0-D1
+0000109A                           168              
+0000109A  4E75                     169              RTS
+0000109C                           170  
+0000109C                           171  ; ------------------------------------------------------------------------------
+Line 172 ERROR: Symbol value differs between first and second pass
+0000109C                           172  SCRPLOT
+0000109C                           173  ; UPDATES DOUBLE BUFFER
+0000109C                           174  ; INPUT    : NONE
+0000109C                           175  ; OUTPUT   : NONE
+0000109C                           176  ; MODIFIES : NONE
+0000109C                           177  ; ------------------------------------------------------------------------------
+0000109C  48A7 C000                178              MOVEM.W D0-D1,-(A7)
+000010A0                           179              ; SWITCH BUFFERS
+000010A0  103C 005E                180              MOVE.B  #94,D0
+000010A4  4E4F                     181              TRAP    #15
+000010A6                           182              
+000010A6                           183              ; CLEAR HIDDEN BUFFER
+000010A6  103C 000B                184              MOVE.B  #11,D0
+000010AA  323C FF00                185              MOVE.W  #$FF00,D1
+000010AE  4E4F                     186              TRAP    #15
+000010B0  4C9F 0003                187              MOVEM.W (A7)+,D0-D1
+000010B4  4E73                     188              RTE
+000010B6                           189  
+000010B6                           190  ; ------------------------------------------------------------------------------
+Line 191 ERROR: Symbol value differs between first and second pass
+000010B6                           191  SCRTIM
+000010B6                           192  ; TIMED INTERRUPT SERVICE ROUTINE
+000010B6                           193  ; INPUT    : NONE
+000010B6                           194  ; OUTPUT   : NONE
+000010B6                           195  ; MODIFIES : NONE
+000010B6                           196  ; ------------------------------------------------------------------------------
+000010B6  5239 000013DE            197              ADDQ.B  #1,(SCRINTCT)
+000010BC  4E73                     198              RTE
+000010BE                           199  
+000010BE                           200  ; ------------------------------------------------------------------------------
+Line 201 ERROR: Symbol value differs between first and second pass
+000010BE                           201  KBDINIT
+000010BE                           202  ; INIT KEYBOARD
+000010BE                           203  ; INPUT    : NONE
+000010BE                           204  ; OUTPUT   : NONE
+000010BE                           205  ; MODIFIES : NONE
+000010BE                           206  ; ------------------------------------------------------------------------------
+000010BE  4239 000013DC            207              CLR.B   (KBDVAL)
+000010C4  4239 000013DD            208              CLR.B   (KBDEDGE)
+000010CA  4E75                     209              RTS
+000010CC                           210  
+000010CC                           211  ; ------------------------------------------------------------------------------
+Line 212 ERROR: Symbol value differs between first and second pass
+000010CC                           212  KBDUPD
+000010CC                           213  ; UPDATE KEYBOARD INFO.  
+000010CC                           214  ; 7 -> PAUSE
+000010CC                           215  ; 6 -> FIRE 3
+000010CC                           216  ; 5 -> FIRE 2
+000010CC                           217  ; 4 -> FIRE 1
+000010CC                           218  ; 3 -> DOWN
+000010CC                           219  ; 2 -> RIGHT
+000010CC                           220  ; 1 -> UP
+000010CC                           221  ; 0 -> LEFT
+000010CC                           222  ; INPUT    : NONE
+000010CC                           223  ; OUTPUT   : NONE
+000010CC                           224  ; MODIFIES : NONE
+000010CC                           225  ; ------------------------------------------------------------------------------
+000010CC                           226  
+000010CC  48E7 F000                227              MOVEM.L D0-D3,-(A7)
+000010D0                           228  
+000010D0                           229              ; READ FIRST PART
+000010D0  103C 0013                230              MOVE.B  #19,D0
+000010D4  223C 50104D20            231              MOVE.L  #KBDPAUSE<<24|KBDFIRE3<<16|KBDFIRE2<<8|KBDFIRE1,D1
+000010DA  4E4F                     232              TRAP    #15
+000010DC                           233              
+000010DC                           234              ; CONVERT TO DESIRED FORMAT
+000010DC  4EB9 0000111A            235              JSR     .PACK
+000010E2                           236  
+000010E2                           237              ; READ SECOND PART
+000010E2  223C 28272625            238              MOVE.L  #KBDDOWN<<24|KBDRIGHT<<16|KBDUP<<8|KBDLEFT,D1
+000010E8  4E4F                     239              TRAP    #15
+000010EA                           240  
+000010EA                           241              ; CONVERT TO DESIRED FORMAT
+000010EA  4EB9 0000111A            242              JSR     .PACK
+000010F0                           243              
+000010F0                           244              ; COMPUTE KBDEDGE
+000010F0  1039 000013DC            245              MOVE.B  (KBDVAL),D0
+000010F6  4600                     246              NOT.B   D0
+000010F8  C002                     247              AND.B   D2,D0
+000010FA  13C0 000013DD            248              MOVE.B  D0,(KBDEDGE)
+00001100                           249              
+00001100                           250              ; STORE KBDVAL
+00001100  13C2 000013DC            251              MOVE.B  D2,(KBDVAL)
+00001106                           252              
+00001106  4CDF 000F                253              MOVEM.L (A7)+,D0-D3
+0000110A                           254  
+0000110A  4E73                     255              RTE
+0000110C                           256              
+Line 257 ERROR: Symbol value differs between first and second pass
+0000110C                           257  .PACK       MOVE.W  #3,D3
+Line 258 ERROR: Symbol value differs between first and second pass
+0000110C                           258  .LOOP       LSL.L   #8,D1
+0000110C  E312                     259              ROXL.B  #1,D2
+0000110E  51CB 000E                260              DBRA.W  D3,.LOOP
+00001112  4E75                     261              RTS
+00001114                           262  
+00001114                           263  
+00001114                           264  -------------------- end include --------------------
+00001114                           265              INCLUDE "BALL.X68"
+00001114                           266  ; ==============================================================================
+00001114                           267  ; BALL MANAGEMENT
+00001114                           268  ; ==============================================================================
+00001114                           269              
+00001114                           270  ; ------------------------------------------------------------------------------
+Line 271 ERROR: Symbol value differs between first and second pass
+00001114                           271  BALINIT
+00001114                           272  ; INITIALIZE BALL.
+00001114                           273  ; INPUT    : NONE 
+00001114                           274  ; OUTPUT   : NONE
+00001114                           275  ; MODIFIES : NONE
+00001114                           276  ; ------------------------------------------------------------------------------
+00001114  33FC 0140 000013CE       277              MOVE.W  #SCRWIDTH/2,(BALPOSX)
+0000111C  33FC 00F0 000013D0       278              MOVE.W  #SCRHEIGH/2,(BALPOSY)
+00001124  33FC 0003 000013D2       279              MOVE.W  #BALSPEED,(BALVELX)
+0000112C  33FC 0003 000013D4       280              MOVE.W  #BALSPEED,(BALVELY)
+00001134  4E75                     281              RTS
+00001136                           282              
+00001136                           283  ; ------------------------------------------------------------------------------
+Line 284 ERROR: Symbol value differs between first and second pass
+00001136                           284  BALUPD
+00001136                           285  ; UPDATES THE BALL.
+00001136                           286  ; INPUT    : NONE 
+00001136                           287  ; OUTPUT   : NONE
+00001136                           288  ; MODIFIES : NONE
+00001136                           289  ; ------------------------------------------------------------------------------
+00001136                           290  
+00001136  48A7 E000                291              MOVEM.W D0-D2,-(A7)
+0000113A                           292  
+0000113A                           293              ; UPDATE BALL COORDINATES
+0000113A  3039 000013CE            294              MOVE.W  (BALPOSX),D0
+00001140  3239 000013D0            295              MOVE.W  (BALPOSY),D1
+00001146  D079 000013D2            296              ADD.W   (BALVELX),D0
+0000114C  D279 000013D4            297              ADD.W   (BALVELY),D1
+00001152                           298              
+00001152                           299              ; CHECK HORIZONTAL COLLISIONS
+00001152  B07C 0278                300              CMP.W   #SCRWIDTH-BALRAD,D0
+00001156  6E00 0032                301              BGT     .COLRGT
+0000115A  B07C 0008                302              CMP.W   #BALRAD,D0
+0000115E  6D00 0036                303              BLT     .COLLFT
+00001162                           304              
+00001162                           305              ; CHECK VERTICAL COLLISIONS
+Line 306 ERROR: Symbol value differs between first and second pass
+00001162                           306  .CHKVERT    CMP.W   #SCRHEIGH-BALRAD,D1
+00001162  6E00 0044                307              BGT     .COLBOT
+00001166  B27C 0008                308              CMP.W   #BALRAD,D1
+0000116A  6D00 004A                309              BLT     .COLTOP
+0000116E  6000 0050                310              BRA     .CHKPAD
+00001172                           311              
+00001172                           312              ; RIGHT SIDE COLLISION
+Line 313 ERROR: Symbol value differs between first and second pass
+00001172                           313  .COLRGT     NEG.W   (BALVELX)
+00001172  303C 0278                314              MOVE.W  #SCRWIDTH-BALRAD,D0
+00001176  60FE                     315              BRA     .CHKVERT
+00001178                           316              
+00001178                           317              ; LEFT SIDE COLLISION
+Line 318 ERROR: Symbol value differs between first and second pass
+00001178                           318  .COLLFT     ADDQ.W  #1,(SCOOUT)
+00001178  303C 0140                319              MOVE.W  #SCRWIDTH/2,D0
+0000117C  323C 00F0                320              MOVE.W  #SCRHEIGH/2,D1
+00001180  6000 0078                321              BRA     .DONE
+00001184                           322  
+00001184                           323              ; BOTTOM COLLISION
+Line 324 ERROR: Symbol value differs between first and second pass
+00001184                           324  .COLBOT     NEG.W   (BALVELY)
+00001184  323C 01D8                325              MOVE.W  #SCRHEIGH-BALRAD,D1
+00001188  6000 0036                326              BRA     .CHKPAD
+0000118C                           327              
+0000118C                           328              ; TOP COLLISION
+Line 329 ERROR: Symbol value differs between first and second pass
+0000118C                           329  .COLTOP     NEG.W   (BALVELY)
+0000118C  323C 0008                330              MOVE.W  #BALRAD,D1
+00001190                           331              
+00001190                           332              ; CHECK PAD COLLISIONS
+Line 333 ERROR: Symbol value differs between first and second pass
+00001190                           333  .CHKPAD     MOVE.W  #PADPOSX,D2
+00001190  9440                     334              SUB.W   D0,D2
+00001192  6A00 0038                335              BPL     .ISPOS
+00001196  4442                     336              NEG.W   D2
+Line 337 ERROR: Symbol value differs between first and second pass
+00001198                           337  .ISPOS      CMP.W   #PADWIDTH/2+BALRAD,D2
+00001198  6E00 0060                338              BGT     .DONE
+0000119C  3439 000013D6            339              MOVE.W  (PADPOSY),D2
+000011A2  9441                     340              SUB.W   D1,D2
+000011A4  6A00 003C                341              BPL     .ISPOS2
+000011A8  4442                     342              NEG.W   D2
+Line 343 ERROR: Symbol value differs between first and second pass
+000011AA                           343  .ISPOS2     CMP.W   #PADHEIGH/2+BALRAD,D2
+000011AA  6E00 004E                344              BGT     .DONE
+000011AE                           345              
+000011AE                           346              ; PAD COLLISION
+000011AE  4479 000013D2            347              NEG.W   (BALVELX)
+000011B4  303C 0040                348              MOVE.W  #PADPOSX+PADWIDTH/2+BALRAD,D0
+000011B8  5279 000013D8            349              ADDQ.W  #1,(SCOIN)
+000011BE                           350  
+000011BE                           351              ; STORE POSITION
+Line 352 ERROR: Symbol value differs between first and second pass
+000011BE                           352  .DONE       MOVE.W  D0,(BALPOSX)
+000011BE  33C1 000013D0            353              MOVE.W  D1,(BALPOSY)
+000011C4                           354  
+000011C4  4C9F 0007                355              MOVEM.W (A7)+,D0-D2
+000011C8                           356  
+000011C8  4E75                     357              RTS
+000011CA                           358              
+000011CA                           359  ; ------------------------------------------------------------------------------
+Line 360 ERROR: Symbol value differs between first and second pass
+000011CA                           360  BALPLOT
+000011CA                           361  ; PLOT THE BALL.
+000011CA                           362  ; INPUT    : NONE 
+000011CA                           363  ; OUTPUT   : NONE
+000011CA                           364  ; MODIFIES : NONE
+000011CA                           365  ; ------------------------------------------------------------------------------
+000011CA  48E7 F800                366              MOVEM.L D0-D4,-(A7)
+000011CE                           367  
+000011CE                           368              ; SET PEN COLOR
+000011CE  103C 0050                369              MOVE.B  #80,D0
+000011D2  223C 00AA0000            370              MOVE.L  #BALPCOL,D1
+000011D8  4E4F                     371              TRAP    #15
+000011DA                           372              
+000011DA                           373              ; SET FILL COLOR
+000011DA  103C 0051                374              MOVE.B  #81,D0
+000011DE  223C 00FF0000            375              MOVE.L  #BALFCOL,D1
+000011E4  4E4F                     376              TRAP    #15
+000011E6                           377              
+000011E6                           378              ; DEFINE COORDINATES
+000011E6  3239 000013CE            379              MOVE.W  (BALPOSX),D1
+000011EC  5141                     380              SUB.W   #BALRAD,D1
+000011EE  3439 000013D0            381              MOVE.W  (BALPOSY),D2
+000011F4  5142                     382              SUB.W   #BALRAD,D2
+000011F6  3601                     383              MOVE.W  D1,D3
+000011F8  0643 0010                384              ADD.W   #2*BALRAD,D3
+000011FC  3802                     385              MOVE.W  D2,D4
+000011FE  0644 0010                386              ADD.W   #2*BALRAD,D4
+00001202                           387              
+00001202                           388              ; DRAW CIRCLE
+00001202  103C 0058                389              MOVE.B  #88,D0
+00001206  4E4F                     390              TRAP    #15
+00001208                           391              
+00001208  4CDF 001F                392              MOVEM.L (A7)+,D0-D4
+0000120C                           393  
+0000120C  4E75                     394              RTS
+0000120E                           395  
+0000120E                           396  -------------------- end include --------------------
+0000120E                           397              INCLUDE "PAD.X68"
+0000120E                           398  ; ==============================================================================
+0000120E                           399  ; PADDLE MANAGEMENT
+0000120E                           400  ; ==============================================================================
+0000120E                           401              
+0000120E                           402  ; ------------------------------------------------------------------------------
+Line 403 ERROR: Symbol value differs between first and second pass
+0000120E                           403  PADINIT
+0000120E                           404  ; INITIALIZE PADDLE.
+0000120E                           405  ; INPUT    : NONE 
+0000120E                           406  ; OUTPUT   : NONE
+0000120E                           407  ; MODIFIES : NONE
+0000120E                           408  ; ------------------------------------------------------------------------------
+0000120E  33FC 00F0 000013D6       409              MOVE.W  #SCRHEIGH/2,(PADPOSY)
+00001216  4E75                     410              RTS
+00001218                           411              
+00001218                           412  ; ------------------------------------------------------------------------------
+Line 413 ERROR: Symbol value differs between first and second pass
+00001218                           413  PADUPD
+00001218                           414  ; UPDATES THE PADDLE.
+00001218                           415  ; INPUT    : NONE 
+00001218                           416  ; OUTPUT   : NONE
+00001218                           417  ; MODIFIES : NONE
+00001218                           418  ; ------------------------------------------------------------------------------
+00001218                           419              
+00001218  3F00                     420              MOVE.W  D0,-(A7)
+0000121A                           421              
+0000121A                           422              ; UPDATE COORDINATE
+0000121A  3039 000013D6            423              MOVE.W  (PADPOSY),D0
+00001220  0839 0001 000013DC       424              BTST.B  #1,(KBDVAL)
+00001228  6700 0046                425              BEQ     .CHKDWN
+0000122C  5F40                     426              SUB.W   #PADSPEED,D0
+Line 427 ERROR: Symbol value differs between first and second pass
+0000122E                           427  .CHKDWN     BTST.B  #3,(KBDVAL)
+0000122E  6700 004E                428              BEQ     .CONT
+00001232  5E40                     429              ADD.W   #PADSPEED,D0
+00001234                           430              
+00001234                           431              ; CHECK COLLISIONS
+Line 432 ERROR: Symbol value differs between first and second pass
+00001234                           432  .CONT       CMP.W   #PADHEIGH/2,D0
+00001234  6C00 0058                433              BGE     .CONT2
+00001238  303C 0020                434              MOVE.W  #PADHEIGH/2,D0
+0000123C  6000 005C                435              BRA     .DONE
+Line 436 ERROR: Symbol value differs between first and second pass
+00001240                           436  .CONT2      CMP.W   #SCRHEIGH-PADHEIGH/2,D0
+00001240  6F00 0058                437              BLE     .DONE
+00001244  303C 01C0                438              MOVE.W  #SCRHEIGH-PADHEIGH/2,D0
+00001248                           439  
+00001248                           440              ; UPDATE VARIABLE
+Line 441 ERROR: Symbol value differs between first and second pass
+00001248                           441  .DONE       MOVE.W  D0,(PADPOSY)
+00001248                           442  
+00001248  301F                     443              MOVE.W  (A7)+,D0
+0000124A                           444  
+0000124A  4E75                     445              RTS
+0000124C                           446              
+0000124C                           447  ; ------------------------------------------------------------------------------
+Line 448 ERROR: Symbol value differs between first and second pass
+0000124C                           448  PADPLOT
+0000124C                           449  ; PLOT THE PADDLE.
+0000124C                           450  ; INPUT    : NONE 
+0000124C                           451  ; OUTPUT   : NONE
+0000124C                           452  ; MODIFIES : NONE
+0000124C                           453  ; ------------------------------------------------------------------------------
+0000124C                           454  
+0000124C  48E7 F800                455              MOVEM.L D0-D4,-(A7)
+00001250                           456  
+00001250                           457              ; SET CONTOUR COLOR
+00001250  103C 0050                458              MOVE.B  #80,D0
+00001254  223C 0000FF00            459              MOVE.L  #PADPCOL,D1
+0000125A  4E4F                     460              TRAP    #15
+0000125C                           461              
+0000125C                           462              ; SET FILL COLOR
+0000125C  103C 0051                463              MOVE.B  #81,D0
+00001260  223C 0000AA00            464              MOVE.L  #PADFCOL,D1
+00001266  4E4F                     465              TRAP    #15
+00001268                           466              
+00001268                           467              ; DEFINE COORDINATES
+00001268  323C 0028                468              MOVE.W  #PADPOSX-PADWIDTH/2,D1
+0000126C  363C 0038                469              MOVE.W  #PADPOSX+PADWIDTH/2,D3
+00001270  3439 000013D6            470              MOVE.W  (PADPOSY),D2
+00001276  0442 0020                471              SUB.W   #PADHEIGH/2,D2
+0000127A  3802                     472              MOVE.W  D2,D4
+0000127C  0644 0040                473              ADD.W   #PADHEIGH,D4
+00001280                           474              
+00001280                           475              ; DRAW RECTANGLE
+00001280  103C 0057                476              MOVE.B  #87,D0
+00001284  4E4F                     477              TRAP    #15
+00001286                           478              
+00001286  4CDF 001F                479              MOVEM.L (A7)+,D0-D4
+0000128A                           480  
+0000128A  4E75                     481              RTS
+0000128C                           482  
+0000128C                           483  
+0000128C                           484  -------------------- end include --------------------
+0000128C                           485              INCLUDE "SCORE.X68"
+0000128C                           486  ; ==============================================================================
+0000128C                           487  ; SCOREBOARD MANAGEMENT
+0000128C                           488  ; ==============================================================================
+0000128C                           489              
+0000128C                           490  ; ------------------------------------------------------------------------------
+Line 491 ERROR: Symbol value differs between first and second pass
+0000128C                           491  SCOINIT
+0000128C                           492  ; INITIALIZE SCOREBOARD
+0000128C                           493  ; INPUT    : NONE 
+0000128C                           494  ; OUTPUT   : NONE
+0000128C                           495  ; MODIFIES : NONE
+0000128C                           496  ; ------------------------------------------------------------------------------
+0000128C  4279 000013D8            497              CLR.W   (SCOIN)
+00001292  4279 000013DA            498              CLR.W   (SCOOUT)
+00001298  4E75                     499              RTS
+0000129A                           500              
+0000129A                           501  ; ------------------------------------------------------------------------------
+Line 502 ERROR: Symbol value differs between first and second pass
+0000129A                           502  SCOPLOT
+0000129A                           503  ; PLOT THE SCOREBOARD
+0000129A                           504  ; INPUT    : NONE 
+0000129A                           505  ; OUTPUT   : NONE
+0000129A                           506  ; MODIFIES : NONE
+0000129A                           507  ; ------------------------------------------------------------------------------
+0000129A                           508  
+0000129A  48E7 C040                509              MOVEM.L D0-D1/A1,-(A7)
+0000129E                           510  
+0000129E                           511              ; SET BACKGROUND COLOR
+0000129E  103C 0051                512              MOVE.B  #81,D0
+000012A2  7200                     513              MOVE.L  #SCOFCOL,D1
+000012A4  4E4F                     514              TRAP    #15
+000012A6                           515              
+000012A6                           516              ; SET FIRST LINE POSITION
+000012A6  103C 000B                517              MOVE.B  #11,D0
+000012AA  323C 0101                518              MOVE.W  #SCOLINE1,D1
+000012AE  4E4F                     519              TRAP    #15
+000012B0                           520  
+000012B0                           521              ; PRINT FIRST LINE
+000012B0  43F9 00001340            522              LEA     .TXT1,A1
+000012B6  4281                     523              CLR.L   D1
+000012B8  3239 000013D8            524              MOVE.W  (SCOIN),D1
+000012BE  103C 0011                525              MOVE.B  #17,D0
+000012C2  4E4F                     526              TRAP    #15
+000012C4                           527  
+000012C4                           528              ; SET SECOND LINE POSITION
+000012C4  103C 000B                529              MOVE.B  #11,D0
+000012C8  323C 0102                530              MOVE.W  #SCOLINE2,D1
+000012CC  4E4F                     531              TRAP    #15
+000012CE                           532  
+000012CE                           533              ; PRINT SECOND LINE
+000012CE  43F9 0000134B            534              LEA     .TXT2,A1
+000012D4  4281                     535              CLR.L   D1
+000012D6  3239 000013DA            536              MOVE.W  (SCOOUT),D1
+000012DC  103C 0011                537              MOVE.B  #17,D0
+000012E0  4E4F                     538              TRAP    #15
+000012E2                           539              
+000012E2  4CDF 0203                540              MOVEM.L (A7)+,D0-D1/A1
+000012E6                           541              
+000012E6  4E75                     542              RTS
+Line 543 ERROR: Symbol value differs between first and second pass
+000012E8= 43 41 50 54 55 52 ...    543  .TXT1       DC.B    'CAPTURED :',0
+Line 544 ERROR: Symbol value differs between first and second pass
+000012F2= 4D 49 53 53 45 44 ...    544  .TXT2       DC.B    'MISSED   :',0
+000012FC                           545  
+000012FC                           546  
+000012FC                           547  -------------------- end include --------------------
+000012FC                           548             
+Line 549 ERROR: Symbol value differs between first and second pass
+000012FC                           549  START
+000012FC                           550  
+000012FC                           551  ; --- DISABLE INTERRUPTS
+000012FC                           552  
+000012FC                           553              ; SR: XXXXXIII XXXXXXXX
+000012FC  007C 0700                554              ORI.W   #$0700,SR
+00001300                           555  
+00001300                           556  ; --- INITIALIZATION -----------------------------------------------------------
+00001300                           557  
+00001300  4EB8 1000                558              JSR     SYSINIT
+00001304  4EB8 1128                559              JSR     BALINIT
+00001308  4EB8 1250                560              JSR     PADINIT
+0000130C  4EB8 12E4                561              JSR     SCOINIT
+00001310                           562  
+Line 563 ERROR: Symbol value differs between first and second pass
+00001310                           563  .LOOP
+00001310                           564  
+00001310                           565  ; --- UPDATE -------------------------------------------------------------------
+00001310                           566  
+00001310                           567  ; READ INPUT DEVICES
+00001310                           568  
+00001310  4E41                     569              TRAP    #KBDUPTN
+00001312                           570  
+00001312                           571  ; UPDATE GAME LOGIC
+00001312                           572  
+00001312  4EB8 114A                573              JSR     BALUPD
+00001316  4EB8 125A                574              JSR     PADUPD            
+0000131A                           575  
+0000131A                           576  ; --- SYNC ---------------------------------------------------------------------
+0000131A                           577  
+Line 578 ERROR: Symbol value differs between first and second pass
+0000131A                           578  .WINT       TST.B   (SCRINTCT)
+0000131A  6758                     579              BEQ     .WINT
+0000131C  4239 000013DE            580              CLR.B   (SCRINTCT)
+00001322                           581              
+00001322                           582              ; THE FOLLOWING SYNC STRATEGY IS ****WRONG****
+00001322                           583              ;MOVE.B  #23,D0
+00001322                           584              ;MOVE.L  #1,D1
+00001322                           585              ;TRAP    #15
+00001322                           586  
+00001322                           587  ; --- PLOT ---------------------------------------------------------------------
+00001322                           588  
+00001322  4EB8 12F2                589              JSR     SCOPLOT
+00001326  4EB8 120C                590              JSR     BALPLOT
+0000132A  4EB8 12A4                591              JSR     PADPLOT
+0000132E                           592              
+0000132E  103C 0050                593              MOVE.B  #80,D0
+00001332  7220                     594              MOVE.L  #$00000020,D1
+00001334  4E4F                     595              TRAP    #15
+00001336  5200                     596              ADDQ.B  #1,D0
+00001338  223C 000000FF            597              MOVE.L  #$000000ff,D1
+0000133E  4E4F                     598              TRAP    #15
+00001340  103C 0058                599              MOVE.B  #88,D0
+00001344  3239 000013E2            600              MOVE.W  (MOUPOSX),D1
+0000134A  3439 000013E0            601              MOVE.W  (MOUPOSY),D2
+00001350  3601                     602              MOVE.W  D1,D3
+00001352  3802                     603              MOVE.W  D2,D4
+00001354  0441 0010                604              SUB.W   #16,D1
+00001358  0442 0010                605              SUB.W   #16,D2
+0000135C  0643 0010                606              ADD.W   #16,D3
+00001360  0644 0010                607              ADD.W   #16,D4
+00001364  4E4F                     608              TRAP    #15
+00001366                           609              
+00001366  4E40                     610              TRAP    #SCRUPTN                ; UPDATE DOUBLE BUFFER
+00001368                           611  
+00001368  6000 0000                612              BRA     .LOOP
+0000136C                           613  
+0000136C  FFFF FFFF                614              SIMHALT
+00001370                           615              
+00001370                           616              INCLUDE "VARS.X68"
+00001370                           617  ; ==============================================================================
+00001370                           618  ; GAME VARIABLES
+00001370                           619  ; ==============================================================================
+00001370                           620  
+00001370                           621  ; --- BALL RELATED VARIABLES ---------------------------------------------------
+00001370                           622  
+Line 623 ERROR: Symbol value differs between first and second pass
+00001370                           623  BALPOSX     DS.W    1                       ; BALL X COORDINATE
+Line 624 ERROR: Symbol value differs between first and second pass
+00001370                           624  BALPOSY     DS.W    1                       ; BALL Y COORDINATE
+Line 625 ERROR: Symbol value differs between first and second pass
+00001370                           625  BALVELX     DS.W    1                       ; BALL X VELOCITY
+Line 626 ERROR: Symbol value differs between first and second pass
+00001370                           626  BALVELY     DS.W    1                       ; BALL Y VELOCITY
+00001370                           627  
+00001370                           628  ; --- PAD RELATED VARIABLES ----------------------------------------------------
+00001370                           629  
+Line 630 ERROR: Symbol value differs between first and second pass
+00001370                           630  PADPOSY     DS.W    1                       ; PAD Y COORDINATE
+00001370                           631  
+00001370                           632  ; --- SCOREBOARD RELATED VARIABLES ---------------------------------------------
+00001370                           633  
+Line 634 ERROR: Symbol value differs between first and second pass
+00001370                           634  SCOIN       DS.W    1                       ; NUMBER OF CAPTURED BALLS
+Line 635 ERROR: Symbol value differs between first and second pass
+00001370                           635  SCOOUT      DS.W    1                       ; NUMBER OF MISSED BALLS
+00001370                           636  -------------------- end include --------------------
+00001370                           637              INCLUDE "SYSVARS.X68"
+00001370                           638  ; ==============================================================================
+00001370                           639  ; SYSTEM VARIABLES
+00001370                           640  ; ==============================================================================
+00001370                           641              
+00001370                           642  ; --- KEYBOARD RELATED VARIABLES -----------------------------------------------
+00001370                           643  
+Line 644 ERROR: Symbol value differs between first and second pass
+00001370                           644  KBDVAL      DS.B    1                       ; KEY STATE
+Line 645 ERROR: Symbol value differs between first and second pass
+00001370                           645  KBDEDGE     DS.B    1                       ; KEY EDGE
+00001370                           646  
+00001370                           647  ; --- TIMED INTERRUPT RELATED VARIABLES ----------------------------------------
+00001370                           648  
+Line 649 ERROR: Symbol value differs between first and second pass
+00001370                           649  SCRINTCT    DS.B    1                       ; INTERRUPT COUNTER
+00001370                           650              DS.W    0
+00001370                           651              
+00001370                           652  ; --- MOUSE RELATED VARIABLES
+00001370                           653  
+Line 654 ERROR: Symbol value differs between first and second pass
+00001370                           654  MOUPOSY     DS.W    1
+Line 655 ERROR: Symbol value differs between first and second pass
+00001370                           655  MOUPOSX     DS.W    1
+00001370                           656  
+00001370                           657  
+00001370                           658  -------------------- end include --------------------
+00001370                           659  
+00001370                           660              END     START
+
+49 errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BALFCOL             FF0000
+BALINIT             1128
+BALPCOL             AA0000
+BALPLOT             120C
+BALPOSX             13CE
+BALPOSY             13D0
+BALRAD              8
+BALSPEED            3
+BALUPD              114A
+BALUPD:CHKPAD       11C0
+BALUPD:CHKVERT      1176
+BALUPD:COLBOT       11A8
+BALUPD:COLLFT       1196
+BALUPD:COLRGT       118A
+BALUPD:COLTOP       11B6
+BALUPD:DONE         11FA
+BALUPD:ISPOS        11CC
+BALUPD:ISPOS2       11E2
+BALVELX             13D2
+BALVELY             13D4
+KBDDOWN             28
+KBDEDGE             13DD
+KBDFIRE1            20
+KBDFIRE2            4D
+KBDFIRE3            10
+KBDINIT             10CC
+KBDLEFT             25
+KBDPAUSE            50
+KBDRIGHT            27
+KBDUP               26
+KBDUPD              10DA
+KBDUPD:LOOP         111E
+KBDUPD:PACK         111A
+KBDUPTN             1
+KBDVAL              13DC
+MOUEVTBD            1
+MOUEVTBU            2
+MOUEVTMV            4
+MOUINIT             103C
+MOUISR              104E
+MOUPOSX             13E2
+MOUPOSY             13E0
+PADFCOL             AA00
+PADHEIGH            40
+PADINIT             1250
+PADPCOL             FF00
+PADPLOT             12A4
+PADPOSX             30
+PADPOSY             13D6
+PADSPEED            7
+PADUPD              125A
+PADUPD:CHKDWN       1270
+PADUPD:CONT         127E
+PADUPD:CONT2        128E
+PADUPD:DONE         129A
+PADWIDTH            10
+SCOFCOL             0
+SCOIN               13D8
+SCOINIT             12E4
+SCOLINE1            101
+SCOLINE2            102
+SCOOUT              13DA
+SCOPLOT             12F2
+SCOPLOT:TXT1        1340
+SCOPLOT:TXT2        134B
+SCRFPS              32
+SCRHEIGH            1E0
+SCRINIT             1066
+SCRINTCT            13DE
+SCRINTN             1
+SCRPLOT             10AA
+SCRTIM              10C4
+SCRUPTN             0
+SCRWIDTH            280
+START               1356
+START:LOOP          136A
+START:WINT          1374
+SYSINIT             1000

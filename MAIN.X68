@@ -13,7 +13,6 @@
             INCLUDE "BALL.X68"
             INCLUDE "PAD.X68"
             INCLUDE "SCORE.X68"
-            
            
 START
 
@@ -86,6 +85,8 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
+
 
 
 

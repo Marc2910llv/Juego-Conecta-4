@@ -26,7 +26,7 @@ SYSINIT
 MOUINIT
 ; INPUT    : NONE
 ; OUTPUT   : NONE
-; MODIFIES : NONE
+; MODIFIES : NONE xd
 ; ------------------------------------------------------------------------------
 
             CLR.L   (MOUPOSY)
@@ -187,6 +187,7 @@ KBDUPD
             ROXL.B  #1,D2
             DBRA.W  D3,.LOOP
             RTS
+
 
 
 *~Font name~Fixedsys~

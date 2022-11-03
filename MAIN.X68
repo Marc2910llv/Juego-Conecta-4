@@ -9,24 +9,30 @@
             
             INCLUDE "CONST.X68"
             INCLUDE "SYSCONST.X68"
+            INCLUDE "LIB/DMMCONST.X68"
+            INCLUDE "LIB/UTLCONST.X68"
+            INCLUDE "LIB/DMMCODE.X68"
             INCLUDE "SYSTEM.X68"
+            INCLUDE "LIB/AGLCODE.X68"
+            INCLUDE "LIB/UTLCODE.X68"
             INCLUDE "BALL.X68"
             INCLUDE "PAD.X68"
             INCLUDE "SCORE.X68"
+            INCLUDE "GAME.X68"
+            INCLUDE "INTRO.X68"
+            INCLUDE "INSTRUCTIONS.X68"
+            INCLUDE "WIN.X68"
+            INCLUDE "GOVER.X68"
+            INCLUDE "STATES.X68"
            
 START
 
-; --- DISABLE INTERRUPTS
-
-            ; SR: XXXXXIII XXXXXXXX
-            ORI.W   #$0700,SR
-
 ; --- INITIALIZATION -----------------------------------------------------------
 
+            ORI.W   #$0700,SR
             JSR     SYSINIT
-            JSR     BALINIT
-            JSR     PADINIT
-            JSR     SCOINIT
+            JSR     UTLINIT
+            JSR     STAINIT
 
 .LOOP
 
@@ -38,53 +44,31 @@ START
 
 ; UPDATE GAME LOGIC
 
-            JSR     BALUPD
-            JSR     PADUPD            
+            JSR     STAUPD
 
 ; --- SYNC ---------------------------------------------------------------------
 
 .WINT       TST.B   (SCRINTCT)
             BEQ     .WINT
             CLR.B   (SCRINTCT)
-            
-            ; THE FOLLOWING SYNC STRATEGY IS ****WRONG****
-            ;MOVE.B  #23,D0
-            ;MOVE.L  #1,D1
-            ;TRAP    #15
 
 ; --- PLOT ---------------------------------------------------------------------
-
-            JSR     SCOPLOT
-            JSR     BALPLOT
-            JSR     PADPLOT
             
-            MOVE.B  #80,D0
-            MOVE.L  #$00000020,D1
-            TRAP    #15
-            ADDQ.B  #1,D0
-            MOVE.L  #$000000ff,D1
-            TRAP    #15
-            MOVE.B  #88,D0
-            MOVE.W  (MOUPOSX),D1
-            MOVE.W  (MOUPOSY),D2
-            MOVE.W  D1,D3
-            MOVE.W  D2,D4
-            SUB.W   #16,D1
-            SUB.W   #16,D2
-            ADD.W   #16,D3
-            ADD.W   #16,D4
-            TRAP    #15
+            JSR     STAPLOT
             
             TRAP    #SCRUPTN                ; UPDATE DOUBLE BUFFER
 
             BRA     .LOOP
-
+            
             SIMHALT
             
             INCLUDE "VARS.X68"
+            INCLUDE "LIB/UTLVARS.X68"
             INCLUDE "SYSVARS.X68"
+            INCLUDE "LIB/DMMVARS.X68"
 
             END     START
+
 
 
 

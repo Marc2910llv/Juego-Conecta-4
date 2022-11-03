@@ -11,47 +11,56 @@ SYSINIT
 ; ------------------------------------------------------------------------------
             MOVE.L  #SCRPLOT,($80+SCRUPTN*4)
             MOVE.L  #KBDUPD,($80+KBDUPTN*4)
+            MOVE.L  #SNDPLAY,($80+SNDPLTN*4)
             MOVE.L  #SCRTIM,($60+SCRINTN*4)
-            MOVE.L  #MOUISR,($60+MOUINTN*4)
 
             JSR     SCRINIT
             JSR     KBDINIT
-            JSR     MOUINIT
+            JSR     SNDINIT
+            JSR     DMMINIT
             
             MOVE.W  SR,-(A7)
-            ANDI.W  #$D8FF,(A7)	;USER MODE AND ENABLE INTERRUPTS
+            ANDI.W  #$D8FF,(A7)
             RTE
             
 ; ------------------------------------------------------------------------------
-MOUINIT
-; INPUT    : NONE
-; OUTPUT   : NONE
-; MODIFIES : NONE xd
-; ------------------------------------------------------------------------------
-
-            CLR.L   (MOUPOSY)
-            
-            MOVE.B  #60,D0
-            MOVE.W  #MOUINTN<<8|MOUEVTMV,D1
-            TRAP    #15
-            
-            RTS
-            
-; ------------------------------------------------------------------------------
-MOUISR
+SNDINIT
+; SOUND SYSTEM INIT
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-
-            MOVEM.L D0-D1,-(A7)
-            MOVE.B  #61,D0
-            CLR.L   D1
+            MOVEM.L D0-D1/A0-A1,-(A7)
+            CLR.B   D1
+            LEA     .SNDLIST,A0
+.LOOP       MOVE.L  (A0)+,D0
+            BEQ     .DONE
+            MOVE.L  D0,A1
+            MOVE.B  #71,D0
             TRAP    #15
-            MOVE.L  D1,(MOUPOSX)
-            MOVEM.L (A7)+,D0-D1
-            RTE
+            ADDQ.B  #1,D1
+            BRA     .LOOP
+.DONE       MOVEM.L (A7)+,D0-D1/A0-A1
+            RTS
+.SNDWALL    DC.B    'SND/WALL.wav',0
+.SNDHIT     DC.B    'SND/HIT.wav',0
+.SNDMISS    DC.B    'SND/MISS.wav',0
+.SNDLIST    DC.L    .SNDWALL,.SNDHIT,.SNDMISS,0
             
+; ------------------------------------------------------------------------------
+SNDPLAY
+; PLAY SOUND
+; INPUT    : D7 SOUND ID
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            MOVEM.W D0-D1,-(A7)
+            MOVE.B  #72,D0
+            MOVE.B  D7,D1
+            TRAP    #15
+            MOVEM.W (A7)+,D0-D1
+            RTE
+
 ; ------------------------------------------------------------------------------
 SCRINIT
 ; INIT SCREEN. SET SCREEN RESOLUTION, SET WINDOWED MODE, CLEAR SCREEN,
@@ -90,7 +99,7 @@ SCRINIT
             TRAP    #15
             
             ; CLEAR INTERRUPT COUNTER
-            CLR.B   (SCRINTCT)
+            CLR.W   (SCRINTCT)
             
             MOVEM.L (A7)+,D0-D1
             
@@ -123,6 +132,7 @@ SCRTIM
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             ADDQ.B  #1,(SCRINTCT)
+            ADDQ.B  #1,(SCRCYCCT)
             RTE
 
 ; ------------------------------------------------------------------------------
@@ -187,6 +197,8 @@ KBDUPD
             ROXL.B  #1,D2
             DBRA.W  D3,.LOOP
             RTS
+
+
 
 
 

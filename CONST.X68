@@ -23,6 +23,23 @@ PADFCOL     EQU     $0000AA00               ; PAD FILL COLOR
 SCOFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
 SCOLINE1    EQU     $0101                   ; FIRST TEXT LINE COORDINATES
 SCOLINE2    EQU     $0102                   ; SECOND TEXT LINE COORDINATES
+
+; --- STATE RELATED CONSTANTS --------------------------------------------------
+
+STANONE     EQU     -1                      ; NON-EXISTENT STATE NUMBER
+ISCMAXTM    EQU     500                     ; INTRO SCREEN WATING CYCLES
+INSMAXTM    EQU     500                     ; INSTRUCTIONS SCREEN WAITING CYCLES
+
+; --- VICTORY/DEFEAT CONSTANTS -------------------------------------------------
+
+SCOINMX     EQU     10                      ; NUMBER OF BALLS TO VICTORY
+SCOOUTMX    EQU     10                      ; NUMBER OF BALLS TO DEFEAT
+
+
+
+
+
+
 *~Font name~Fixedsys~
 *~Font size~24~
 *~Tab type~0~

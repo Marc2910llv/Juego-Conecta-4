@@ -19,18 +19,22 @@ KBDFIRE2    EQU     'M'
 KBDFIRE3    EQU     $10
 KBDPAUSE    EQU     'P'
 
-MOUEVTMV    EQU     4
-MOUEVTBU    EQU     2
-MOUEVTBD    EQU     1
+; --- SOUND IDENTIFIERS --------------------------------------------------------
+
+SNDWALL     EQU     0
+SNDHIT      EQU     1
+SNDMISS     EQU     2
 
 ; --- TRAP NUMBERS -------------------------------------------------------------
 
 SCRUPTN     EQU     0                       ; SCREEN UPDATE TRAP NUMBER
 KBDUPTN     EQU     1                       ; KEYBOARD UPDATE TRAP NUMBER
+SNDPLTN     EQU     2                       ; SOUND PLAY TRAP NUMBER
 
 ; --- INTERRUPT NUMBERS --------------------------------------------------------
 
 SCRINTN     EQU     1                       ; TIMED INTERRUPT NUMBER
+
 *~Font name~Fixedsys~
 *~Font size~24~
 *~Tab type~0~

@@ -10,12 +10,9 @@ KBDEDGE     DS.B    1                       ; KEY EDGE
 ; --- TIMED INTERRUPT RELATED VARIABLES ----------------------------------------
 
 SCRINTCT    DS.B    1                       ; INTERRUPT COUNTER
+SCRCYCCT    DS.B    1                       ; CYCLE COUNTER
             DS.W    0
-            
-; --- MOUSE RELATED VARIABLES
 
-MOUPOSY     DS.W    1
-MOUPOSX     DS.W    1
 
 
 *~Font name~Fixedsys~

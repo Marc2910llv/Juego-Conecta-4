@@ -1,55 +1,36 @@
 ; ==============================================================================
-; PADDLE MANAGEMENT
+; TABLE MANAGEMENT
 ; ==============================================================================
             
 ; ------------------------------------------------------------------------------
-PADINIT
-; INITIALIZE PADDLE.
+TABINIT
+; INITIALIZE TABLE.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVE.W  #SCRHEIGH/2,(PADPOSY)
+            MOVE.W  #SCRWIDTH/2,(TABPOSX)
+            MOVE.W  #SCRHEIGH/2,(TABPOSY)
+            MOVE.W  #SCRWIDTH,D0
+            SUB.W   #50,D0
+            MOVE.W  D0,(TABWIDTH)
+            MOVE.W  #SCRHEIGH,D0
+            SUB.W   #50,D0
+            MOVE.W  D0,(TABHEIGH)
             RTS
             
 ; ------------------------------------------------------------------------------
-PADUPD
-; UPDATES THE PADDLE.
+TABUPD
+; UPDATES THE TABLE.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            
-            MOVE.W  D0,-(A7)
-            
-            ; UPDATE COORDINATE
-            MOVE.W  (PADPOSY),D0
-            BTST.B  #1,(KBDVAL)
-            BEQ     .CHKDWN
-            SUB.W   #PADSPEED,D0
-.CHKDWN     BTST.B  #3,(KBDVAL)
-            BEQ     .CONT
-            ADD.W   #PADSPEED,D0
-            
-            ; CHECK COLLISIONS
-.CONT       CMP.W   #PADHEIGH/2,D0
-            BGE     .CONT2
-            MOVE.W  #PADHEIGH/2,D0
-            BRA     .DONE
-.CONT2      CMP.W   #SCRHEIGH-PADHEIGH/2,D0
-            BLE     .DONE
-            MOVE.W  #SCRHEIGH-PADHEIGH/2,D0
-
-            ; UPDATE VARIABLE
-.DONE       MOVE.W  D0,(PADPOSY)
-
-            MOVE.W  (A7)+,D0
-
             RTS
             
 ; ------------------------------------------------------------------------------
-PADPLOT
-; PLOT THE PADDLE.
+TABPLOT
+; PLOT THE TABLE.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -59,21 +40,19 @@ PADPLOT
 
             ; SET CONTOUR COLOR
             MOVE.B  #80,D0
-            MOVE.L  #PADPCOL,D1
+            MOVE.L  #TABPCOL,D1
             TRAP    #15
             
             ; SET FILL COLOR
             MOVE.B  #81,D0
-            MOVE.L  #PADFCOL,D1
+            MOVE.L  #TABFCOL,D1
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  #PADPOSX-PADWIDTH/2,D1
-            MOVE.W  #PADPOSX+PADWIDTH/2,D3
-            MOVE.W  (PADPOSY),D2
-            SUB.W   #PADHEIGH/2,D2
-            MOVE.W  D2,D4
-            ADD.W   #PADHEIGH,D4
+            MOVE.W  #TABPOSX-TABWIDTH/2,D1
+            MOVE.W  #TABPOSY-TABHEIGH/2,D2
+            MOVE.W  #TABPOSX+TABWIDTH/2,D3
+            MOVE.W  #TABPOSY+TABHEIGH/2,D4
             
             ; DRAW RECTANGLE
             MOVE.B  #87,D0
@@ -83,8 +62,7 @@ PADPLOT
 
             RTS
 
-
 *~Font name~Fixedsys~
-*~Font size~24~
+*~Font size~9~
 *~Tab type~0~
 *~Tab size~4~

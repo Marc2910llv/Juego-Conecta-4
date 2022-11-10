@@ -2,33 +2,26 @@
 ; GAME VARIABLES
 ; ==============================================================================
 
-; --- PAD RELATED VARIABLES ----------------------------------------------------
+; --- BALL RELATED VARIABLES ---------------------------------------------------
 
-PADPOSY     DS.W    1                       ; PAD Y COORDINATE
+BALPOSX     DS.W    1                       ; BALL X COORDINATE
+BALPOSY     DS.W    1                       ; BALL Y COORDINATE
+BALVELX     DS.W    1                       ; BALL X VELOCITY
+BALVELY     DS.W    1                       ; BALL Y VELOCITY
+
+; --- TAB RELATED VARIABLES ----------------------------------------------------
+
+TABPOSX     DS.W    1                       ; TAB x COORDINATE
+TABPOSY     DS.W    1                       ; TAB Y COORDINATE
+TABWIDTH    DS.W    1                       ; TAB WIDTH
+TABHEIGH    DS.W    1                       ; TAB HEIGH
 
 ; --- SCOREBOARD RELATED VARIABLES ---------------------------------------------
 
 SCOIN       DS.W    1                       ; NUMBER OF CAPTURED BALLS
 SCOOUT      DS.W    1                       ; NUMBER OF MISSED BALLS
 
-; --- INTRO STATE RELATED VARIABLES --------------------------------------------
-
-ISCTIMER    DS.W    1                       ; INTRO TIMER
-
-; --- INSTRUCTIONS STATE RELATED VARIABLES -------------------------------------
-
-INSTIMER    DS.W    1                       ; INSTRUCTIONS TIMER
-
-; --- STATE RELATED VARIABLES --------------------------------------------------
-
-STACUR      DS.W    1                       ; CURRENT STATE
-STANEXT     DS.W    1                       ; NEXT STATE
-
-
-
-
-
 *~Font name~Fixedsys~
-*~Font size~24~
+*~Font size~9~
 *~Tab type~0~
 *~Tab size~4~

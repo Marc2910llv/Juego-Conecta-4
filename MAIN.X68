@@ -22,6 +22,7 @@ START
             JSR     SYSINIT
             JSR     BALINIT
             JSR     TABINIT
+            JSR     TABPLOT
             JSR     SCOINIT
             
 .LOOP
@@ -32,8 +33,7 @@ START
 
 ; UPDATE GAME LOGIC
 
-            JSR     BALUPD
-            JSR     TABUPD            
+            JSR     BALUPD            
 
 ; --- SYNC ---------------------------------------------------------------------
 
@@ -41,7 +41,6 @@ START
 
             ;JSR     SCOPLOT
             ;JSR     BALPLOT
-            JSR     TABPLOT
 
             BRA     .LOOP
 

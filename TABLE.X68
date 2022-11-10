@@ -11,12 +11,8 @@ TABINIT
 ; ------------------------------------------------------------------------------
             MOVE.W  #SCRWIDTH/2,(TABPOSX)
             MOVE.W  #SCRHEIGH/2,(TABPOSY)
-            MOVE.W  #SCRWIDTH,D0
-            SUB.W   #50,D0
-            MOVE.W  D0,(TABWIDTH)
-            MOVE.W  #SCRHEIGH,D0
-            SUB.W   #50,D0
-            MOVE.W  D0,(TABHEIGH)
+            MOVE.W  #SCRWIDTH-25,(TABWIDTH)
+            MOVE.W  #SCRHEIGH-25,(TABHEIGH)
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -49,10 +45,10 @@ TABPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  #TABPOSX-TABWIDTH/2,D1
-            MOVE.W  #TABPOSY-TABHEIGH/2,D2
-            MOVE.W  #TABPOSX+TABWIDTH/2,D3
-            MOVE.W  #TABPOSY+TABHEIGH/2,D4
+            MOVE.W  #25,D1
+            MOVE.W  #50,D2
+            MOVE.W  (TABWIDTH),D3
+            MOVE.W  (TABHEIGH),D4
             
             ; DRAW RECTANGLE
             MOVE.B  #87,D0

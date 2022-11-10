@@ -1,0 +1,91 @@
+000011F4 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 10/11/2022 16:57:37
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; TABLE MANAGEMENT
+00000000                             3  ; ==============================================================================
+00000000                             4              
+00000000                             5  ; ------------------------------------------------------------------------------
+00000000                             6  TABINIT
+00000000                             7  ; INITIALIZE TABLE.
+00000000                             8  ; INPUT    : NONE 
+00000000                             9  ; OUTPUT   : NONE
+00000000                            10  ; MODIFIES : NONE
+00000000                            11  ; ------------------------------------------------------------------------------
+Line 12 ERROR: Comma expected
+00000000                            12              MOVE.W  #SCRWIDTH/2,(TABPOSX)
+Line 13 ERROR: Comma expected
+00000000                            13              MOVE.W  #SCRHEIGH/2,(TABPOSY)
+Line 14 ERROR: Undefined symbol
+00000000  303C BD16                 14              MOVE.W  #SCRWIDTH,D0
+00000004  0440 0032                 15              SUB.W   #50,D0
+Line 16 ERROR: Undefined symbol
+00000008  33C0 005455B8             16              MOVE.W  D0,(TABWIDTH)
+Line 17 ERROR: Undefined symbol
+0000000E  303C BD16                 17              MOVE.W  #SCRHEIGH,D0
+00000012  0440 0032                 18              SUB.W   #50,D0
+Line 19 ERROR: Undefined symbol
+00000016  33C0 005455B8             19              MOVE.W  D0,(TABHEIGH)
+0000001C  4E75                      20              RTS
+0000001E                            21              
+0000001E                            22  ; ------------------------------------------------------------------------------
+Line 23 ERROR: Symbol value differs between first and second pass
+0000001E                            23  TABUPD
+0000001E                            24  ; UPDATES THE TABLE.
+0000001E                            25  ; INPUT    : NONE 
+0000001E                            26  ; OUTPUT   : NONE
+0000001E                            27  ; MODIFIES : NONE
+0000001E                            28  ; ------------------------------------------------------------------------------
+0000001E  4E75                      29              RTS
+00000020                            30              
+00000020                            31  ; ------------------------------------------------------------------------------
+Line 32 ERROR: Symbol value differs between first and second pass
+00000020                            32  TABPLOT
+00000020                            33  ; PLOT THE TABLE.
+00000020                            34  ; INPUT    : NONE 
+00000020                            35  ; OUTPUT   : NONE
+00000020                            36  ; MODIFIES : NONE
+00000020                            37  ; ------------------------------------------------------------------------------
+00000020                            38  
+00000020  48E7 F800                 39              MOVEM.L D0-D4,-(A7)
+00000024                            40  
+00000024                            41              ; SET CONTOUR COLOR
+00000024  103C 0050                 42              MOVE.B  #80,D0
+Line 43 ERROR: Undefined symbol
+00000028  223C 004DBD16             43              MOVE.L  #TABPCOL,D1
+0000002E  4E4F                      44              TRAP    #15
+00000030                            45              
+00000030                            46              ; SET FILL COLOR
+00000030  103C 0051                 47              MOVE.B  #81,D0
+Line 48 ERROR: Undefined symbol
+00000034  223C 004DBD16             48              MOVE.L  #TABFCOL,D1
+0000003A  4E4F                      49              TRAP    #15
+0000003C                            50              
+0000003C                            51              ; DEFINE COORDINATES
+0000003C  323C 0019                 52              MOVE.W  #25,D1
+Line 53 ERROR: Comma expected
+00000040                            53              MOVE.W  #SCRHEIGH-25,D2
+Line 54 ERROR: Comma expected
+00000040                            54              MOVE.W  #SCRWIDTH-25,D3
+00000040  383C 0019                 55              MOVE.W  #25,D4
+00000044                            56              
+00000044                            57              ; DRAW RECTANGLE
+00000044  103C 0057                 58              MOVE.B  #87,D0
+00000048  4E4F                      59              TRAP    #15
+0000004A                            60              
+0000004A  4CDF 001F                 61              MOVEM.L (A7)+,D0-D4
+0000004E                            62  
+0000004E  4E75                      63              RTS
+Line 64 WARNING: END directive missing, starting address not set
+
+12 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+TABINIT             0
+TABPLOT             30
+TABUPD              2E

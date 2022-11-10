@@ -11,8 +11,8 @@ BALSPEED    EQU     3                       ; MAGNITUDE OF THE X AND Y VEL.
 
 ; --- TAB RELATED CONSTANTS ----------------------------------------------------
 
-TABPCOL     EQU     $0000FF00               ; TAB CONTOUR COLOR
-TABFCOL     EQU     $0000AA00               ; TAB FILL COLOR
+TABPCOL     EQU     $00FF0000               ; TAB CONTOUR COLOR
+TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
 ; --- SCOREBOARD RELATED CONSTANTS ---------------------------------------------
 

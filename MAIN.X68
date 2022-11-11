@@ -13,6 +13,7 @@
             INCLUDE "BALL.X68"
             INCLUDE "TABLE.X68"
             INCLUDE "SCORE.X68"
+            INCLUDE "PIECE.X68"
             
            
 START
@@ -24,6 +25,7 @@ START
             JSR     TABINIT
             JSR     TABPLOT
             JSR     SCOINIT
+            JSR     PIEINIT
             
 .LOOP
 
@@ -40,7 +42,7 @@ START
 ; --- PLOT ---------------------------------------------------------------------
 
             ;JSR     SCOPLOT
-            ;JSR     BALPLOT
+            JSR     PIEPLOT
 
             BRA     .LOOP
 
@@ -50,6 +52,8 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
+
 
 
 *~Font name~Fixedsys~

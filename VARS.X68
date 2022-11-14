@@ -2,20 +2,17 @@
 ; GAME VARIABLES
 ; ==============================================================================
 
-; --- BALL RELATED VARIABLES ---------------------------------------------------
+; --- BOX RELATED VARIABLES ---------------------------------------------------
 
-BALPOSX     DS.W    1                       ; BALL X COORDINATE
-BALPOSY     DS.W    1                       ; BALL Y COORDINATE
-BALVELX     DS.W    1                       ; BALL X VELOCITY
-BALVELY     DS.W    1                       ; BALL Y VELOCITY
+BOXPOSX     DS.W    1                       ; BOX X COORDINATE
+BOXPOSY     DS.W    1                       ; BOX Y COORDINATE
+BOXRAD      DS.W    1                       ; BOX X VELOCITY
 
 ; --- PIECE RELATED VARIABLES ---------------------------------------------------
 
 PIEPOSX     DS.W    1                       ; PIECE X COORDINATE
 PIEPOSY     DS.W    1                       ; PIECE Y COORDINATE
 PIEVELY     DS.W    1                       ; PIECE Y VELOCITY
-
-
 
 ; --- TAB RELATED VARIABLES ----------------------------------------------------
 
@@ -28,6 +25,7 @@ TABHEIGH    DS.W    1                       ; TAB HEIGH
 
 SCOIN       DS.W    1                       ; NUMBER OF CAPTURED BALLS
 SCOOUT      DS.W    1                       ; NUMBER OF MISSED BALLS
+
 
 
 *~Font name~Fixedsys~

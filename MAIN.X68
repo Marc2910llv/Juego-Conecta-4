@@ -21,10 +21,8 @@ START
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-            JSR     BALINIT
-            JSR     TABINIT
-            JSR     TABPLOT
-            JSR     SCOINIT
+            JSR     BOXINIT
+            ;JSR     SCOINIT
             JSR     PIEINIT
             
 .LOOP
@@ -35,12 +33,15 @@ START
 
 ; UPDATE GAME LOGIC
 
-            JSR     BALUPD            
+            JSR     PIEUPD
+            JSR     BOXUPD            
 
 ; --- SYNC ---------------------------------------------------------------------
 
 ; --- PLOT ---------------------------------------------------------------------
 
+            JSR     TABPLOT
+            JSR     BOXPLOT
             ;JSR     SCOPLOT
             JSR     PIEPLOT
 
@@ -52,6 +53,7 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
 
 
 

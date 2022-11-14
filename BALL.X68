@@ -1,79 +1,29 @@
 ; ==============================================================================
-; BALL MANAGEMENT
+; BOX MANAGEMENT
 ; ==============================================================================
             
 ; ------------------------------------------------------------------------------
-BALINIT
-; INITIALIZE BALL.
+BOXINIT
+; INITIALIZE BOX.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVE.W  #SCRWIDTH/2,(BALPOSX)
-            MOVE.W  #SCRHEIGH/2,(BALPOSY)
-            MOVE.W  #BALSPEED,(BALVELX)
-            MOVE.W  #BALSPEED,(BALVELY)
+            MOVE.W  #PIERAD+10,BOXRAD
             RTS
             
 ; ------------------------------------------------------------------------------
-BALUPD
-; UPDATES THE BALL.
+BOXUPD
+; UPDATES THE BOX.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-
-            MOVEM.W D0-D1,-(A7)
-
-            ; UPDATE BALL COORDINATES
-            MOVE.W  (BALPOSX),D0
-            MOVE.W  (BALPOSY),D1
-            ADD.W   (BALVELX),D0
-            ADD.W   (BALVELY),D1
-            
-            ; CHECK HORIZONTAL COLLISIONS
-            CMP.W   #SCRWIDTH-BALRAD,D0
-            BGT     .COLRGT
-            CMP.W   #BALRAD,D0
-            BLT     .COLLFT
-            
-            ; CHECK VERTICAL COLLISIONS
-.CHKVERT    CMP.W   #SCRHEIGH-BALRAD,D1
-            BGT     .COLBOT
-            CMP.W   #BALRAD,D1
-            BLT     .COLTOP
-            BRA     .DONE
-            
-            ; RIGHT SIDE COLLISION
-.COLRGT     NEG.W   (BALVELX)
-            MOVE.W  #SCRWIDTH-BALRAD,D0
-            BRA     .CHKVERT
-            
-            ; LEFT SIDE COLLISION
-.COLLFT     NEG.W   (BALVELX)
-            MOVE.W  #BALRAD,D0
-            BRA     .CHKVERT
-            
-            ; BOTTOM COLLISION
-.COLBOT     NEG.W   (BALVELY)
-            MOVE.W  #SCRHEIGH-BALRAD,D1
-            BRA     .DONE
-            
-            ; TOP COLLISION
-.COLTOP     NEG.W   (BALVELY)
-            MOVE.W  #BALRAD,D1
-
-            ; STORE POSITION
-.DONE       MOVE.W  D0,(BALPOSX)
-            MOVE.W  D1,(BALPOSY)
-
-            MOVEM.W (A7)+,D0-D1
-
             RTS
             
 ; ------------------------------------------------------------------------------
-BALPLOT
-; PLOT THE BALL.
+BOXPLOT
+; PLOT THE BOX.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -107,7 +57,8 @@ BALPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 *~Font name~Fixedsys~
-*~Font size~24~
-*~Tab type~0~
+*~Font size~9~
+*~Tab type~1~
 *~Tab size~4~

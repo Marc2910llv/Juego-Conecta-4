@@ -4,7 +4,7 @@
             
 ; ------------------------------------------------------------------------------
 PIEINIT
-; INITIALIZE PIECE.
+; INITIALIZE THE PIECE.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -15,7 +15,12 @@ PIEINIT
             
 ; ------------------------------------------------------------------------------
 PIEUPD
-
+; UPDATE THE PIECE.
+; INPUT    : NONE 
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            RTS
 ; ------------------------------------------------------------------------------
 PIEPLOT
 ; PLOT THE PIECE.
@@ -52,6 +57,7 @@ PIEPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 *~Font name~Fixedsys~

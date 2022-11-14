@@ -16,15 +16,6 @@ TABINIT
             RTS
             
 ; ------------------------------------------------------------------------------
-TABUPD
-; UPDATES THE TABLE.
-; INPUT    : NONE 
-; OUTPUT   : NONE
-; MODIFIES : NONE
-; ------------------------------------------------------------------------------
-            RTS
-            
-; ------------------------------------------------------------------------------
 TABPLOT
 ; PLOT THE TABLE.
 ; INPUT    : NONE 
@@ -47,8 +38,8 @@ TABPLOT
             ; DEFINE COORDINATES
             MOVE.W  #25,D1
             MOVE.W  #50,D2
-            MOVE.W  (TABWIDTH),D3
-            MOVE.W  (TABHEIGH),D4
+            MOVE.W  #TABWIDTH,D3
+            MOVE.W  #TABHEIGH,D4
             
             ; DRAW RECTANGLE
             MOVE.B  #87,D0
@@ -57,6 +48,7 @@ TABPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 *~Font name~Fixedsys~
 *~Font size~9~

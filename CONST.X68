@@ -4,7 +4,7 @@
 
 ; --- BOX RELATED CONTANTS ----------------------------------------------------
 
-BOXNMAT     EQU     7                       ; NUMBER OF BOXES IN A ROW / COLUMN
+BOXNUMB     EQU     7                       ; NUMBER OF BOXES IN A ROW / COLUMN
 BOXPCOL     EQU     $000000AA               ; BOXCONTOUR COLOR
 BOXFCOL     EQU     $000000FF               ; BOX FILL COLOR
 
@@ -27,6 +27,7 @@ TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 SCOFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
 SCOLINE1    EQU     $0101                   ; FIRST TEXT LINE COORDINATES
 SCOLINE2    EQU     $0102                   ; SECOND TEXT LINE COORDINATES
+
 
 
 

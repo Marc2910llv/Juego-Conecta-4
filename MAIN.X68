@@ -10,7 +10,7 @@
             INCLUDE "CONST.X68"
             INCLUDE "SYSCONST.X68"
             INCLUDE "SYSTEM.X68"
-            INCLUDE "BALL.X68"
+            INCLUDE "BOX.X68"
             INCLUDE "TABLE.X68"
             INCLUDE "SCORE.X68"
             INCLUDE "PIECE.X68"
@@ -53,6 +53,8 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
+
 
 
 

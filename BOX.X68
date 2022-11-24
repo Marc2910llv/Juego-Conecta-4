@@ -32,23 +32,23 @@ BOXPLOT
 
             ; SET PEN COLOR
             MOVE.B  #80,D0
-            MOVE.L  #BALPCOL,D1
+            MOVE.L  #BOXPCOL,D1
             TRAP    #15
             
             ; SET FILL COLOR
             MOVE.B  #81,D0
-            MOVE.L  #BALFCOL,D1
+            MOVE.L  #BOXFCOL,D1
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  (BALPOSX),D1
-            SUB.W   #BALRAD,D1
-            MOVE.W  (BALPOSY),D2
-            SUB.W   #BALRAD,D2
+            MOVE.W  (BOXPOSX),D1
+            SUB.W   #BOXRAD,D1
+            MOVE.W  (BOXPOSY),D2
+            SUB.W   #BOXRAD,D2
             MOVE.W  D1,D3
-            ADD.W   #2*BALRAD,D3
+            ADD.W   #2*BOXRAD,D3
             MOVE.W  D2,D4
-            ADD.W   #2*BALRAD,D4
+            ADD.W   #2*BOXRAD,D4
             
             ; DRAW CIRCLE
             MOVE.B  #88,D0
@@ -57,6 +57,7 @@ BOXPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 *~Font name~Fixedsys~
 *~Font size~9~

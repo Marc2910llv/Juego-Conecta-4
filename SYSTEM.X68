@@ -38,9 +38,15 @@ SCRINIT
             MOVE.W  #$FF00,D1
             TRAP    #15
             
+            ;ENABLE DOUBLE BUFFER
+            MOVE.B #92,D0
+            MOVE.B #17,D1
+            TRAP #15
+            
             MOVEM.L (A7)+,D0-D1
             
             RTS
+
 
 
 *~Font name~Fixedsys~

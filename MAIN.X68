@@ -21,7 +21,8 @@ START
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-            JSR     BOXINIT
+            JSR     TABINIT
+            ;JSR     BOXINIT
             ;JSR     SCOINIT
             JSR     PIEINIT
             
@@ -34,14 +35,14 @@ START
 ; UPDATE GAME LOGIC
 
             JSR     PIEUPD
-            JSR     BOXUPD            
+            ;JSR     BOXUPD            
 
 ; --- SYNC ---------------------------------------------------------------------
 
 ; --- PLOT ---------------------------------------------------------------------
 
             JSR     TABPLOT
-            JSR     BOXPLOT
+            ;JSR     BOXPLOT
             ;JSR     SCOPLOT
             JSR     PIEPLOT
 
@@ -53,6 +54,8 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
+
 
 
 

@@ -9,10 +9,8 @@ TABINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVE.W  #SCRWIDTH/2,(TABPOSX)
-            MOVE.W  #SCRHEIGH/2,(TABPOSY)
-            MOVE.W  #SCRWIDTH-25,(TABWIDTH)
-            MOVE.W  #SCRHEIGH-25,(TABHEIGH)
+            MOVE.W  #SCRWIDTH-10,(TABWIDTH)
+            MOVE.W  #SCRHEIGH-10,(TABHEIGH)
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -36,10 +34,11 @@ TABPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  #25,D1
-            MOVE.W  #50,D2
-            MOVE.W  #TABWIDTH,D3
-            MOVE.W  #TABHEIGH,D4
+            MOVE.W  #10,D1
+            MOVE.W  (PIEPOSY),D2
+            ADD.W   #PIERAD+10,D2
+            MOVE.W  (TABWIDTH),D3
+            MOVE.W  (TABHEIGH),D4
             
             ; DRAW RECTANGLE
             MOVE.B  #87,D0
@@ -48,6 +47,7 @@ TABPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 *~Font name~Fixedsys~

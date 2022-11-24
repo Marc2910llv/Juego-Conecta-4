@@ -16,8 +16,6 @@ PIEVELY     DS.W    1                       ; PIECE Y VELOCITY
 
 ; --- TAB RELATED VARIABLES ----------------------------------------------------
 
-TABPOSX     DS.W    1                       ; TAB x COORDINATE
-TABPOSY     DS.W    1                       ; TAB Y COORDINATE
 TABWIDTH    DS.W    1                       ; TAB WIDTH
 TABHEIGH    DS.W    1                       ; TAB HEIGH
 
@@ -25,6 +23,7 @@ TABHEIGH    DS.W    1                       ; TAB HEIGH
 
 SCOIN       DS.W    1                       ; NUMBER OF CAPTURED BALLS
 SCOOUT      DS.W    1                       ; NUMBER OF MISSED BALLS
+
 
 
 

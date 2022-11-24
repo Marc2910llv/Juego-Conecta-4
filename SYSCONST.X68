@@ -4,8 +4,9 @@
 
 ; --- SCREEN RELATED CONSTANTS -------------------------------------------------
 
-SCRWIDTH    EQU     640                     ; SCREEN WIDTH
-SCRHEIGH    EQU     480                     ; SCREEN HEIGHT
+SCRWIDTH    EQU     960                     ; SCREEN WIDTH
+SCRHEIGH    EQU     720                     ; SCREEN HEIGHT
+
 
 *~Font name~Fixedsys~
 *~Font size~24~

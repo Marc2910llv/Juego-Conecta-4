@@ -9,26 +9,33 @@
             
             INCLUDE "CONST.X68"
             INCLUDE "SYSCONST.X68"
-            INCLUDE "LIB/DMMCONST.X68"
-            INCLUDE "LIB/DMMCODE.X68"
             INCLUDE "SYSTEM.X68"
-            INCLUDE "LIB/AGLCODE.X68"
-            INCLUDE "LIB/UTLCODE.X68"
             INCLUDE "BOX.X68"
             INCLUDE "TABLE.X68"
             INCLUDE "SCORE.X68"
             INCLUDE "PIECE.X68"
-            INCLUDE "GAME.X68"
             
            
 START
 
 ; --- INITIALIZATION -----------------------------------------------------------
 
-            ORI.W   #$0700,SR
             JSR     SYSINIT
+<<<<<<< HEAD
+<<<<<<< HEAD
             JSR     UTLINIT
             JSR     GAMINIT
+=======
+            JSR     BOXINIT
+            ;JSR     SCOINIT
+            JSR     PIEINIT
+>>>>>>> parent of ef41bd7 (Update dibuix)
+=======
+            JSR     TABINIT
+            ;JSR     BOXINIT
+            ;JSR     SCOINIT
+            JSR     PIEINIT
+>>>>>>> parent of 92241fa (UPDATE)
             
 .LOOP
 
@@ -36,33 +43,36 @@ START
 
 ; READ INPUT DEVICES
 
-            TRAP    #KBDUPTN
-
 ; UPDATE GAME LOGIC
 
-            JSR     GAMUPD
             JSR     PIEUPD
-            ;JSR     BOXUPD            
+            JSR     BOXUPD            
 
 ; --- SYNC ---------------------------------------------------------------------
-
-.WINT       TST.B   (SCRINTCT)
-            BEQ     .WINT
-            CLR.B   (SCRINTCT)
 
 ; --- PLOT ---------------------------------------------------------------------
 
             JSR     TABPLOT
+<<<<<<< HEAD
+<<<<<<< HEAD
             TRAP    #SCRUPTN                ; UPDATE DOUBLE BUFFER
+=======
+            JSR     BOXPLOT
+            ;JSR     SCOPLOT
+            JSR     PIEPLOT
+>>>>>>> parent of ef41bd7 (Update dibuix)
+=======
+            ;JSR     BOXPLOT
+            ;JSR     SCOPLOT
+            JSR     PIEPLOT
+>>>>>>> parent of 92241fa (UPDATE)
 
             BRA     .LOOP
 
             SIMHALT
             
             INCLUDE "VARS.X68"
-            INCLUDE "LIB/UTLVARS.X68"
             INCLUDE "SYSVARS.X68"
-            INCLUDE "LIB/DMMVARS.X68"
 
             END     START
 
@@ -72,10 +82,16 @@ START
 
 
 
+<<<<<<< HEAD
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> parent of ef41bd7 (Update dibuix)
+=======
+>>>>>>> parent of 92241fa (UPDATE)
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

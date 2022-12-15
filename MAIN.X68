@@ -21,12 +21,21 @@ START
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-
+<<<<<<< HEAD
+<<<<<<< HEAD
+            JSR     UTLINIT
+            JSR     GAMINIT
+=======
             JSR     BOXINIT
             ;JSR     SCOINIT
             JSR     PIEINIT
-
+>>>>>>> parent of ef41bd7 (Update dibuix)
+=======
             JSR     TABINIT
+            ;JSR     BOXINIT
+            ;JSR     SCOINIT
+            JSR     PIEINIT
+>>>>>>> parent of 92241fa (UPDATE)
             
 .LOOP
 
@@ -44,16 +53,19 @@ START
 ; --- PLOT ---------------------------------------------------------------------
 
             JSR     TABPLOT
-            
- ;           TRAP    #SCRUPTN                ; UPDATE DOUBLE BUFFER
-
+<<<<<<< HEAD
+<<<<<<< HEAD
+            TRAP    #SCRUPTN                ; UPDATE DOUBLE BUFFER
+=======
             JSR     BOXPLOT
             ;JSR     SCOPLOT
             JSR     PIEPLOT
-
+>>>>>>> parent of ef41bd7 (Update dibuix)
+=======
             ;JSR     BOXPLOT
             ;JSR     SCOPLOT
             JSR     PIEPLOT
+>>>>>>> parent of 92241fa (UPDATE)
 
             BRA     .LOOP
 
@@ -65,6 +77,21 @@ START
             END     START
 
 
+
+
+
+
+
+<<<<<<< HEAD
+
+
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> parent of ef41bd7 (Update dibuix)
+=======
+>>>>>>> parent of 92241fa (UPDATE)
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

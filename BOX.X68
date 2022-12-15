@@ -10,6 +10,14 @@ BOXINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             MOVE.W  #PIERAD+10,BOXRAD
+            MOVE.W  #10,D1
+            ADD.W   #BOXRAD,D1
+            ADDQ.W  #5,D1
+            MOVE.W  D1,(BOXPOSX)
+            MOVE.W  (PIEPOSY),D2
+            ADD.W   #PIERAD+10,D2
+            ADD.W   #BOXRAD,D2
+            MOVE.W  D2,(BOXPOSY)
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -57,6 +65,7 @@ BOXPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 *~Font name~Fixedsys~

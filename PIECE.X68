@@ -10,7 +10,7 @@ PIEINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             MOVE.W  #SCRWIDTH/2,(PIEPOSX)
-            MOVE.W  #15,(PIEPOSY)
+            MOVE.W  #PIERAD+10,(PIEPOSY)
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -60,7 +60,9 @@ PIEPLOT
 
 
 
+
+
 *~Font name~Fixedsys~
-*~Font size~13~
+*~Font size~9~
 *~Tab type~0~
 *~Tab size~4~

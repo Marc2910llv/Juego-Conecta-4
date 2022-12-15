@@ -27,17 +27,6 @@ TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 SCOFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
 SCOLINE1    EQU     $0101                   ; FIRST TEXT LINE COORDINATES
 SCOLINE2    EQU     $0102                   ; SECOND TEXT LINE COORDINATES
-
-
-
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of ef41bd7 (Update dibuix)
-=======
->>>>>>> parent of 92241fa (UPDATE)
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

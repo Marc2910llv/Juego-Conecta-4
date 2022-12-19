@@ -21,7 +21,7 @@ START
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-            ;JSR     TABINIT
+            JSR     TABINIT
             JSR     BOXINIT
             ;JSR     SCOINIT
             JSR     PIEINIT
@@ -34,18 +34,22 @@ START
 
 ; UPDATE GAME LOGIC
 
-            JSR     PIEUPD          
-            JSR     BOXUPD            
+            ;JSR     PIEUPD          
+            ;JSR     BOXUPD            
 
 ; --- SYNC ---------------------------------------------------------------------
 
+            
+
 ; --- PLOT ---------------------------------------------------------------------
 
-            ;JSR     TABPLOT
+            JSR     TABPLOT
             JSR     BOXPLOT
             ;JSR     SCOPLOT
             JSR     PIEPLOT
 
+            TRAP    #0                      ; ENABLE DOBLE BUFFER
+            
             BRA     .LOOP
 
             SIMHALT
@@ -54,6 +58,8 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
+
 
 
 

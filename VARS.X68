@@ -4,15 +4,14 @@
 
 ; --- BOX RELATED VARIABLES ---------------------------------------------------
 
-BOXPOSX     DS.W    1                       ; BOX X COORDINATE
-BOXPOSY     DS.W    1                       ; BOX Y COORDINATE
-BOXRAD      DS.W    1                       ; BOX X VELOCITY
+BOXRAD      DS.W    1                       ; BOX RADIUS
 
 ; --- PIECE RELATED VARIABLES ---------------------------------------------------
 
 PIEPOSX     DS.W    1                       ; PIECE X COORDINATE
 PIEPOSY     DS.W    1                       ; PIECE Y COORDINATE
 PIEVELY     DS.W    1                       ; PIECE Y VELOCITY
+PIERAD      DS.W    1                       ; PIECE RADIUS
 
 ; --- TAB RELATED VARIABLES ----------------------------------------------------
 
@@ -23,6 +22,7 @@ TABHEIGH    DS.W    1                       ; TAB HEIGH
 
 SCOIN       DS.W    1                       ; NUMBER OF CAPTURED BALLS
 SCOOUT      DS.W    1                       ; NUMBER OF MISSED BALLS
+
 
 
 

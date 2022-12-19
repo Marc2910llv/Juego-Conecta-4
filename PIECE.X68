@@ -9,8 +9,18 @@ PIEINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
+            MOVEM.L D0,-(A7)
+
+            MOVE.W  (BOXRAD),D0
+            SUB.W   #10,D0
+            MOVE.W  D0,(PIERAD)
             MOVE.W  #SCRWIDTH/2,(PIEPOSX)
-            MOVE.W  #PIERAD+10,(PIEPOSY)
+            MOVE.W  (PIERAD),D0
+            ADD.W   #10,D0
+            MOVE.W  D0,(PIEPOSY)
+            
+            MOVEM.L (A7)+,D0
+            
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -28,7 +38,7 @@ PIEPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D4,-(A7)
+            MOVEM.L D0-D5,-(A7)
 
             ; SET PEN COLOR
             MOVE.B  #80,D0
@@ -41,22 +51,25 @@ PIEPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
+            MOVE.W  (PIERAD),D5
             MOVE.W  (PIEPOSX),D1
-            SUB.W   #PIERAD,D1
+            SUB.W   D5,D1
             MOVE.W  (PIEPOSY),D2
-            SUB.W   #PIERAD,D2
+            SUB.W   D5,D2
+            ADD.W   D5,D5
             MOVE.W  D1,D3
-            ADD.W   #2*PIERAD,D3
+            ADD.W   D5,D3
             MOVE.W  D2,D4
-            ADD.W   #2*PIERAD,D4
+            ADD.W   D5,D4
             
             ; DRAW PIECE
             MOVE.B  #88,D0
             TRAP    #15
             
-            MOVEM.L (A7)+,D0-D4
+            MOVEM.L (A7)+,D0-D5
 
             RTS
+
 
 
 

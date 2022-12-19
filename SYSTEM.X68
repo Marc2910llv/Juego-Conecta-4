@@ -10,6 +10,9 @@ SYSINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             JSR     SCRINIT
+            
+            MOVE.L  #SCRPLOT,($80)
+            
             MOVE.W  SR,-(A7)
             ANDI.W  #$DFFF,(A7)
             RTE
@@ -38,14 +41,36 @@ SCRINIT
             MOVE.W  #$FF00,D1
             TRAP    #15
             
-            ;ENABLE DOUBLE BUFFER
-            ;MOVE.B #92,D0
-            ;MOVE.B #17,D1
-            ;TRAP #15
+            ; ENABLE DOUBLE BUFFER
+            MOVE.B #92,D0
+            MOVE.B #17,D1
+            TRAP #15
             
             MOVEM.L (A7)+,D0-D1
             
             RTS
+            
+; ------------------------------------------------------------------------------
+SCRPLOT
+; UPDATES DOBLE BUFFER
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            MOVEM.W D0-D1,-(A7)
+
+            ; SWITCH BUFFERS
+            MOVE.B  #94,D0
+            TRAP    #15
+            
+            ; CLEAR HIDDEN BUFFER
+            MOVE.B  #11,D0
+            MOVE.W  #$FF00,D1
+            TRAP    #15
+            
+            MOVEM.W (A7)+,D0-D1
+            
+            RTE 
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

@@ -9,15 +9,12 @@ BOXINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVE.W  #PIERAD+10,BOXRAD
-            MOVE.W  #10,D1
-            ADD.W   #BOXRAD,D1
-            ADDQ.W  #5,D1
-            MOVE.W  D1,(BOXPOSX)
-            MOVE.W  (PIEPOSY),D2
-            ADD.W   #PIERAD+10,D2
-            ADD.W   #BOXRAD,D2
-            MOVE.W  D2,(BOXPOSY)
+            MOVEM.L D0-D1,-(A7)
+            
+            MOVE.W  #(SCRHEIGH/14)-5,(BOXRAD)
+            
+            MOVEM.L (A7)+,D0-D1
+            
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -49,14 +46,16 @@ BOXPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  (BOXPOSX),D1
-            SUB.W   #BOXRAD,D1
-            MOVE.W  (BOXPOSY),D2
-            SUB.W   #BOXRAD,D2
-            MOVE.W  D1,D3
-            ADD.W   #2*BOXRAD,D3
-            MOVE.W  D2,D4
-            ADD.W   #2*BOXRAD,D4
+            MOVE.W  #15,D1
+            MOVE.W  (PIEPOSY),D2
+            ADD.W   (PIERAD),D2
+            ADD.W   D1,D2
+            MOVE.W  (BOXRAD),D3
+            ADD.W   D3,D3
+            ADD.W   D1,D3
+            MOVE.W  (BOXRAD),D4
+            ADD.W   D4,D4
+            ADD.W   D2,D4
             
             ; DRAW CIRCLE
             MOVE.B  #88,D0
@@ -65,6 +64,7 @@ BOXPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

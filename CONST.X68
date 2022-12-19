@@ -4,13 +4,12 @@
 
 ; --- BOX RELATED CONTANTS ----------------------------------------------------
 
-BOXNMAT     EQU     7                       ; NUMBER OF BOXES IN A ROW / COLUMN
-BOXPCOL     EQU     $000000AA               ; BOXCONTOUR COLOR
-BOXFCOL     EQU     $000000FF               ; BOX FILL COLOR
+BOXMAT      EQU     7                       ; NUMBER OF BOXES IN A ROW / COLUMN
+BOXPCOL     EQU     $00AA0000               ; BOXCONTOUR COLOR
+BOXFCOL     EQU     $00AAAAAA               ; BOX FILL COLOR
 
 ; --- PIECE RELATED CONTANTS ----------------------------------------------------
 
-PIERAD      EQU     20                      ; PIECE RADIUS
 PIEPCOL1    EQU     $000000AA               ; PIECE CONTOUR COLOR TURN 1
 PIEFCOL1    EQU     $000000FF               ; PIECE FILL COLOR TURN 1
 PIEPCOL2    EQU     $0000AAAA               ; PIECE CONTOUR COLOR TURN 2
@@ -27,6 +26,7 @@ TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 SCOFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
 SCOLINE1    EQU     $0101                   ; FIRST TEXT LINE COORDINATES
 SCOLINE2    EQU     $0102                   ; SECOND TEXT LINE COORDINATES
+
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

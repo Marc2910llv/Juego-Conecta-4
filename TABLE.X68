@@ -36,7 +36,8 @@ TABPLOT
             ; DEFINE COORDINATES
             MOVE.W  #10,D1
             MOVE.W  (PIEPOSY),D2
-            ADD.W   #PIERAD+10,D2
+            ADD.W   (PIERAD),D2
+            ADD.W   #10,D2
             MOVE.W  (TABWIDTH),D3
             MOVE.W  (TABHEIGH),D4
             
@@ -47,6 +48,7 @@ TABPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

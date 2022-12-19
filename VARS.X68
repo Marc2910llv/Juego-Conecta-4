@@ -2,11 +2,13 @@
 ; GAME VARIABLES
 ; ==============================================================================
 
-; --- BOX RELATED VARIABLES ---------------------------------------------------
+; --- BOX RELATED VARIABLES ----------------------------------------------------
 
 BOXRAD      DS.W    1                       ; BOX RADIUS
+BOXCOL      DS.W    1                       ; COLUMN WHERE THE BOX IS PAINTED  
+BOXROW      DS.W    1                       ; ROW WHERE THE BOX IS PAINTED    
 
-; --- PIECE RELATED VARIABLES ---------------------------------------------------
+; --- PIECE RELATED VARIABLES --------------------------------------------------
 
 PIEPOSX     DS.W    1                       ; PIECE X COORDINATE
 PIEPOSY     DS.W    1                       ; PIECE Y COORDINATE
@@ -18,10 +20,6 @@ PIERAD      DS.W    1                       ; PIECE RADIUS
 TABWIDTH    DS.W    1                       ; TAB WIDTH
 TABHEIGH    DS.W    1                       ; TAB HEIGH
 
-; --- SCOREBOARD RELATED VARIABLES ---------------------------------------------
-
-SCOIN       DS.W    1                       ; NUMBER OF CAPTURED BALLS
-SCOOUT      DS.W    1                       ; NUMBER OF MISSED BALLS
 
 
 

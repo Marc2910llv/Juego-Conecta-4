@@ -11,7 +11,7 @@ BOXINIT
 ; ------------------------------------------------------------------------------
             MOVEM.L D0-D1,-(A7)
             
-            MOVE.W  #(SCRHEIGH/14)-5,(BOXRAD)
+            MOVE.W  #(SCRHEIGH/14)-10,(BOXRAD)
             
             MOVEM.L (A7)+,D0-D1
             
@@ -46,13 +46,20 @@ BOXPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  #15,D1
-            MOVE.W  (PIEPOSY),D2
+            MOVE.W  #(SCRHEIGH/14)*2,D1
+            MULS.W  (BOXCOL),D1
+            ADD.W   #15,D1
+            
+            MOVE.W  #(SCRHEIGH/14)*2,D2
+            MULS.W  (BOXROW),D2
+            ADD.W   (PIEPOSY),D2
             ADD.W   (PIERAD),D2
-            ADD.W   D1,D2
+            ADD.W   #30,D2
+            
             MOVE.W  (BOXRAD),D3
             ADD.W   D3,D3
             ADD.W   D1,D3
+            
             MOVE.W  (BOXRAD),D4
             ADD.W   D4,D4
             ADD.W   D2,D4
@@ -64,6 +71,7 @@ BOXPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

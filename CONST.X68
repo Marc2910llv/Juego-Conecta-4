@@ -4,7 +4,8 @@
 
 ; --- BOX RELATED CONTANTS ----------------------------------------------------
 
-BOXMAT      EQU     7                       ; NUMBER OF BOXES IN A ROW / COLUMN
+BOXNCOL     EQU     7                       ; NUMBER OF BOXES IN A COLUMN
+BOXNROW     EQU     6                       ; NUMBER OF BOXES IN A ROW
 BOXPCOL     EQU     $00AA0000               ; BOXCONTOUR COLOR
 BOXFCOL     EQU     $00AAAAAA               ; BOX FILL COLOR
 
@@ -21,11 +22,6 @@ PIESPEED    EQU     3                       ; MAGNITUDE OF THE FALL VEL.
 TABPCOL     EQU     $00FF0000               ; TAB CONTOUR COLOR
 TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
-; --- SCOREBOARD RELATED CONSTANTS ---------------------------------------------
-
-SCOFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
-SCOLINE1    EQU     $0101                   ; FIRST TEXT LINE COORDINATES
-SCOLINE2    EQU     $0102                   ; SECOND TEXT LINE COORDINATES
 
 *~Font name~Fixedsys~
 *~Font size~9~

@@ -69,6 +69,40 @@ GAMPLOT
             MOVEM.L (A7)+,D0-D3
             
             RTS
+; ------------------------------------------------------------------------------
+PLACEPIE
+; PLACES A PIECE
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            MOVEM.L D0-D3,-(A7)
+            
+            MOVE.L  #(COLU1),D1
+            LSL.L   #1,D1
+            ROXL.B  #1,D2
+            CMP.L   #7,D2
+            BEQ     .MAXPIE                 ;Ja no se poden colocar mes peces
+            OR.L #(PIEVAL1)<<D2,(COLU1)
+            
+            MOVEM.L (A7)+,D0-D3
+            
+            RTS
+.MAXPIE     ;SUBRUTINA RENOU ERROR
+            RTS
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

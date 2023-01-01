@@ -22,6 +22,12 @@ PIESPEED    EQU     3                       ; MAGNITUDE OF THE FALL VEL.
 TABPCOL     EQU     $00FF0000               ; TAB CONTOUR COLOR
 TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
+; --- COLUMN RELATED CONSTANTS -------------------------------------------------
+
+PIEVAL1     EQU     $0000000A               ; LOGIC VALUE OF PIECE 1
+PIEVAL2     EQU     $0000000B               ; LOGIC VALUE OF PIECE 2
+
+
 
 *~Font name~Fixedsys~
 *~Font size~9~

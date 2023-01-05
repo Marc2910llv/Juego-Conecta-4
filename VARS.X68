@@ -6,7 +6,7 @@
 
 BOXRAD      DS.W    1                       ; BOX RADIUS
 BOXCOL      DS.W    1                       ; COLUMN WHERE THE BOX IS PAINTED  
-BOXROW      DS.W    1                       ; ROW WHERE THE BOX IS PAINTED    
+BOXROW      DS.W    1                       ; ROW WHERE THE BOX IS PAINTED          
 
 ; --- PIECE RELATED VARIABLES --------------------------------------------------
 
@@ -39,6 +39,7 @@ VCOLU4      DS.L    1
 VCOLU5      DS.L    1
 VCOLU6      DS.L    1
 VCOLU7      DS.L    1
+
 
 
 

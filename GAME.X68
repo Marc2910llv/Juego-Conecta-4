@@ -83,13 +83,14 @@ PLACEPIE
             ROXL.B  #1,D2
             CMP.L   #7,D2
             BEQ     .MAXPIE                 ;Ja no se poden colocar mes peces
-            OR.L #(PIEVAL1)<<D2,(COLU1)
+            ;OR.L #(PIEVAL1)<<D2,(COLU1)
             
             MOVEM.L (A7)+,D0-D3
             
             RTS
 .MAXPIE     ;SUBRUTINA RENOU ERROR
             RTS
+
 
 
 

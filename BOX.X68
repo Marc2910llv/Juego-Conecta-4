@@ -46,11 +46,11 @@ BOXPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  #(SCRHEIGH/14)*2,D1
+            MOVE.W  #(SCRWIDTH/7),D1
             MULS.W  (BOXCOL),D1
-            ADD.W   #15,D1
+            ADD.W   #28,D1
             
-            MOVE.W  #(SCRHEIGH/14)*2,D2
+            MOVE.W  #(SCRHEIGH/7),D2
             MULS.W  (BOXROW),D2
             ADD.W   (PIEPOSY),D2
             ADD.W   (PIERAD),D2
@@ -71,6 +71,7 @@ BOXPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

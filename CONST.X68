@@ -8,6 +8,7 @@ BOXNCOL     EQU     7                       ; NUMBER OF BOXES IN A COLUMN
 BOXNROW     EQU     6                       ; NUMBER OF BOXES IN A ROW
 BOXPCOL     EQU     $00AA0000               ; BOXCONTOUR COLOR
 BOXFCOL     EQU     $00AAAAAA               ; BOX FILL COLOR
+BOXRAD      EQU     45                      ; BOX RADIUS
 
 ; --- PIECE RELATED CONTANTS ----------------------------------------------------
 
@@ -16,6 +17,7 @@ PIEFCOL1    EQU     $000000FF               ; PIECE FILL COLOR TURN 1
 PIEPCOL2    EQU     $0000AAAA               ; PIECE CONTOUR COLOR TURN 2
 PIEFCOL2    EQU     $0000FFFF               ; PIECE FILL COLOR TURN 2
 PIESPEED    EQU     3                       ; MAGNITUDE OF THE FALL VEL.
+PIERAD      EQU     35                      ; PIECE RADIUS
 
 ; --- TAB RELATED CONSTANTS ----------------------------------------------------
 
@@ -26,6 +28,7 @@ TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
 PIEVAL1     EQU     $0000000A               ; LOGIC VALUE OF PIECE 1
 PIEVAL2     EQU     $0000000B               ; LOGIC VALUE OF PIECE 2
+
 
 
 

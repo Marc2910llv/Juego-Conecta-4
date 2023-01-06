@@ -10,8 +10,10 @@ SYSINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             JSR     SCRINIT
+            JSR     KBDINIT
             
             MOVE.L  #SCRPLOT,($80)
+            MOVE.L  #KBDUPDATE,($84)
             
             MOVE.W  SR,-(A7)
             ANDI.W  #$DFFF,(A7)
@@ -71,6 +73,56 @@ SCRPLOT
             MOVEM.W (A7)+,D0-D1
             
             RTE 
+            
+; ------------------------------------------------------------------------------
+KBDINIT
+; INIT KEYBOOARD
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            CLR.B   (KBDVAL)
+            CLR.B   (KBDEDGE)
+            RTS
+            
+; ------------------------------------------------------------------------------
+KBDUPDATE
+; UPDATE KEYBOOARD INFO.
+; 2 -> FIRE 1
+; 1 -> RIGHT
+; 0 -> LEFT
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+
+            MOVEM.W D0-D3,-(A7)
+            
+            ; READ FIRST PART
+            MOVE.B  #19,D0
+            MOVE.L  #0<<24|KBDFIRE1<<16|KBDRIGHT<<8|KBDLEFT,D1
+            TRAP    #15
+            
+            ; CONVERT TO DESIRED FORMAT
+            MOVE.W  #3,D3
+.LOOP       LSL.L   #8,D1
+            ROXL.B  #1,D2
+            DBRA.W  D3,.LOOP
+            
+            ; COMPUTE KBDEDGE
+            MOVE.B  (KBDVAL),D0
+            NOT.B   D0
+            AND.B   D2,D0
+            MOVE.B  D0,(KBDEDGE)
+            
+            ; STORE KBDVAL
+            MOVE.B  D2,(KBDVAL)
+            
+            MOVEM.W (A7)+,D0-D3
+            
+            RTE
+            
+            
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

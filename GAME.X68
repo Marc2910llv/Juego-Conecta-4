@@ -65,22 +65,22 @@ GAMPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D3,-(A7)
+            MOVEM.L D0-D2,-(A7)
             
             ;JSR     AGLPLOT
             JSR     TABPLOT
             
             MOVE.W  #BOXNCOL-1,D0
 .PLOT_NEXT_COL
-            MOVE.W  #BOXNCOL-1,D2
+            MOVE.W  #BOXNCOL,D2
             SUB.W   D0,D2
             MOVE.W  D2,(BOXCOL)
             
             MOVE.W  #BOXNROW-1,D1
 .PLOT_NEXT_ROW
-            MOVE.W  #BOXNROW-1,D3
-            SUB.W   D1,D3
-            MOVE.W  D3,(BOXROW)
+            MOVE.W  #BOXNROW,D2
+            SUB.W   D1,D2
+            MOVE.W  D2,(BOXROW)
             
             JSR     BOXPLOT
             
@@ -89,7 +89,7 @@ GAMPLOT
             
             JSR     PIEPLOT
             
-            MOVEM.L (A7)+,D0-D3
+            MOVEM.L (A7)+,D0-D2
             
             RTS
 ; ------------------------------------------------------------------------------
@@ -107,6 +107,7 @@ PLACEPIE
             ;SALT A ERROR
             BEQ     .MAXERR    
             
+<<<<<<< HEAD
             ;FORMULA PER FICAR SA FITXA ON TOCA, ES UNA FUMADA SI VOLS T'HO EXPLIC AMB UN DIBUIXET O ALGO xd
             MOVE    (POSX),A0
             SUBQ.W  #1,A0
@@ -118,6 +119,14 @@ PLACEPIE
             ADDQ.W  (POSX),A1
             ;PER ARA FIC 'A' PERO S'HA DE IMPLEMENTAR ES TEMA DE QUE SE VAIG CAMBIANT AMB B SEGONS ES TORN
             MOVE.B  #$A,ROW1(A1)
+=======
+            MOVE.L  #(COLU1),D1
+            LSL.L   #1,D1
+            ROXL.B  #1,D2
+            CMP.L   #7,D2
+            BEQ     .MAXPIE                 ; ja no se poden colocar mes peces
+            ;OR.L #(PIEVAL1)<<D2,(COLU1)
+>>>>>>> 503e21dfa9b7b37e9c064c8041e36b9a99ccc48a
             
             ;SUBRUTINA PER FER SES COMPROBACIONS
             JSR     CHECKTAB
@@ -163,6 +172,7 @@ CHECK2:
             MOVEM.L (A7)+,D0-D3
             
             RTS
+
 
 
 

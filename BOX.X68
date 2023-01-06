@@ -9,11 +9,9 @@ BOXINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D1,-(A7)
             
-            MOVE.W  #(SCRHEIGH/14)-10,(BOXRAD)
-            
-            MOVEM.L (A7)+,D0-D1
+            MOVE.W  #BOXRAD*2+41,(BOXPOSX)
+            MOVE.W  #BOXRAD*2+10,(BOXPOSY)
             
             RTS
             
@@ -46,23 +44,22 @@ BOXPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  #(SCRWIDTH/7),D1
-            MULS.W  (BOXCOL),D1
-            ADD.W   #28,D1
+            MOVE.W  (BOXPOSX),D1
+            MOVE.W  (BOXCOL),D2
+            MULS.W  D2,D1
+            SUB.W   #BOXRAD*2,D1
             
-            MOVE.W  #(SCRHEIGH/7),D2
-            MULS.W  (BOXROW),D2
-            ADD.W   (PIEPOSY),D2
-            ADD.W   (PIERAD),D2
-            ADD.W   #30,D2
+            MOVE.W  (BOXPOSY),D2
+            MOVE.W  (BOXROW),D3
+            MULS.W  D3,D2
+            ADD.W   #PIERAD*2+20,D2
+            SUB.W   #BOXRAD*2-5,D2
             
-            MOVE.W  (BOXRAD),D3
-            ADD.W   D3,D3
-            ADD.W   D1,D3
+            MOVE.W  D1,D3
+            ADD.W   #BOXRAD*2,D3
             
-            MOVE.W  (BOXRAD),D4
-            ADD.W   D4,D4
-            ADD.W   D2,D4
+            MOVE.W  D2,D4
+            ADD.W   #BOXRAD*2,D4
             
             ; DRAW CIRCLE
             MOVE.B  #88,D0
@@ -71,6 +68,7 @@ BOXPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

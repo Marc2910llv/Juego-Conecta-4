@@ -33,6 +33,8 @@ START
 
 ; READ INPUT DEVICES
 
+            TRAP    #1
+
 ; UPDATE GAME LOGIC
 
             JSR     GAMUPD           
@@ -57,6 +59,7 @@ START
             ;INCLUDE "LIB/DMMVARS.X68"
 
             END     START
+
 
 
 

@@ -4,21 +4,17 @@
 
 ; --- BOX RELATED VARIABLES ----------------------------------------------------
 
-BOXRAD      DS.W    1                       ; BOX RADIUS
 BOXCOL      DS.W    1                       ; COLUMN WHERE THE BOX IS PAINTED  
-BOXROW      DS.W    1                       ; ROW WHERE THE BOX IS PAINTED          
+BOXROW      DS.W    1                       ; ROW WHERE THE BOX IS PAINTED
+BOXPOSX     DS.W    1                       ; BOX X COORDINATE
+BOXPOSY     DS.W    1                       ; BOX Y COORDINATE
 
 ; --- PIECE RELATED VARIABLES --------------------------------------------------
 
 PIEPOSX     DS.W    1                       ; PIECE X COORDINATE
 PIEPOSY     DS.W    1                       ; PIECE Y COORDINATE
-PIEVELY     DS.W    1                       ; PIECE Y VELOCITY
-PIERAD      DS.W    1                       ; PIECE RADIUS
-
-; --- TAB RELATED VARIABLES ----------------------------------------------------
-
-TABWIDTH    DS.W    1                       ; TAB WIDTH
-TABHEIGH    DS.W    1                       ; TAB HEIGH
+PIEVELX     DS.W    1                       ; X MOVEMENT
+PIEVELY     DS.W    1                       ; Y MOVEMENT
 
 ; --- COLUMN RELATED VARAIBLES -------------------------------------------------
 
@@ -39,6 +35,7 @@ VCOLU4      DS.L    1
 VCOLU5      DS.L    1
 VCOLU6      DS.L    1
 VCOLU7      DS.L    1
+
 
 
 

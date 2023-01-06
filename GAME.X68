@@ -42,22 +42,22 @@ GAMPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D3,-(A7)
+            MOVEM.L D0-D2,-(A7)
             
             ;JSR     AGLPLOT
             JSR     TABPLOT
             
             MOVE.W  #BOXNCOL-1,D0
 .PLOT_NEXT_COL
-            MOVE.W  #BOXNCOL-1,D2
+            MOVE.W  #BOXNCOL,D2
             SUB.W   D0,D2
             MOVE.W  D2,(BOXCOL)
             
             MOVE.W  #BOXNROW-1,D1
 .PLOT_NEXT_ROW
-            MOVE.W  #BOXNROW-1,D3
-            SUB.W   D1,D3
-            MOVE.W  D3,(BOXROW)
+            MOVE.W  #BOXNROW,D2
+            SUB.W   D1,D2
+            MOVE.W  D2,(BOXROW)
             
             JSR     BOXPLOT
             
@@ -66,7 +66,7 @@ GAMPLOT
             
             JSR     PIEPLOT
             
-            MOVEM.L (A7)+,D0-D3
+            MOVEM.L (A7)+,D0-D2
             
             RTS
 ; ------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ PLACEPIE
             LSL.L   #1,D1
             ROXL.B  #1,D2
             CMP.L   #7,D2
-            BEQ     .MAXPIE                 ;Ja no se poden colocar mes peces
+            BEQ     .MAXPIE                 ; ja no se poden colocar mes peces
             ;OR.L #(PIEVAL1)<<D2,(COLU1)
             
             MOVEM.L (A7)+,D0-D3
@@ -90,6 +90,7 @@ PLACEPIE
             RTS
 .MAXPIE     ;SUBRUTINA RENOU ERROR
             RTS
+
 
 
 

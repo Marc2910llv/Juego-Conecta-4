@@ -11,13 +11,10 @@ PIEINIT
 ; ------------------------------------------------------------------------------
             MOVEM.L D0,-(A7)
 
-            MOVE.W  (BOXRAD),D0
-            SUB.W   #10,D0
-            MOVE.W  D0,(PIERAD)
             MOVE.W  #SCRWIDTH/2,(PIEPOSX)
-            MOVE.W  (PIERAD),D0
-            ADD.W   #10,D0
-            MOVE.W  D0,(PIEPOSY)
+            MOVE.W  #PIERAD+10,(PIEPOSY)
+            
+            MOVE.W  (BOXPOSX),(PIEVELX)
             
             MOVEM.L (A7)+,D0
             
@@ -30,6 +27,18 @@ PIEUPD
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
+            
+            ; UPDATE X POSITION
+            MOVE.W  (PIEPOSX),D0
+            BTST.B  #0,(KBDEDGE)
+            BEQ     .CHKRIGHT
+            MOVE.W  (PIERAD),D5
+            MOVE.W  (PIEPOSX),D1
+            ADD.W   #(SCRWIDTH/7),D1
+            ADD.W   #28,D1
+            SUB.W   D5,D1
+.CHKRIGHT               
+
             RTS
 ; ------------------------------------------------------------------------------
 PIEPLOT
@@ -38,7 +47,7 @@ PIEPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D5,-(A7)
+            MOVEM.L D0-D4,-(A7)
 
             ; SET PEN COLOR
             MOVE.B  #80,D0
@@ -51,24 +60,26 @@ PIEPLOT
             TRAP    #15
             
             ; DEFINE COORDINATES
-            MOVE.W  (PIERAD),D5
             MOVE.W  (PIEPOSX),D1
-            SUB.W   D5,D1
+            SUB.W   #PIERAD,D1
+            
             MOVE.W  (PIEPOSY),D2
-            SUB.W   D5,D2
-            ADD.W   D5,D5
-            MOVE.W  D1,D3
-            ADD.W   D5,D3
-            MOVE.W  D2,D4
-            ADD.W   D5,D4
+            SUB.W   #PIERAD,D2
+            
+            MOVE.W  (PIEPOSX),D3
+            ADD.W   #PIERAD,D3
+            
+            MOVE.W  (PIEPOSY),D4
+            ADD.W   #PIERAD,D4
             
             ; DRAW PIECE
             MOVE.B  #88,D0
             TRAP    #15
             
-            MOVEM.L (A7)+,D0-D5
+            MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

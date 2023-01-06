@@ -12,6 +12,7 @@ GAMINIT
             JSR     TABINIT
             JSR     BOXINIT
             JSR     PIEINIT
+            JSR     COLUINIT
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -33,6 +34,28 @@ GAMUPD
 ;.GOUPD      JSR     AGLUPD
 ;            JSR     PADUPD        
 ;            MOVEM.L (A7)+,D0/A1-A3
+             RTS
+
+;-------------------------------------------------------------------------------             
+COLUINIT
+; PLOTS THE GAME
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            MOVEM.L D0-D3,-(A7)
+            ;BUCLE PER INICIAR A 0 COLUVAL
+            MOVEQ.L #0,A0
+            MOVEQ.L #6,D1
+            
+            
+COLU:
+            CLR.B   COLUVAL(A0)
+            ADDQ.W  #1,A1            
+            DBRA    D1,CHECK2
+            
+            MOVEM.L (A7)+,D0-D3
+            
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -97,7 +120,7 @@ PLACEPIE
             MOVE.B  #$A,ROW1(A1)
             
             ;SUBRUTINA PER FER SES COMPROBACIONS
-            
+            JSR     CHECKTAB
                         
             MOVEM.L (A7)+,D0-D3
             
@@ -138,6 +161,9 @@ CHECK2:
             DBRA    D1,CHECK1
 
             MOVEM.L (A7)+,D0-D3
+            
+            RTS
+
 
 
 

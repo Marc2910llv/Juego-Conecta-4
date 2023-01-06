@@ -20,25 +20,23 @@ PIERAD      DS.W    1                       ; PIECE RADIUS
 TABWIDTH    DS.W    1                       ; TAB WIDTH
 TABHEIGH    DS.W    1                       ; TAB HEIGH
 
-; --- COLUMN RELATED VARAIBLES -------------------------------------------------
+; --- ROW RELATED VARAIBLES ----------------------------------------------------
 
-COLU1       DS.L    1
-COLU2       DS.L    1
-COLU3       DS.L    1
-COLU4       DS.L    1
-COLU5       DS.L    1
-COLU6       DS.L    1
-COLU7       DS.L    1
+ROW1       DS.B    1,1,1,1,1,1,1
+ROW2       DS.B    1,1,1,1,1,1,1
+ROW3       DS.B    1,1,1,1,1,1,1
+ROW4       DS.B    1,1,1,1,1,1,1
+ROW5       DS.B    1,1,1,1,1,1,1
+ROW6       DS.B    1,1,1,1,1,1,1
 
 ; --- PIECE VALUE RELATED VARAIBLES --------------------------------------------
 
-VCOLU1      DS.L    1
-VCOLU2      DS.L    1
-VCOLU3      DS.L    1
-VCOLU4      DS.L    1
-VCOLU5      DS.L    1
-VCOLU6      DS.L    1
-VCOLU7      DS.L    1
+COLUVAL      DS.B    1,1,1,1,1,1,1 ;Vector per saber cuntes fitxes s'hi han colocat a cada columna, amb aixo podem determinar sa posició per colocar i comparar sa fitxa
+
+; --- PIECE POSITION VARAIBLES -------------------------------------------------
+
+POSX        DS.B    1 ;aqui se guarden ses posicions x i y de on se vol colocar sa fitxa si miram sa tauler com una matriu de posicions xy
+POSY        DS.B    1
 
 
 

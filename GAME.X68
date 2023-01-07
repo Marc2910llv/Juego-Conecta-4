@@ -33,6 +33,9 @@ GAMUPD
 ;.GOUPD      JSR     AGLUPD
 ;            JSR     PADUPD        
 ;            MOVEM.L (A7)+,D0/A1-A3
+
+            JSR     PIEUPD
+
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -90,6 +93,7 @@ PLACEPIE
             RTS
 .MAXPIE     ;SUBRUTINA RENOU ERROR
             RTS
+
 
 
 

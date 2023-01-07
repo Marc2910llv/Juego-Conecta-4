@@ -28,16 +28,44 @@ PIEUPD
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
+            MOVEM.W  D0-D2,-(A7)
+            
             ; UPDATE X POSITION
             MOVE.W  (PIEPOSX),D0
+            
+            ; CHECK LEFT ARROW KEY
             BTST.B  #0,(KBDEDGE)
             BEQ     .CHKRIGHT
-            MOVE.W  (PIERAD),D5
-            MOVE.W  (PIEPOSX),D1
-            ADD.W   #(SCRWIDTH/7),D1
-            ADD.W   #28,D1
-            SUB.W   D5,D1
-.CHKRIGHT               
+            SUB.W   (PIEVELX),D0
+            
+            ;CHECK  RIGHT ARROW KEY
+.CHKRIGHT   BTST.B  #2,(KBDEDGE)
+            BEQ     .CHKSPACE
+            ADD.W   (PIEVELX),D0
+            
+            ; CHECK SPACE KEY
+.CHKSPACE   BTST.B  #4,(KBDEDGE)
+            BEQ     .CONT
+            ; (LET THE PIECE GO DOWN)
+            
+            ; CHECK COLISIONS
+.CONT       MOVE.W  (PIEVELX),D1
+            SUB.W   #BOXRAD-5,D1
+            CMP.W   D1,D0
+            BGE     .CONT2
+            MOVE.W  D1,D0
+            BRA     .DONE
+            
+.CONT2      MOVE.W  #SCRWIDTH,D2
+            SUB.W   D1,D2
+            CMP.W   D2,D0
+            BLE     .DONE
+            MOVE.W  D2,D0
+
+            ; UPDATE VARIABLE
+.DONE       MOVE.W  D0,(PIEPOSX) 
+
+            MOVEM.W  (A7)+,D0-D2             
 
             RTS
 ; ------------------------------------------------------------------------------
@@ -79,6 +107,7 @@ PIEPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

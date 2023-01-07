@@ -87,27 +87,36 @@ KBDINIT
             
 ; ------------------------------------------------------------------------------
 KBDUPDATE
-; UPDATE KEYBOOARD INFO.
-; 2 -> FIRE 1
-; 1 -> RIGHT
+; UPDATE KEYBOARD INFO.  
+; 7 -> PAUSE
+; 6 -> FIRE 3
+; 5 -> FIRE 2
+; 4 -> FIRE 1
+; 3 -> DOWN
+; 2 -> RIGHT
+; 1 -> UP
 ; 0 -> LEFT
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
 
-            MOVEM.W D0-D3,-(A7)
-            
+            MOVEM.L D0-D3,-(A7)
+
             ; READ FIRST PART
             MOVE.B  #19,D0
-            MOVE.L  #0<<24|KBDFIRE1<<16|KBDRIGHT<<8|KBDLEFT,D1
+            MOVE.L  #KBDPAUSE<<24|KBDFIRE3<<16|KBDFIRE2<<8|KBDFIRE1,D1
             TRAP    #15
             
             ; CONVERT TO DESIRED FORMAT
-            MOVE.W  #3,D3
-.LOOP       LSL.L   #8,D1
-            ROXL.B  #1,D2
-            DBRA.W  D3,.LOOP
+            JSR     .PACK
+
+            ; READ SECOND PART
+            MOVE.L  #KBDDOWN<<24|KBDRIGHT<<16|KBDUP<<8|KBDLEFT,D1
+            TRAP    #15
+
+            ; CONVERT TO DESIRED FORMAT
+            JSR     .PACK
             
             ; COMPUTE KBDEDGE
             MOVE.B  (KBDVAL),D0
@@ -118,11 +127,19 @@ KBDUPDATE
             ; STORE KBDVAL
             MOVE.B  D2,(KBDVAL)
             
-            MOVEM.W (A7)+,D0-D3
-            
+            MOVEM.L (A7)+,D0-D3
+
             RTE
             
+.PACK       MOVE.W  #3,D3
+.LOOP       LSL.L   #8,D1
+            ROXL.B  #1,D2
+            DBRA.W  D3,.LOOP
+            RTS
+
             
+            
+
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

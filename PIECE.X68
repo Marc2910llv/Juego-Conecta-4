@@ -121,13 +121,24 @@ PIEFALL
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
-            MOVEM.L D0-D3,-(A7)
+            MOVEM.L D0-D4/A1,-(A7)
             
             MOVE.W  (PIEVELY),D3
             MOVE.W  #5,D2
             MOVE.W  #50,D1
             
-.FALLAGAIN  MOVE.W  #23,D0
+.FALLAGAIN  LEA.L   ROW1,A1
+            ADDQ.W  #1,(POSY)
+            MOVE.W  (POSY),D4
+            MULS.W  #7,D4
+            ADD.W   D4,A1
+            MOVE.W  (POSX),D4
+            ADD.W   D4,A1
+            SUBQ.W  #1,(POSY)
+            CMP.B   #0,(A1)
+            BNE     .OTHERPIE
+            
+            MOVE.W  #23,D0
             TRAP    #15
             ADD.W   D3,(PIEPOSY)
             CMP.W   #-1,(POSY)
@@ -138,9 +149,14 @@ PIEFALL
             TRAP    #0
             DBRA    D2,.FALLAGAIN
             
-            MOVEM.L (A7)+,D0-D3
+.END        MOVE.B  #1,(A1)
+            MOVEM.L (A7)+,D0-D4/A1
 
             RTS
+
+.OTHERPIE   SUB.W   #7,A1
+            BRA     .END
+
 
 
 

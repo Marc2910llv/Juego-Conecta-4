@@ -10,13 +10,17 @@ TABINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
 
+            MOVEM.L D0/A1,-(A7)
+
             ;INITIALICE ROWS VALUES
             MOVE.W  #6*7-1,D0
             LEA.L   ROW1,A1
 .LOOP       
             MOVE.B  #0,(A1)
-            ADDA.L  #2,A0
+            ADD.L  #1,A1
             DBRA    D0,.LOOP
+
+            MOVEM.L (A7)+,D0/A1
 
             RTS
             
@@ -53,6 +57,7 @@ TABPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

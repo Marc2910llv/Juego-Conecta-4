@@ -9,14 +9,15 @@ PIEINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0,-(A7)
 
-            MOVE.W  #SCRWIDTH/2,(PIEPOSX)
+            MOVE.W  #SCRWIDTH/2-1,(PIEPOSX)
             MOVE.W  #PIERAD+10,(PIEPOSY)
             
             MOVE.W  (BOXPOSX),(PIEVELX)
+            MOVE.W  #100,(PIEVELY)
             
-            MOVEM.L (A7)+,D0
+            MOVE.W  #3,(POSX)
+            MOVE.W  #-1,(POSY)
             
             RTS
             
@@ -37,23 +38,26 @@ PIEUPD
             BTST.B  #0,(KBDEDGE)
             BEQ     .CHKRIGHT
             SUB.W   (PIEVELX),D0
+            SUBQ.W  #1,(POSX)
             
             ;CHECK  RIGHT ARROW KEY
 .CHKRIGHT   BTST.B  #2,(KBDEDGE)
             BEQ     .CHKSPACE
             ADD.W   (PIEVELX),D0
+            ADDQ.W  #1,(POSX)
             
             ; CHECK SPACE KEY
 .CHKSPACE   BTST.B  #4,(KBDEDGE)
             BEQ     .CONT
-            ; (LET THE PIECE GO DOWN)
+            JSR     PIEFALL
             
             ; CHECK COLISIONS
 .CONT       MOVE.W  (PIEVELX),D1
-            SUB.W   #BOXRAD-5,D1
+            SUB.W   #BOXRAD-1,D1
             CMP.W   D1,D0
             BGE     .CONT2
             MOVE.W  D1,D0
+            MOVE.W  #0,(POSX)
             BRA     .DONE
             
 .CONT2      MOVE.W  #SCRWIDTH,D2
@@ -61,6 +65,7 @@ PIEUPD
             CMP.W   D2,D0
             BLE     .DONE
             MOVE.W  D2,D0
+            MOVE.W  #6,(POSX)
 
             ; UPDATE VARIABLE
 .DONE       MOVE.W  D0,(PIEPOSX) 
@@ -105,6 +110,35 @@ PIEPLOT
             TRAP    #15
             
             MOVEM.L (A7)+,D0-D4
+
+            RTS
+            
+; ------------------------------------------------------------------------------
+PIEFALL
+; LET A PIECE FALL IN A COLUMN
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            
+            MOVEM.L D0-D3,-(A7)
+            
+            MOVE.W  (PIEVELY),D3
+            MOVE.W  #5,D2
+            MOVE.W  #50,D1
+            
+.FALLAGAIN  MOVE.W  #23,D0
+            TRAP    #15
+            ADD.W   D3,(PIEPOSY)
+            CMP.W   #-1,(POSY)
+            BNE     .PASS
+            ADDQ.W  #5,(PIEPOSY)
+.PASS       ADDQ.W  #1,(POSY)
+            JSR     GAMPLOT
+            TRAP    #0
+            DBRA    D2,.FALLAGAIN
+            
+            MOVEM.L (A7)+,D0-D3
 
             RTS
 

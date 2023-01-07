@@ -7,7 +7,7 @@
 BOXNCOL     EQU     7                       ; NUMBER OF BOXES IN A COLUMN
 BOXNROW     EQU     6                       ; NUMBER OF BOXES IN A ROW
 BOXPCOL     EQU     $00AA0000               ; BOXCONTOUR COLOR
-BOXFCOL     EQU     $00AAAAAA               ; BOX FILL COLOR
+BOXFCOL     EQU     $00000000               ; BOX FILL COLOR
 BOXRAD      EQU     45                      ; BOX RADIUS
 
 ; --- PIECE RELATED CONTANTS ----------------------------------------------------
@@ -28,6 +28,7 @@ TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
 PIEVAL1     EQU     $0000000A               ; LOGIC VALUE OF PIECE 1
 PIEVAL2     EQU     $0000000B               ; LOGIC VALUE OF PIECE 2
+
 
 
 

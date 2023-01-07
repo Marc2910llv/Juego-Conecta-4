@@ -10,14 +10,13 @@ TABINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
 
-            ;INITIALICE COLUMN VALUES
-            MOVE.L  #$00000000,(COLU1)
-            MOVE.L  #$00000000,(COLU2)
-            MOVE.L  #$00000000,(COLU3)
-            MOVE.L  #$00000000,(COLU4)
-            MOVE.L  #$00000000,(COLU5)
-            MOVE.L  #$00000000,(COLU6)
-            MOVE.L  #$00000000,(COLU7)
+            ;INITIALICE ROWS VALUES
+            MOVE.W  #6*7-1,D0
+            LEA.L   ROW1,A1
+.LOOP       
+            MOVE.B  #0,(A1)
+            ADDA.L  #2,A0
+            DBRA    D0,.LOOP
 
             RTS
             
@@ -54,6 +53,7 @@ TABPLOT
             MOVEM.L (A7)+,D0-D4
 
             RTS
+
 
 
 

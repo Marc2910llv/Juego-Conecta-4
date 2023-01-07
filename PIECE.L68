@@ -1,0 +1,185 @@
+0000133C Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 07/01/2023 2:05:08
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; PIECE MANAGEMENT
+00000000                             3  ; ==============================================================================
+00000000                             4              
+00000000                             5  ; ------------------------------------------------------------------------------
+00000000                             6  PIEINIT
+00000000                             7  ; INITIALIZE THE PIECE.
+00000000                             8  ; INPUT    : NONE 
+00000000                             9  ; OUTPUT   : NONE
+00000000                            10  ; MODIFIES : NONE
+00000000                            11  ; ------------------------------------------------------------------------------
+00000000  48E7 8000                 12              MOVEM.L D0,-(A7)
+00000004                            13  
+Line 14 ERROR: Comma expected
+00000004                            14              MOVE.W  #SCRWIDTH/2,(PIEPOSX)
+Line 15 ERROR: Invalid syntax
+00000004                            15              MOVE.W  #PIERAD+10,(PIEPOSY)
+00000004                            16              
+Line 17 ERROR: Undefined symbol
+00000004  33F9 004DBD16 005455B8    17              MOVE.W  (BOXPOSX),(PIEVELX)
+Line 18 ERROR: Invalid syntax
+0000000E                            18              MOVE.W  #BOXRAD*3+5,(PIEVELY)
+0000000E                            19              
+0000000E  4CDF 0001                 20              MOVEM.L (A7)+,D0
+00000012                            21              
+00000012  4E75                      22              RTS
+00000014                            23              
+00000014                            24  ; ------------------------------------------------------------------------------
+Line 25 ERROR: Symbol value differs between first and second pass
+00000014                            25  PIEUPD
+00000014                            26  ; UPDATE THE PIECE.
+00000014                            27  ; INPUT    : NONE 
+00000014                            28  ; OUTPUT   : NONE
+00000014                            29  ; MODIFIES : NONE
+00000014                            30  ; ------------------------------------------------------------------------------
+00000014                            31              
+00000014  48A7 F000                 32              MOVEM.W  D0-D3,-(A7)
+00000018                            33              
+00000018                            34              ; UPDATE X POSITION
+Line 35 ERROR: Undefined symbol
+00000018  3039 004DBD16             35              MOVE.W  (PIEPOSX),D0
+Line 36 ERROR: Undefined symbol
+0000001E  3239 004DBD16             36              MOVE.W  (PIEPOSY),D1
+00000024                            37              
+00000024                            38              ; CHECK LEFT ARROW KEY
+Line 39 ERROR: Undefined symbol
+00000024  0839 0000 005455B8        39              BTST.B  #0,(KBDEDGE)
+0000002C  6700 0020                 40              BEQ     .CHKRIGHT
+Line 41 ERROR: Undefined symbol
+00000030  9079 004DBD16             41              SUB.W   (PIEVELX),D0
+00000036                            42              
+00000036                            43              ;CHECK  RIGHT ARROW KEY
+Line 44 ERROR: Symbol value differs between first and second pass
+00000036                            44  .CHKRIGHT   BTST.B  #2,(KBDEDGE)
+00000036  6700 0028                 45              BEQ     .CHKSPACE
+Line 46 ERROR: Undefined symbol
+0000003A  D079 004DBD16             46              ADD.W   (PIEVELX),D0
+00000040                            47              
+00000040                            48              ; CHECK SPACE KEY
+Line 49 ERROR: Symbol value differs between first and second pass
+00000040                            49  .CHKSPACE   BTST.B  #4,(KBDEDGE)
+00000040  6700 0030                 50              BEQ     .CHKX
+Line 51 ERROR: Undefined symbol
+00000044  9279 004DBD16             51              SUB.W   (PIEVELY),D1
+0000004A                            52              
+0000004A                            53             ; CHECK SPACE KEY ++++++++++++
+Line 54 ERROR: Symbol value differs between first and second pass
+0000004A                            54  .CHKX       BTST.B  #1,(KBDEDGE)
+0000004A  6700 0038                 55              BEQ     .CONT
+Line 56 ERROR: Undefined symbol
+0000004E  D279 004DBD16             56              ADD.W   (PIEVELY),D1
+00000054                            57              
+00000054                            58              ; CHECK COLISIONS
+Line 59 ERROR: Symbol value differs between first and second pass
+00000054                            59  .CONT       MOVE.W  (PIEVELX),D2
+Line 60 ERROR: Comma expected
+00000054                            60              SUB.W   #BOXRAD-5,D2
+00000054  B042                      61              CMP.W   D2,D0
+00000056  6C00 0042                 62              BGE     .CONT2
+0000005A  3002                      63              MOVE.W  D2,D0
+0000005C  6000 0056                 64              BRA     .DONE
+00000060                            65              
+Line 66 ERROR: Symbol value differs between first and second pass
+00000060                            66  .CONT2      MOVE.W  #SCRWIDTH,D3
+00000060  9642                      67              SUB.W   D2,D3
+00000062  B043                      68              CMP.W   D3,D0
+00000064  6F00 0042                 69              BLE     .CONT3
+00000068  3003                      70              MOVE.W  D3,D0
+0000006A                            71              
+Line 72 ERROR: Symbol value differs between first and second pass
+0000006A                            72  .CONT3      MOVE.W  #SCRHEIGH-BOXRAD,D2
+0000006A  B242                      73              CMP.W   D2,D1
+0000006C  6F00 0046                 74              BLE     .DONE
+00000070  3202                      75              MOVE.W  D2,D1
+00000072                            76  
+00000072                            77              ; UPDATE VARIABLE
+Line 78 ERROR: Symbol value differs between first and second pass
+00000072                            78  .DONE       MOVE.W  D0,(PIEPOSX) 
+Line 79 ERROR: Undefined symbol
+00000072  33C1 005455B8             79              MOVE.W  D1,(PIEPOSY) 
+00000078                            80  
+00000078  4C9F 000F                 81              MOVEM.W  (A7)+,D0-D3             
+0000007C                            82  
+0000007C  4E75                      83              RTS
+0000007E                            84  ; ------------------------------------------------------------------------------
+Line 85 ERROR: Symbol value differs between first and second pass
+0000007E                            85  PIEPLOT
+0000007E                            86  ; PLOT THE PIECE.
+0000007E                            87  ; INPUT    : NONE 
+0000007E                            88  ; OUTPUT   : NONE
+0000007E                            89  ; MODIFIES : NONE
+0000007E                            90  ; ------------------------------------------------------------------------------
+0000007E  48E7 F800                 91              MOVEM.L D0-D4,-(A7)
+00000082                            92  
+00000082                            93              ; SET PEN COLOR
+00000082  103C 0050                 94              MOVE.B  #80,D0
+Line 95 ERROR: Undefined symbol
+00000086  223C 004DBD16             95              MOVE.L  #PIEPCOL2,D1
+0000008C  4E4F                      96              TRAP    #15
+0000008E                            97              
+0000008E                            98              ; SET FILL COLOR
+0000008E  103C 0051                 99              MOVE.B  #81,D0
+Line 100 ERROR: Undefined symbol
+00000092  223C 004DBD16            100              MOVE.L  #PIEFCOL2,D1
+00000098  4E4F                     101              TRAP    #15
+0000009A                           102              
+0000009A                           103              ; DEFINE COORDINATES
+Line 104 ERROR: Undefined symbol
+0000009A  3239 004DBD16            104              MOVE.W  (PIEPOSX),D1
+Line 105 ERROR: Undefined symbol
+000000A0  0441 BD16                105              SUB.W   #PIERAD,D1
+000000A4                           106              
+Line 107 ERROR: Undefined symbol
+000000A4  3439 004DBD16            107              MOVE.W  (PIEPOSY),D2
+Line 108 ERROR: Undefined symbol
+000000AA  0442 BD16                108              SUB.W   #PIERAD,D2
+000000AE                           109              
+Line 110 ERROR: Undefined symbol
+000000AE  3639 004DBD16            110              MOVE.W  (PIEPOSX),D3
+Line 111 ERROR: Undefined symbol
+000000B4  0643 BD16                111              ADD.W   #PIERAD,D3
+000000B8                           112              
+Line 113 ERROR: Undefined symbol
+000000B8  3839 004DBD16            113              MOVE.W  (PIEPOSY),D4
+Line 114 ERROR: Undefined symbol
+000000BE  0644 BD16                114              ADD.W   #PIERAD,D4
+000000C2                           115              
+000000C2                           116              ; DRAW PIECE
+000000C2  103C 0058                117              MOVE.B  #88,D0
+000000C6  4E4F                     118              TRAP    #15
+000000C8                           119              
+000000C8  4CDF 001F                120              MOVEM.L (A7)+,D0-D4
+000000CC                           121  
+000000CC  4E75                     122              RTS
+000000CE                           123  
+000000CE                           124  
+000000CE                           125  
+000000CE                           126  
+000000CE                           127  
+000000CE                           128  
+000000CE                           129  
+000000CE                           130  
+Line 131 WARNING: END directive missing, starting address not set
+
+32 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+PIEINIT             0
+PIEPLOT             C6
+PIEUPD              2C
+PIEUPD:CHKRIGHT     4E
+PIEUPD:CHKSPACE     60
+PIEUPD:CHKX         72
+PIEUPD:CONT         84
+PIEUPD:CONT2        9A
+PIEUPD:CONT3        A8
+PIEUPD:DONE         B4

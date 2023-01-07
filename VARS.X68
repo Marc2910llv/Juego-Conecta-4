@@ -15,26 +15,18 @@ PIEPOSX     DS.W    1                       ; PIECE X COORDINATE
 PIEPOSY     DS.W    1                       ; PIECE Y COORDINATE
 PIEVELX     DS.W    1                       ; X MOVEMENT
 PIEVELY     DS.W    1                       ; Y MOVEMENT
+POSX        DS.W    1                       ; POS. X IN THE MATRIX 
+POSY        DS.W    1                       ; POS. Y IN THE MATRIX
 
 ; --- COLUMN RELATED VARAIBLES -------------------------------------------------
 
-COLU1       DS.L    1
-COLU2       DS.L    1
-COLU3       DS.L    1
-COLU4       DS.L    1
-COLU5       DS.L    1
-COLU6       DS.L    1
-COLU7       DS.L    1
+ROW1        DS.B    7
+ROW2        DS.B    7
+ROW3        DS.B    7
+ROW4        DS.B    7
+ROW5        DS.B    7
+ROW6        DS.B    7
 
-; --- PIECE VALUE RELATED VARAIBLES --------------------------------------------
-
-VCOLU1      DS.L    1
-VCOLU2      DS.L    1
-VCOLU3      DS.L    1
-VCOLU4      DS.L    1
-VCOLU5      DS.L    1
-VCOLU6      DS.L    1
-VCOLU7      DS.L    1
 
 
 

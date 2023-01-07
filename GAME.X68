@@ -12,7 +12,6 @@ GAMINIT
             JSR     TABINIT
             JSR     BOXINIT
             JSR     PIEINIT
-            JSR     COLUINIT
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -34,28 +33,6 @@ GAMUPD
 ;.GOUPD      JSR     AGLUPD
 ;            JSR     PADUPD        
 ;            MOVEM.L (A7)+,D0/A1-A3
-             RTS
-
-;-------------------------------------------------------------------------------             
-COLUINIT
-; PLOTS THE GAME
-; INPUT    : NONE
-; OUTPUT   : NONE
-; MODIFIES : NONE
-; ------------------------------------------------------------------------------
-            MOVEM.L D0-D3,-(A7)
-            ;BUCLE PER INICIAR A 0 COLUVAL
-            MOVEQ.L #0,A0
-            MOVEQ.L #6,D1
-            
-            
-COLU:
-            CLR.B   COLUVAL(A0)
-            ADDQ.W  #1,A1            
-            DBRA    D1,CHECK2
-            
-            MOVEM.L (A7)+,D0-D3
-            
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -100,77 +77,18 @@ PLACEPIE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             MOVEM.L D0-D3,-(A7)
-            ;SI ON SE VOL COLOCAR SA FITXA ESTA PLE:
-            MOVE.B  (POSX),A0
-            SUB.B   #1,A0
-            CMP.B   #6,COLVAL(A0)
-            ;SALT A ERROR
-            BEQ     .MAXERR    
             
-<<<<<<< HEAD
-            ;FORMULA PER FICAR SA FITXA ON TOCA, ES UNA FUMADA SI VOLS T'HO EXPLIC AMB UN DIBUIXET O ALGO xd
-            MOVE    (POSX),A0
-            SUBQ.W  #1,A0
-            MOVE.W  COLUVAL(A0),D0
-            MOVE.W  #5,A1
-            SUB.W   D0,A1
-            MULS.W  #7,A1
-            ADDQ.W  #1,A1
-            ADDQ.W  (POSX),A1
-            ;PER ARA FIC 'A' PERO S'HA DE IMPLEMENTAR ES TEMA DE QUE SE VAIG CAMBIANT AMB B SEGONS ES TORN
-            MOVE.B  #$A,ROW1(A1)
-=======
             MOVE.L  #(COLU1),D1
             LSL.L   #1,D1
             ROXL.B  #1,D2
             CMP.L   #7,D2
             BEQ     .MAXPIE                 ; ja no se poden colocar mes peces
             ;OR.L #(PIEVAL1)<<D2,(COLU1)
->>>>>>> 503e21dfa9b7b37e9c064c8041e36b9a99ccc48a
             
-            ;SUBRUTINA PER FER SES COMPROBACIONS
-            JSR     CHECKTAB
-                        
             MOVEM.L (A7)+,D0-D3
             
             RTS
-.MAXERR
-            ;SUBRUTINA ERROR
-            
-            RTS
-
-; ------------------------------------------------------------------------------
-CHECKTAB
-; CHECKS A POSSIBLE WINNER
-; INPUT    : NONE
-; OUTPUT   : NONE
-; MODIFIES : NONE
-; ------------------------------------------------------------------------------
-            MOVEM.L D0-D3,-(A7)
-            ;OBTENCIO DE QUINA FILA ES
-            MOVE    (POSX),A0
-            SUBQ.W  #1,A0
-            MOVE.W  COLUVAL(A0),D0
-            MOVE.W  #5,A1
-            SUB.W   D0,A1
-            MULS.W  #7,A1
-            
-            MOVE    #3,D1
-            
-CHECK1:
-            MOVE    #3,D2
-CHECK2:
-            ADD.B   ROW1(A1),D3
-            ADDQ.W  #1,A1            
-            ;FALTA FER ES CMP AMB D3 I ES NUMERO DE TORN CORRESPONENT NO SE SI FER LO DE A I B O UNA ALTRE COSA
-            DBRA    D2,CHECK2
-            SUBQ.W  #3,A1
-            
-            
-            DBRA    D1,CHECK1
-
-            MOVEM.L (A7)+,D0-D3
-            
+.MAXPIE     ;SUBRUTINA RENOU ERROR
             RTS
 
 

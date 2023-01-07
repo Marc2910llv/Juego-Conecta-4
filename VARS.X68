@@ -16,23 +16,25 @@ PIEPOSY     DS.W    1                       ; PIECE Y COORDINATE
 PIEVELX     DS.W    1                       ; X MOVEMENT
 PIEVELY     DS.W    1                       ; Y MOVEMENT
 
-; --- ROW RELATED VARAIBLES ----------------------------------------------------
+; --- COLUMN RELATED VARAIBLES -------------------------------------------------
 
-ROW1       DS.B    1,1,1,1,1,1,1
-ROW2       DS.B    1,1,1,1,1,1,1
-ROW3       DS.B    1,1,1,1,1,1,1
-ROW4       DS.B    1,1,1,1,1,1,1
-ROW5       DS.B    1,1,1,1,1,1,1
-ROW6       DS.B    1,1,1,1,1,1,1
+COLU1       DS.L    1
+COLU2       DS.L    1
+COLU3       DS.L    1
+COLU4       DS.L    1
+COLU5       DS.L    1
+COLU6       DS.L    1
+COLU7       DS.L    1
 
 ; --- PIECE VALUE RELATED VARAIBLES --------------------------------------------
 
-COLUVAL      DS.B    1,1,1,1,1,1,1 ;Vector per saber cuntes fitxes s'hi han colocat a cada columna, amb aixo podem determinar sa posició per colocar i comparar sa fitxa
-
-; --- PIECE POSITION VARAIBLES -------------------------------------------------
-
-POSX        DS.B    1 ;aqui se guarden ses posicions x i y de on se vol colocar sa fitxa si miram sa tauler com una matriu de posicions xy
-POSY        DS.B    1
+VCOLU1      DS.L    1
+VCOLU2      DS.L    1
+VCOLU3      DS.L    1
+VCOLU4      DS.L    1
+VCOLU5      DS.L    1
+VCOLU6      DS.L    1
+VCOLU7      DS.L    1
 
 
 

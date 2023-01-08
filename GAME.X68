@@ -12,6 +12,7 @@ GAMINIT
             JSR     TABINIT
             JSR     BOXINIT
             JSR     PIEINIT
+            JSR     PLAINIT
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -45,7 +46,7 @@ GAMPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D2,-(A7)
+            MOVEM.L D0-D6,-(A7)
             
             ;JSR     AGLPLOT
             JSR     TABPLOT
@@ -67,11 +68,15 @@ GAMPLOT
             DBRA    D1,.PLOT_NEXT_ROW
             DBRA    D0,.PLOT_NEXT_COL
             
+            MOVE.W  (PIEPOSX),D5
+            MOVE.W  (PIEPOSY),D6
+            MOVE.B  (TURN),D0
             JSR     PIEPLOT
             
-            MOVEM.L (A7)+,D0-D2
+            MOVEM.L (A7)+,D0-D6
             
             RTS
+
 
 
 

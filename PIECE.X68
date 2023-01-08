@@ -50,6 +50,8 @@ PIEUPD
 .CHKSPACE   BTST.B  #4,(KBDEDGE)
             BEQ     .CONT
             JSR     PIEFALL
+            JSR     PLAUPD
+            BRA     .DONE2
             
             ; CHECK COLISIONS
 .CONT       MOVE.W  (PIEVELX),D1
@@ -57,7 +59,7 @@ PIEUPD
             CMP.W   D1,D0
             BGE     .CONT2
             MOVE.W  D1,D0
-            MOVE.W  #0,(POSX)
+            CLR.W   (POSX)
             BRA     .DONE
             
 .CONT2      MOVE.W  #SCRWIDTH,D2
@@ -73,15 +75,26 @@ PIEUPD
             MOVEM.W  (A7)+,D0-D2             
 
             RTS
+            
+.DONE2      JSR     PIEINIT
+
+            MOVEM.W  (A7)+,D0-D2             
+
+            RTS
+            
 ; ------------------------------------------------------------------------------
 PIEPLOT
 ; PLOT THE PIECE.
-; INPUT    : NONE 
+; INPUT    : D5 AS COORDINATE X OF PIECE, D6 AS COORDINATE Y OF PIECE,
+;            D0 INDICATES COLOR OF THE PIECE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D4,-(A7)
+            MOVEM.L D1-D4,-(A7)
 
+            CMP.B   #1,D0
+            BEQ     .COLOR1
+            
             ; SET PEN COLOR
             MOVE.B  #80,D0
             MOVE.L  #PIEPCOL2,D1
@@ -92,24 +105,38 @@ PIEPLOT
             MOVE.L  #PIEFCOL2,D1
             TRAP    #15
             
+            BRA     .JUMP
+            
+.COLOR1            
+            ; SET PEN COLOR
+            MOVE.B  #80,D0
+            MOVE.L  #PIEPCOL1,D1
+            TRAP    #15
+            
+            ; SET FILL COLOR
+            MOVE.B  #81,D0
+            MOVE.L  #PIEFCOL1,D1
+            TRAP    #15
+
+.JUMP            
             ; DEFINE COORDINATES
-            MOVE.W  (PIEPOSX),D1
+            MOVE.W  D5,D1
             SUB.W   #PIERAD,D1
             
-            MOVE.W  (PIEPOSY),D2
+            MOVE.W  D6,D2
             SUB.W   #PIERAD,D2
             
-            MOVE.W  (PIEPOSX),D3
+            MOVE.W  D5,D3
             ADD.W   #PIERAD,D3
             
-            MOVE.W  (PIEPOSY),D4
+            MOVE.W  D6,D4
             ADD.W   #PIERAD,D4
             
             ; DRAW PIECE
             MOVE.B  #88,D0
             TRAP    #15
             
-            MOVEM.L (A7)+,D0-D4
+            MOVEM.L (A7)+,D1-D4
 
             RTS
             
@@ -134,28 +161,29 @@ PIEFALL
             ADD.W   D4,A1
             MOVE.W  (POSX),D4
             ADD.W   D4,A1
-            SUBQ.W  #1,(POSY)
             CMP.B   #0,(A1)
             BNE     .OTHERPIE
             
             MOVE.W  #23,D0
             TRAP    #15
             ADD.W   D3,(PIEPOSY)
-            CMP.W   #-1,(POSY)
+            CMP.W   #0,(POSY)
             BNE     .PASS
             ADDQ.W  #5,(PIEPOSY)
-.PASS       ADDQ.W  #1,(POSY)
-            JSR     GAMPLOT
+.PASS       JSR     GAMPLOT
             TRAP    #0
             DBRA    D2,.FALLAGAIN
             
-.END        MOVE.B  #1,(A1)
+.END        MOVE.B  (TURN),(A1)
+
             MOVEM.L (A7)+,D0-D4/A1
 
             RTS
 
 .OTHERPIE   SUB.W   #7,A1
+            SUBQ.W  #1,(POSY)
             BRA     .END
+
 
 
 

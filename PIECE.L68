@@ -1,6 +1,6 @@
-0000136E Starting Address
+00001402 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 07/01/2023 18:11:50
+Created On: 08/01/2023 20:03:27
 
 00000000                             1  ; ==============================================================================
 00000000                             2  ; PIECE MANAGEMENT
@@ -67,175 +67,198 @@ Line 47 ERROR: Undefined symbol
 00000056                            49              ; CHECK SPACE KEY
 Line 50 ERROR: Symbol value differs between first and second pass
 00000056                            50  .CHKSPACE   BTST.B  #4,(KBDEDGE)
-00000056  6700 0028                 51              BEQ     .CONT
-0000005A  4EB9 00000110             52              JSR     PIEFALL
-00000060                            53              
-00000060                            54              ; CHECK COLISIONS
-Line 55 ERROR: Symbol value differs between first and second pass
-00000060                            55  .CONT       MOVE.W  (PIEVELX),D1
-Line 56 ERROR: Comma expected
-00000060                            56              SUB.W   #BOXRAD-1,D1
-00000060  B041                      57              CMP.W   D1,D0
-00000062  6C00 003A                 58              BGE     .CONT2
-00000066  3001                      59              MOVE.W  D1,D0
-Line 60 ERROR: Undefined symbol
-00000068  33FC 0000 005455B8        60              MOVE.W  #0,(POSX)
-00000070  6000 0042                 61              BRA     .DONE
-00000074                            62              
-Line 63 ERROR: Symbol value differs between first and second pass
-00000074                            63  .CONT2      MOVE.W  #SCRWIDTH,D2
-00000074  9441                      64              SUB.W   D1,D2
-00000076  B042                      65              CMP.W   D2,D0
-00000078  6F00 003A                 66              BLE     .DONE
-0000007C  3002                      67              MOVE.W  D2,D0
-Line 68 ERROR: Undefined symbol
-0000007E  33FC 0006 005455B8        68              MOVE.W  #6,(POSX)
-00000086                            69  
-00000086                            70              ; UPDATE VARIABLE
-Line 71 ERROR: Symbol value differs between first and second pass
-00000086                            71  .DONE       MOVE.W  D0,(PIEPOSX) 
-00000086                            72  
-00000086  4C9F 0007                 73              MOVEM.W  (A7)+,D0-D2             
-0000008A                            74  
-0000008A  4E75                      75              RTS
-0000008C                            76  ; ------------------------------------------------------------------------------
-Line 77 ERROR: Symbol value differs between first and second pass
-0000008C                            77  PIEPLOT
-0000008C                            78  ; PLOT THE PIECE.
-0000008C                            79  ; INPUT    : NONE 
-0000008C                            80  ; OUTPUT   : NONE
-0000008C                            81  ; MODIFIES : NONE
-0000008C                            82  ; ------------------------------------------------------------------------------
-0000008C  48E7 F800                 83              MOVEM.L D0-D4,-(A7)
-00000090                            84  
-00000090                            85              ; SET PEN COLOR
-00000090  103C 0050                 86              MOVE.B  #80,D0
-Line 87 ERROR: Undefined symbol
-00000094  223C 004DBD16             87              MOVE.L  #PIEPCOL2,D1
-0000009A  4E4F                      88              TRAP    #15
-0000009C                            89              
-0000009C                            90              ; SET FILL COLOR
-0000009C  103C 0051                 91              MOVE.B  #81,D0
-Line 92 ERROR: Undefined symbol
-000000A0  223C 004DBD16             92              MOVE.L  #PIEFCOL2,D1
-000000A6  4E4F                      93              TRAP    #15
-000000A8                            94              
-000000A8                            95              ; DEFINE COORDINATES
-Line 96 ERROR: Undefined symbol
-000000A8  3239 004DBD16             96              MOVE.W  (PIEPOSX),D1
-Line 97 ERROR: Undefined symbol
-000000AE  0441 BD16                 97              SUB.W   #PIERAD,D1
-000000B2                            98              
-Line 99 ERROR: Undefined symbol
-000000B2  3439 004DBD16             99              MOVE.W  (PIEPOSY),D2
-Line 100 ERROR: Undefined symbol
-000000B8  0442 BD16                100              SUB.W   #PIERAD,D2
-000000BC                           101              
-Line 102 ERROR: Undefined symbol
-000000BC  3639 004DBD16            102              MOVE.W  (PIEPOSX),D3
-Line 103 ERROR: Undefined symbol
-000000C2  0643 BD16                103              ADD.W   #PIERAD,D3
-000000C6                           104              
-Line 105 ERROR: Undefined symbol
-000000C6  3839 004DBD16            105              MOVE.W  (PIEPOSY),D4
+00000056  6700 0032                 51              BEQ     .CONT
+0000005A  4EB9 0000012C             52              JSR     PIEFALL
+Line 53 ERROR: Undefined symbol
+00000060  4EB9 004DBD16             53              JSR     PLAUPD
+00000066  4EB8 0000                 54              JSR     PIEINIT
+0000006A                            55              
+0000006A                            56              ; CHECK COLISIONS
+Line 57 ERROR: Symbol value differs between first and second pass
+0000006A                            57  .CONT       MOVE.W  (PIEVELX),D1
+Line 58 ERROR: Comma expected
+0000006A                            58              SUB.W   #BOXRAD-1,D1
+0000006A  B041                      59              CMP.W   D1,D0
+0000006C  6C00 0038                 60              BGE     .CONT2
+00000070  3001                      61              MOVE.W  D1,D0
+Line 62 ERROR: Undefined symbol
+00000072  4279 004DBD16             62              CLR.W   (POSX)
+00000078  6000 0042                 63              BRA     .DONE
+0000007C                            64              
+Line 65 ERROR: Symbol value differs between first and second pass
+0000007C                            65  .CONT2      MOVE.W  #SCRWIDTH,D2
+0000007C  9441                      66              SUB.W   D1,D2
+0000007E  B042                      67              CMP.W   D2,D0
+00000080  6F00 003A                 68              BLE     .DONE
+00000084  3002                      69              MOVE.W  D2,D0
+Line 70 ERROR: Undefined symbol
+00000086  33FC 0006 005455B8        70              MOVE.W  #6,(POSX)
+0000008E                            71  
+0000008E                            72              ; UPDATE VARIABLE
+Line 73 ERROR: Symbol value differs between first and second pass
+0000008E                            73  .DONE       MOVE.W  D0,(PIEPOSX) 
+0000008E                            74  
+0000008E  4C9F 0007                 75              MOVEM.W  (A7)+,D0-D2             
+00000092                            76  
+00000092  4E75                      77              RTS
+00000094                            78  ; ------------------------------------------------------------------------------
+Line 79 ERROR: Symbol value differs between first and second pass
+00000094                            79  PIEPLOT
+00000094                            80  ; PLOT THE PIECE.
+00000094                            81  ; INPUT    : D5 AS COORDINATE X OF PIECE, D6 AS COORDINATE Y OF PIECE,
+00000094                            82  ;            D0 INDICATES COLOR OF THE PIECE
+00000094                            83  ; OUTPUT   : NONE
+00000094                            84  ; MODIFIES : NONE
+00000094                            85  ; ------------------------------------------------------------------------------
+00000094  48E7 F800                 86              MOVEM.L D0-D4,-(A7)
+00000098                            87  
+00000098  B03C 0001                 88              CMP.B   #1,D0
+0000009C  6700 0052                 89              BEQ     .COLOR1
+000000A0                            90              
+000000A0                            91              ; SET PEN COLOR
+000000A0  103C 0050                 92              MOVE.B  #80,D0
+Line 93 ERROR: Undefined symbol
+000000A4  223C 004DBD16             93              MOVE.L  #PIEPCOL2,D1
+000000AA  4E4F                      94              TRAP    #15
+000000AC                            95              
+000000AC                            96              ; SET FILL COLOR
+000000AC  103C 0051                 97              MOVE.B  #81,D0
+Line 98 ERROR: Undefined symbol
+000000B0  223C 004DBD16             98              MOVE.L  #PIEFCOL2,D1
+000000B6  4E4F                      99              TRAP    #15
+000000B8                           100              
+000000B8  6000 004E                101              BRA     .JUMP
+000000BC                           102              
+Line 103 ERROR: Symbol value differs between first and second pass
+000000BC                           103  .COLOR1            
+000000BC                           104              ; SET PEN COLOR
+000000BC  103C 0050                105              MOVE.B  #80,D0
 Line 106 ERROR: Undefined symbol
-000000CC  0644 BD16                106              ADD.W   #PIERAD,D4
-000000D0                           107              
-000000D0                           108              ; DRAW PIECE
-000000D0  103C 0058                109              MOVE.B  #88,D0
-000000D4  4E4F                     110              TRAP    #15
-000000D6                           111              
-000000D6  4CDF 001F                112              MOVEM.L (A7)+,D0-D4
-000000DA                           113  
-000000DA  4E75                     114              RTS
-000000DC                           115              
-000000DC                           116  ; ------------------------------------------------------------------------------
-Line 117 ERROR: Symbol value differs between first and second pass
-000000DC                           117  PIEFALL
-000000DC                           118  ; LET A PIECE FALL IN A COLUMN
-000000DC                           119  ; INPUT    : NONE
-000000DC                           120  ; OUTPUT   : NONE
-000000DC                           121  ; MODIFIES : NONE
-000000DC                           122  ; ------------------------------------------------------------------------------
-000000DC                           123              
-000000DC  48E7 F840                124              MOVEM.L D0-D4/A1,-(A7)
-000000E0                           125              
+000000C0  223C 004DBD16            106              MOVE.L  #PIEPCOL1,D1
+000000C6  4E4F                     107              TRAP    #15
+000000C8                           108              
+000000C8                           109              ; SET FILL COLOR
+000000C8  103C 0051                110              MOVE.B  #81,D0
+Line 111 ERROR: Undefined symbol
+000000CC  223C 004DBD16            111              MOVE.L  #PIEFCOL1,D1
+000000D2  4E4F                     112              TRAP    #15
+000000D4                           113  
+Line 114 ERROR: Symbol value differs between first and second pass
+000000D4                           114  .JUMP            
+000000D4                           115              ; DEFINE COORDINATES
+000000D4  3205                     116              MOVE.W  D5,D1
+Line 117 ERROR: Undefined symbol
+000000D6  0441 BD16                117              SUB.W   #PIERAD,D1
+000000DA                           118              
+000000DA  3406                     119              MOVE.W  D6,D2
+Line 120 ERROR: Undefined symbol
+000000DC  0442 BD16                120              SUB.W   #PIERAD,D2
+000000E0                           121              
+000000E0  3605                     122              MOVE.W  D5,D3
+Line 123 ERROR: Undefined symbol
+000000E2  0643 BD16                123              ADD.W   #PIERAD,D3
+000000E6                           124              
+000000E6  3806                     125              MOVE.W  D6,D4
 Line 126 ERROR: Undefined symbol
-000000E0  3639 004DBD16            126              MOVE.W  (PIEVELY),D3
-000000E6  343C 0005                127              MOVE.W  #5,D2
-000000EA  323C 0032                128              MOVE.W  #50,D1
-Line 129 ERROR: Undefined symbol
-000000EE  43F9 004DBD16            129              LEA.L   ROW1,A1
-000000F4                           130              
-Line 131 ERROR: Symbol value differs between first and second pass
-000000F4                           131  .FALLAGAIN  ADDQ.W  #1,(POSY)
-Line 132 ERROR: Undefined symbol
-000000F4  3839 004DBD16            132              MOVE.W  (POSY),D4
-000000FA  C9FC 000E                133              MULS.W  #14,D4
-000000FE  D2C4                     134              ADD.W   D4,A1
-Line 135 ERROR: Undefined symbol
-00000100  3839 004DBD16            135              MOVE.W  (POSX),D4
-00000106  C9FC 0002                136              MULS.W  #2,D4
-0000010A  D2C4                     137              ADD.W   D4,A1
-0000010C  0C11 0000                138              CMP.B   #0,(A1)
-00000110  6600 007C                139              BNE     .OTHERPIE
-Line 140 ERROR: Undefined symbol
-00000114  5379 005455B8            140              SUBQ.W  #1,(POSY)
-0000011A                           141              
-0000011A  303C 0017                142              MOVE.W  #23,D0
-0000011E  4E4F                     143              TRAP    #15
-Line 144 ERROR: Undefined symbol
-00000120  D779 005455B8            144              ADD.W   D3,(PIEPOSY)
-Line 145 ERROR: Undefined symbol
-00000126  0C79 FFFF 005455B8       145              CMP.W   #-1,(POSY)
-0000012E  6600 0042                146              BNE     .PASS
-Line 147 ERROR: Undefined symbol
-00000132  5A79 005455B8            147              ADDQ.W  #5,(PIEPOSY)
-Line 148 ERROR: Symbol value differs between first and second pass
-00000138                           148  .PASS       ADDQ.W  #1,(POSY)
-Line 149 ERROR: Undefined symbol
-00000138  4EB9 004DBD16            149              JSR     GAMPLOT
-0000013E  4E40                     150              TRAP    #0
-00000140  51CA FFE6                151              DBRA    D2,.FALLAGAIN
-00000144                           152              
-Line 153 ERROR: Symbol value differs between first and second pass
-00000144                           153  .END        MOVE.B  #1,(A1)
-00000144  4CDF 021F                154              MOVEM.L (A7)+,D0-D4/A1
-00000148                           155  
-00000148  4E75                     156              RTS
-0000014A                           157  
-Line 158 ERROR: Symbol value differs between first and second pass
-0000014A                           158  .OTHERPIE   SUBQ.W  #1,(POSY)
-0000014A  92FC 000E                159              SUB.W   #14,A1
-0000014E  6034                     160              BRA     .END
-00000150                           161  
-00000150                           162  
-00000150                           163  
-00000150                           164  
-00000150                           165  
-00000150                           166  
-00000150                           167  
-00000150                           168  
-00000150                           169  
-Line 170 WARNING: END directive missing, starting address not set
+000000E8  0644 BD16                126              ADD.W   #PIERAD,D4
+000000EC                           127              
+000000EC                           128              ; DRAW PIECE
+000000EC  103C 0058                129              MOVE.B  #88,D0
+000000F0  4E4F                     130              TRAP    #15
+000000F2                           131              
+000000F2  4CDF 001F                132              MOVEM.L (A7)+,D0-D4
+000000F6                           133  
+000000F6  4E75                     134              RTS
+000000F8                           135              
+000000F8                           136  ; ------------------------------------------------------------------------------
+Line 137 ERROR: Symbol value differs between first and second pass
+000000F8                           137  PIEFALL
+000000F8                           138  ; LET A PIECE FALL IN A COLUMN
+000000F8                           139  ; INPUT    : NONE
+000000F8                           140  ; OUTPUT   : NONE
+000000F8                           141  ; MODIFIES : NONE
+000000F8                           142  ; ------------------------------------------------------------------------------
+000000F8                           143              
+000000F8  48E7 F840                144              MOVEM.L D0-D4/A1,-(A7)
+000000FC                           145              
+Line 146 ERROR: Undefined symbol
+000000FC  3639 004DBD16            146              MOVE.W  (PIEVELY),D3
+00000102  343C 0005                147              MOVE.W  #5,D2
+00000106  323C 0032                148              MOVE.W  #50,D1
+0000010A                           149              
+Line 150 ERROR: Symbol value differs between first and second pass
+0000010A                           150  .FALLAGAIN  LEA.L   ROW1,A1
+Line 151 ERROR: Undefined symbol
+0000010A  5279 005455B8            151              ADDQ.W  #1,(POSY)
+Line 152 ERROR: Undefined symbol
+00000110  3839 004DBD16            152              MOVE.W  (POSY),D4
+00000116  C9FC 0007                153              MULS.W  #7,D4
+0000011A  D2C4                     154              ADD.W   D4,A1
+Line 155 ERROR: Undefined symbol
+0000011C  3839 004DBD16            155              MOVE.W  (POSX),D4
+00000122  D2C4                     156              ADD.W   D4,A1
+Line 157 ERROR: Undefined symbol
+00000124  5379 005455B8            157              SUBQ.W  #1,(POSY)
+0000012A  0C11 0000                158              CMP.B   #0,(A1)
+0000012E  6600 0078                159              BNE     .OTHERPIE
+00000132                           160              
+00000132  303C 0017                161              MOVE.W  #23,D0
+00000136  4E4F                     162              TRAP    #15
+Line 163 ERROR: Undefined symbol
+00000138  D779 005455B8            163              ADD.W   D3,(PIEPOSY)
+Line 164 ERROR: Undefined symbol
+0000013E  0C79 FFFF 005455B8       164              CMP.W   #-1,(POSY)
+00000146  6600 0042                165              BNE     .PASS
+Line 166 ERROR: Undefined symbol
+0000014A  5A79 005455B8            166              ADDQ.W  #5,(PIEPOSY)
+Line 167 ERROR: Symbol value differs between first and second pass
+00000150                           167  .PASS       ADDQ.W  #1,(POSY)
+Line 168 ERROR: Undefined symbol
+00000150  4EB9 004DBD16            168              JSR     GAMPLOT
+00000156  4E40                     169              TRAP    #0
+00000158  51CA FFE4                170              DBRA    D2,.FALLAGAIN
+0000015C                           171              
+Line 172 ERROR: Symbol value differs between first and second pass
+0000015C                           172  .END        MOVE.B  (TURN),(A1)
+0000015C                           173  
+0000015C  4CDF 021F                174              MOVEM.L (A7)+,D0-D4/A1
+00000160                           175  
+00000160  4E75                     176              RTS
+00000162                           177  
+Line 178 ERROR: Symbol value differs between first and second pass
+00000162                           178  .OTHERPIE   SUB.W   #7,A1
+00000162  6038                     179              BRA     .END
+00000164                           180  
+00000164                           181  
+00000164                           182  
+00000164                           183  
+00000164                           184  
+00000164                           185  
+00000164                           186  
+00000164                           187  
+00000164                           188  
+00000164                           189  
+Line 190 WARNING: END directive missing, starting address not set
 
-46 errors detected
+47 errors detected
 1 warning generated
 
 
 SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
-PIEFALL             110
-PIEFALL:END         184
-PIEFALL:FALLAGAIN   128
-PIEFALL:OTHERPIE    18E
-PIEFALL:PASS        172
+PIEFALL             12C
+PIEFALL:END         19C
+PIEFALL:FALLAGAIN   13E
+PIEFALL:OTHERPIE    1A8
+PIEFALL:PASS        18A
 PIEINIT             0
-PIEPLOT             C0
+PIEPLOT             C8
+PIEPLOT:COLOR1      F0
+PIEPLOT:JUMP        108
 PIEUPD              34
 PIEUPD:CHKRIGHT     56
 PIEUPD:CHKSPACE     6E
-PIEUPD:CONT         80
-PIEUPD:CONT2        9E
-PIEUPD:DONE         B4
+PIEUPD:CONT         8A
+PIEUPD:CONT2        A6
+PIEUPD:DONE         BC

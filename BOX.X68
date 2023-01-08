@@ -31,7 +31,7 @@ BOXPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D4,-(A7)
+            MOVEM.L D0-D6/A1,-(A7)
 
             ; SET PEN COLOR
             MOVE.B  #80,D0
@@ -40,8 +40,8 @@ BOXPLOT
             
             ; SET FILL COLOR
             MOVE.B  #81,D0
-            MOVE.L  #BOXFCOL,D1
-            TRAP    #15
+            MOVE.L  #BOXFCOL,D1                                                                     
+            TRAP    #15                                                                             
             
             ; DEFINE COORDINATES
             MOVE.W  (BOXPOSX),D1
@@ -65,9 +65,29 @@ BOXPLOT
             MOVE.B  #88,D0
             TRAP    #15
             
-            MOVEM.L (A7)+,D0-D4
+            LEA.L   ROW1,A1
+            MOVE.W  (BOXCOL),D3
+            MOVE.W  (BOXROW),D4
+            SUBQ.W  #1,D3
+            SUBQ.W  #1,D4
+            ADD.W   D3,A1   
+            MULS.W  #7,D4
+            ADD.W   D4,A1
+            
+            CMP.B   #0,(A1)
+            BEQ     .EMPTY
+            MOVE.W  D1,D5
+            ADD.W   #BOXRAD,D5
+            MOVE.W  D2,D6
+            ADD.W   #BOXRAD,D6
+            MOVE.B  (A1),D0
+            JSR     PIEPLOT
+            
+.EMPTY
+            MOVEM.L (A7)+,D0-D6/A1
 
             RTS
+
 
 
 

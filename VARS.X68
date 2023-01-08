@@ -18,7 +18,7 @@ PIEVELY     DS.W    1                       ; Y MOVEMENT
 POSX        DS.W    1                       ; POS. X IN THE MATRIX 
 POSY        DS.W    1                       ; POS. Y IN THE MATRIX
 
-; --- COLUMN RELATED VARAIBLES -------------------------------------------------
+; --- COLUMN RELATED VARIABLES -------------------------------------------------
 
 ROW1        DS.B    7
 ROW2        DS.B    7
@@ -26,6 +26,11 @@ ROW3        DS.B    7
 ROW4        DS.B    7
 ROW5        DS.B    7
 ROW6        DS.B    7
+
+; --- PLAYER VARIABLES ---------------------------------------------------------
+
+TURN        DS.B    1                       ; PLAYER WHO PLAY IN THAT TURN
+
 
 
 

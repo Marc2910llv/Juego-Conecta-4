@@ -1,0 +1,96 @@
+00001402 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 08/01/2023 19:59:55
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; TABLE MANAGEMENT
+00000000                             3  ; ==============================================================================
+00000000                             4              
+00000000                             5  ; ------------------------------------------------------------------------------
+00000000                             6  TABINIT
+00000000                             7  ; INITIALIZE TABLE.
+00000000                             8  ; INPUT    : NONE 
+00000000                             9  ; OUTPUT   : NONE
+00000000                            10  ; MODIFIES : NONE
+00000000                            11  ; ------------------------------------------------------------------------------
+00000000                            12  
+00000000  48E7 8040                 13              MOVEM.L D0/A1,-(A7)
+00000004                            14  
+00000004                            15              ;INITIALICE ROWS VALUES
+00000004  303C 0029                 16              MOVE.W  #6*7-1,D0
+Line 17 ERROR: Undefined symbol
+00000008  43F9 004DBD16             17              LEA.L   ROW1,A1
+0000000E                            18  .LOOP       
+0000000E  12BC 0000                 19              MOVE.B  #0,(A1)
+00000012  5289                      20              ADD.L  #1,A1
+00000014  51C8 FFF8                 21              DBRA    D0,.LOOP
+00000018                            22  
+00000018  4CDF 0201                 23              MOVEM.L (A7)+,D0/A1
+0000001C                            24  
+0000001C  4E75                      25              RTS
+0000001E                            26              
+0000001E                            27  ; ------------------------------------------------------------------------------
+0000001E                            28  TABPLOT
+0000001E                            29  ; PLOT THE TABLE.
+0000001E                            30  ; INPUT    : NONE 
+0000001E                            31  ; OUTPUT   : NONE
+0000001E                            32  ; MODIFIES : NONE
+0000001E                            33  ; ------------------------------------------------------------------------------
+0000001E                            34  
+0000001E  48E7 F800                 35              MOVEM.L D0-D4,-(A7)
+00000022                            36  
+00000022                            37              ; SET CONTOUR COLOR
+00000022  103C 0050                 38              MOVE.B  #80,D0
+Line 39 ERROR: Undefined symbol
+00000026  223C 004DBD16             39              MOVE.L  #TABPCOL,D1
+0000002C  4E4F                      40              TRAP    #15
+0000002E                            41              
+0000002E                            42              ; SET FILL COLOR
+0000002E  103C 0051                 43              MOVE.B  #81,D0
+Line 44 ERROR: Undefined symbol
+00000032  223C 004DBD16             44              MOVE.L  #TABFCOL,D1
+00000038  4E4F                      45              TRAP    #15
+0000003A                            46              
+0000003A                            47              ; DEFINE COORDINATES
+0000003A  323C 0005                 48              MOVE.W  #5,D1
+Line 49 ERROR: Invalid syntax
+0000003E                            49              MOVE.W  #PIERAD*2+20,D2
+Line 50 ERROR: Comma expected
+0000003E                            50              MOVE.W  #SCRWIDTH-5,D3
+Line 51 ERROR: Comma expected
+0000003E                            51              MOVE.W  #SCRHEIGH-5,D4
+0000003E                            52              
+0000003E                            53              ; DRAW RECTANGLE
+0000003E  103C 0057                 54              MOVE.B  #87,D0
+00000042  4E4F                      55              TRAP    #15
+00000044                            56              
+00000044  4CDF 001F                 57              MOVEM.L (A7)+,D0-D4
+00000048                            58  
+00000048  4E75                      59              RTS
+0000004A                            60  
+0000004A                            61  
+0000004A                            62  
+0000004A                            63  
+0000004A                            64  
+0000004A                            65  
+0000004A                            66  
+0000004A                            67  
+0000004A                            68  
+0000004A                            69  
+0000004A                            70  
+0000004A                            71  
+0000004A                            72  
+0000004A                            73  
+0000004A                            74  
+Line 75 WARNING: END directive missing, starting address not set
+
+6 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+TABINIT             0
+TABINIT:LOOP        E
+TABPLOT             1E

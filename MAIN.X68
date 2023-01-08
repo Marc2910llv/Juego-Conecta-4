@@ -17,6 +17,7 @@
             INCLUDE "BOX.X68"
             INCLUDE "TABLE.X68"
             INCLUDE "PIECE.X68"
+            INCLUDE "PLAYER.X68"
             INCLUDE "GAME.X68"
             
            
@@ -59,6 +60,7 @@ START
             ;INCLUDE "LIB/DMMVARS.X68"
 
             END     START
+
 
 
 

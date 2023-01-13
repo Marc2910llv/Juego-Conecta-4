@@ -50,6 +50,8 @@ PIEUPD
 .CHKSPACE   BTST.B  #4,(KBDEDGE)
             BEQ     .CONT
             JSR     PIEFALL
+            JSR     CHKCOL                  ;CHECK 4 CONNECT IN COLUMNS
+            JSR     CHKROW                  ;CHECK 4 CONNECT IN ROWS
             JSR     PLAUPD
             BRA     .DONE2
             
@@ -78,7 +80,7 @@ PIEUPD
             
 .DONE2      JSR     PIEINIT
 
-            MOVEM.W  (A7)+,D0-D2             
+            MOVEM.W  (A7)+,D0-D2          
 
             RTS
             
@@ -94,6 +96,8 @@ PIEPLOT
 
             CMP.B   #1,D0
             BEQ     .COLOR1
+            CMP.B   #21,D0
+            BEQ     .COLORWINNER
             
             ; SET PEN COLOR
             MOVE.B  #80,D0
@@ -117,6 +121,21 @@ PIEPLOT
             MOVE.B  #81,D0
             MOVE.L  #PIEFCOL1,D1
             TRAP    #15
+            
+            BRA     .JUMP
+
+.COLORWINNER
+            ; SET PEN COLOR
+            MOVE.B  #80,D0
+            MOVE.L  #PIEPCOL3,D1
+            TRAP    #15
+            
+            ; SET FILL COLOR
+            MOVE.B  #81,D0
+            MOVE.L  #PIEFCOL3,D1
+            TRAP    #15
+            
+            BRA     .JUMP
 
 .JUMP            
             ; DEFINE COORDINATES
@@ -152,7 +171,7 @@ PIEFALL
             
             MOVE.W  (PIEVELY),D3
             MOVE.W  #5,D2
-            MOVE.W  #50,D1
+            MOVE.W  #20,D1                  ;WAIT TO SEE THE PIECE FALL (MS)
             
 .FALLAGAIN  LEA.L   ROW1,A1
             ADDQ.W  #1,(POSY)
@@ -183,6 +202,114 @@ PIEFALL
 .OTHERPIE   SUB.W   #7,A1
             SUBQ.W  #1,(POSY)
             BRA     .END
+            
+; ------------------------------------------------------------------------------
+CHKCOL
+; CHECK IF SOME COLUMN HAVE 4 PIECES CONNECTED
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+
+            MOVEM.L D0-D2/A1-A3,-(A7)
+            
+            LEA.L   ROW1,A1
+            MOVE.L  #BOXNCOL-1,D0
+.CHECK_NEXT_COL
+            MOVE.L  A1,A2
+            ADD.L   #1,A1
+            MOVE.L  #BOXNROW-3-1,D1
+            
+.CHECK_POSITION_COL
+            MOVE.L  A2,A3
+            ADD.L   #7,A2
+            
+            CLR.L   D2
+            MOVE.B  (A3),D2
+            ADD.L   #7,A3
+            ADD.B   (A3),D2
+            ADD.L   #7,A3
+            ADD.B   (A3),D2
+            ADD.L   #7,A3
+            ADD.B   (A3),D2
+            
+            CMP.B   #4,D2
+            BEQ     .PLAYERWINS_COL
+            CMP.B   #20,D2
+            BEQ     .PLAYERWINS_COL
+            
+            DBRA    D1,.CHECK_POSITION_COL
+            
+            DBRA    D0,.CHECK_NEXT_COL
+            
+            MOVEM.L (A7)+,D0-D2/A1-A3
+            
+            RTS
+            
+.PLAYERWINS_COL
+            MOVE.B  (TURN),(WINNER)  
+
+            MOVE.L  #3,D0
+.LOOP_COL
+            MOVE.B  #21,(A3)
+            SUB.L   #7,A3
+            DBRA    D0,.LOOP_COL
+                    
+            MOVEM.L (A7)+,D0-D2/A1-A3
+            RTS
+
+; ------------------------------------------------------------------------------
+CHKROW
+; CHECK IF SOME ROW HAVE 4 PIECES CONNECTED
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+
+            MOVEM.L D0-D2/A1-A3,-(A7)
+            
+            LEA.L   ROW1,A1
+            MOVE.L  #BOXNROW-1,D0
+.CHECK_NEXT_ROW
+            MOVE.L  A1,A2
+            ADD.L   #7,A1
+            MOVE.L  #BOXNCOL-3-1,D1
+            
+.CHECK_POSITION_ROW
+            MOVE.L  A2,A3
+            ADD.L   #1,A2
+            
+            CLR.L   D2
+            MOVE.B   (A3)+,D2
+            ADD.B   (A3)+,D2
+            ADD.B   (A3)+,D2
+            ADD.B   (A3),D2
+            
+            CMP.B   #4,D2
+            BEQ     .PLAYERWINS_ROW
+            CMP.B   #20,D2
+            BEQ     .PLAYERWINS_ROW
+            
+            DBRA    D1,.CHECK_POSITION_ROW
+            
+            DBRA    D0,.CHECK_NEXT_ROW
+            
+            MOVEM.L (A7)+,D0-D2/A1-A3
+            
+            RTS
+
+.PLAYERWINS_ROW
+            MOVE.B  (TURN),(WINNER)
+            
+            MOVE.L  #3,D0
+.LOOP_ROW
+            MOVE.B  #21,(A3)
+            SUB.L   #1,A3
+            DBRA    D0,.LOOP_ROW
+            
+            MOVEM.L (A7)+,D0-D2/A1-A3
+            RTS
+
 
 
 

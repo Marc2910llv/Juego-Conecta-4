@@ -4,19 +4,20 @@
            
 ; ------------------------------------------------------------------------------
 PLAINIT
-; INITIALIZE BOX.
+; INITIALIZE PLAYER.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
             MOVE.B  #1,(TURN)               ; STARTS THE PLAYER 1
+            CLR.B   (WINNER)
             
             RTS
             
 ; ------------------------------------------------------------------------------
 PLAUPD
-; UPDATES THE BOX.
+; UPDATES THE PLAYER.
 ; INPUT    : NONE 
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -32,6 +33,8 @@ PLAUPD
             
             RTS
             
+
+
 
 
 

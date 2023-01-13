@@ -30,6 +30,8 @@ ROW6        DS.B    7
 ; --- PLAYER VARIABLES ---------------------------------------------------------
 
 TURN        DS.B    1                       ; PLAYER WHO PLAY IN THAT TURN
+WINNER      DS.B    1                       ; 0 NONE, 1 OR 5 (PLAYER WHO WIN)
+
 
 
 

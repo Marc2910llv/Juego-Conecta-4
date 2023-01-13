@@ -22,18 +22,6 @@ GAMUPD
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-;            MOVEM.L D0/A1-A3,-(A7)
-;            MOVE.B  (SCRCYCCT),D0
-;            AND.B   #%00011111,D0
-;            BNE     .GOUPD
-;            LEA     BALINIT,A1
-;            LEA     BALUPD,A2
-;            LEA     BALPLOT,A3
-;            MOVE.W  #1,D0
-;            JSR     AGLADD
-;.GOUPD      JSR     AGLUPD
-;            JSR     PADUPD        
-;            MOVEM.L (A7)+,D0/A1-A3
 
             JSR     PIEUPD
 
@@ -48,7 +36,6 @@ GAMPLOT
 ; ------------------------------------------------------------------------------
             MOVEM.L D0-D6,-(A7)
             
-            ;JSR     AGLPLOT
             JSR     TABPLOT
             
             MOVE.W  #BOXNCOL-1,D0
@@ -72,30 +59,11 @@ GAMPLOT
             MOVE.W  (PIEPOSY),D6
             MOVE.B  (TURN),D0
             JSR     PIEPLOT
+            JSR     BOAPLOT                 
             
             MOVEM.L (A7)+,D0-D6
             
             RTS
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

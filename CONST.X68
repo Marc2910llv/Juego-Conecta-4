@@ -15,19 +15,22 @@ BOXRAD      EQU     45                      ; BOX RADIUS
 PIEPCOL1    EQU     $000000AA               ; PIECE CONTOUR COLOR TURN 1
 PIEFCOL1    EQU     $000000FF               ; PIECE FILL COLOR TURN 1
 PIEPCOL2    EQU     $0000AAAA               ; PIECE CONTOUR COLOR TURN 2
-PIEFCOL2    EQU     $0000FFFF               ; PIECE FILL COLOR TURN 2
+PIEFCOL2    EQU     $0000FFFF               ; PIECE FILL COLOR TURN 2               
+PIEPCOL3    EQU     $00000000               ; PIECE CONTOUR COLOR WIN
+PIEFCOL3    EQU     $003FEB1D               ; PIECE FILL COLOR WIN
 PIESPEED    EQU     3                       ; MAGNITUDE OF THE FALL VEL.
 PIERAD      EQU     35                      ; PIECE RADIUS
 
-; --- TAB RELATED CONSTANTS ----------------------------------------------------
+; --- TABLE RELATED CONSTANTS ----------------------------------------------------
 
 TABPCOL     EQU     $00FF0000               ; TAB CONTOUR COLOR
 TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
-; --- COLUMN RELATED CONSTANTS -------------------------------------------------
+; --- BOARD RELATED CONSTANTS ---------------------------------------------
 
-PIEVAL1     EQU     $0000000A               ; LOGIC VALUE OF PIECE 1
-PIEVAL2     EQU     $0000000B               ; LOGIC VALUE OF PIECE 2
+BOAFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
+BOALINE1    EQU     $0000                   ; FIRST TEXT LINE COORDINATES
+
 
 
 

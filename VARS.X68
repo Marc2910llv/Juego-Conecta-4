@@ -32,6 +32,16 @@ ROW6        DS.B    7
 TURN        DS.B    1                       ; PLAYER WHO PLAY IN THAT TURN
 WINNER      DS.B    1                       ; 0 NONE, 1 OR 5 (PLAYER WHO WIN)
 
+; --- INTRO STATE RELATED VARAIBLES --------------------------------------------
+
+ISCTIMER    DS.W    1                       ;INTRO TIMER
+
+
+; --- STATE RELATED VARAIBLES --------------------------------------------------
+
+STACUR      DS.W    1                       ;CURRENT STATE
+STANEXT     DS.W    1                       ;NEXT STATE
+
 
 
 

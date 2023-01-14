@@ -73,6 +73,7 @@ SCRPLOT
             MOVEM.W (A7)+,D0-D1
             
             RTE 
+
             
 ; ------------------------------------------------------------------------------
 KBDINIT
@@ -139,6 +140,7 @@ KBDUPDATE
 
             
             
+
 
 *~Font name~Fixedsys~
 *~Font size~9~

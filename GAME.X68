@@ -64,6 +64,7 @@ GAMPLOT
             MOVEM.L (A7)+,D0-D6
             
             RTS
+
 *~Font name~Fixedsys~
 *~Font size~9~
 *~Tab type~0~

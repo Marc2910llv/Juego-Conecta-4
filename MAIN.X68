@@ -8,12 +8,18 @@
             INCLUDE "CONST.X68"
             INCLUDE "SYSCONST.X68"
             INCLUDE "SYSTEM.X68"
+            INCLUDE "LIB/UTLCONST.X68"
+            INCLUDE "LIB/UTLCODE.X68"
+            INCLUDE "LIB/UTLVARS.X68"
             INCLUDE "BOX.X68"
             INCLUDE "TABLE.X68"
             INCLUDE "PIECE.X68"
             INCLUDE "PLAYER.X68"
             INCLUDE "BOARD.X68"
             INCLUDE "GAME.X68"
+            INCLUDE "INTRO.X68"
+            INCLUDE "INSTRUCT.X68"
+            INCLUDE "STATES.X68"
             
            
 START
@@ -21,7 +27,8 @@ START
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-            JSR     GAMINIT
+            JSR     UTLINIT
+            JSR     STAINIT
             
 .LOOP
 
@@ -32,12 +39,13 @@ START
             TRAP    #1
 
 ; UPDATE GAME LOGIC
-
-            JSR     GAMUPD           
+       
+            JSR     STAUPD    
 
 ; --- PLOT ---------------------------------------------------------------------
 
-            JSR     GAMPLOT
+            
+            JSR     STAPLOT
 
             TRAP    #0                      ; ENABLE DOBLE BUFFER
             
@@ -50,6 +58,16 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
+
+
+
+
+
+
+
+
+
 
 
 

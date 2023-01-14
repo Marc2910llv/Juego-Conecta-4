@@ -52,6 +52,7 @@ PIEUPD
             JSR     PIEFALL
             JSR     CHKCOL                  ;CHECK 4 CONNECT IN COLUMNS
             JSR     CHKROW                  ;CHECK 4 CONNECT IN ROWS
+            JSR     CHKDIA                  ;CHECK 4 CONNECT IN DIAGONALS
             JSR     PLAUPD
             BRA     .DONE2
             
@@ -171,7 +172,7 @@ PIEFALL
             
             MOVE.W  (PIEVELY),D3
             MOVE.W  #5,D2
-            MOVE.W  #20,D1                  ;WAIT TO SEE THE PIECE FALL (MS)
+            MOVE.W  #5,D1                  ;WAIT TO SEE THE PIECE FALL (MS)
             
 .FALLAGAIN  LEA.L   ROW1,A1
             ADDQ.W  #1,(POSY)
@@ -310,8 +311,107 @@ CHKROW
             MOVEM.L (A7)+,D0-D2/A1-A3
             RTS
 
+; ------------------------------------------------------------------------------
+CHKDIA
+; CHECK IF SOME DIAGONAL HAVE 4 PIECES CONNECTED
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
 
+            MOVEM.L D0-D6/A1-A3,-(A7)
+            
+            LEA.L   ROW1,A1
+           
+            MOVE.L  #8,D6
+            MOVE.L  #1,D1
+.LOOP_TO_OTHER_SIDE 
+           
+            MOVE.L  A1,A2
+            ;DIAGONAL OF (0,0) AND (6,0)            
+            MOVE.L  #2,D2
+.LOOP1
+            MOVE.L  A2,A3
+            ADD.L   D6,A2
+            
+            CLR.L   D0
+            MOVE.B  (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            
+            CMP.B   #4,D0
+            BEQ     .PLAYERWINS_DIA
+            CMP.B   #20,D0
+            BEQ     .PLAYERWINS_DIA
+           
+            DBRA    D2,.LOOP1
+            
+            ;DIAGONAL OF (0,1) AND (6,1)
+            MOVE.L  A1,A2
+            ADD.L   #7,A2
+            
+            MOVE.L  #1,D2
+.LOOP2
+            MOVE.L  A2,A3
+            ADD.L   D6,A2
+            
+            CLR.L   D0
+            MOVE.B  (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            
+            CMP.B   #4,D0
+            BEQ     .PLAYERWINS_DIA
+            CMP.B   #20,D0
+            BEQ     .PLAYERWINS_DIA
+           
+            DBRA    D2,.LOOP2
+            
+            ;DIAGONAL OF (0,2) AND (6,2)
+            MOVE.L  A1,A3
+            ADD.L   #14,A3
+            
+            CLR.L   D0
+            MOVE.B  (A3),D0
+            ADD.L   D6,A3
+            ADD.B  (A3),D0
+            ADD.L   D6,A3
+            ADD.B  (A3),D0
+            ADD.L   D6,A3
+            ADD.B  (A3),D0
+            
+            CMP.B   #4,D0
+            BEQ     .PLAYERWINS_DIA
+            CMP.B   #20,D0
+            BEQ     .PLAYERWINS_DIA          
 
+            ADD.L   #6,A1
+            MOVE.L  #6,D6
+            DBRA    D1,.LOOP_TO_OTHER_SIDE
+
+.FINISH_DIA
+            MOVEM.L (A7)+,D0-D6/A1-A3            
+            RTS
+           
+.PLAYERWINS_DIA
+            MOVE.B  (TURN),(WINNER)  
+
+            MOVE.L  #3,D0
+.LOOP_DIA
+            MOVE.B  #21,(A3)
+            SUB.L   D6,A3
+            DBRA    D0,.LOOP_DIA
+            
+            MOVEM.L (A7)+,D0-D6/A1-A3        
+            RTS
 
 
 

@@ -64,8 +64,8 @@ BOAPLOT
             
 .TXT1       DC.B    'PLAYER TURN: ',0
             DC.B    0            
-.TXT2       DC.B    'WINS PLAYER: ',0
-            DC.B    0
+.TXT2       DC.B    'WINS PLAYER ',0
+
 
 
 

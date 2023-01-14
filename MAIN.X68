@@ -27,8 +27,9 @@ START
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-            JSR     UTLINIT
-            JSR     STAINIT
+            JSR     GAMINIT
+            ;JSR     UTLINIT
+            ;JSR     STAINIT
             
 .LOOP
 
@@ -40,12 +41,13 @@ START
 
 ; UPDATE GAME LOGIC
        
-            JSR     STAUPD    
+            ;JSR     STAUPD
+            JSR     GAMUPD    
 
 ; --- PLOT ---------------------------------------------------------------------
 
-            
-            JSR     STAPLOT
+            ;JSR     STAPLOT
+            JSR GAMPLOT
 
             TRAP    #0                      ; ENABLE DOBLE BUFFER
             
@@ -58,6 +60,7 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
 
 
 

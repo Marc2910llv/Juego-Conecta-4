@@ -19,7 +19,7 @@ UTLINIT
 UTLPRINT
 ; PRINT SCREEN CENTERED TEXT
 ; INPUT    : A0 POINTER TO ZERO-TERMINATED STRING
-;          : D0.B SCREEN ROW TO PRINT TEXT
+;            D0.B SCREEN ROW TO PRINT TEXT
 ; OUTPUT   : D0.B NEXT ROW
 ; MODIFIES : NONE (ASIDE OF OUTPUT)
 ; -----------------------------------------------------------------------------
@@ -42,9 +42,9 @@ UTLPRINT
             MOVEM.L (A7)+,D0-D1/A0-A1
             ADDQ.B  #1,D0
             RTS
-            
 
 ; -----------------------------------------------------------------------------
+
 
 
 *~Font name~Fixedsys~

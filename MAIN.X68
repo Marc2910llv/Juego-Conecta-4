@@ -16,6 +16,7 @@
             INCLUDE "PIECE.X68"
             INCLUDE "PLAYER.X68"
             INCLUDE "BOARD.X68"
+            INCLUDE "FILE.X68"
             INCLUDE "GAME.X68"
             INCLUDE "INTRO.X68"
             INCLUDE "INSTRUCT.X68"
@@ -60,6 +61,7 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
 
 
 

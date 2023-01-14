@@ -26,7 +26,7 @@ BOAPLOT
             BNE     .WINNER_LINE
 
             ; PRINT LINE
-            LEA     .TXT1,A1
+            LEA.L   .TXT1,A1
             CLR.L   D1
             CMP.B   #1,(TURN)
             BEQ     .PLAYER1
@@ -43,7 +43,7 @@ BOAPLOT
             
 .WINNER_LINE
             ; PRINT LINE
-            LEA     .TXT2,A1
+            LEA.L   .TXT2,A1
             CLR.L   D1
             CMP.B   #1,(WINNER)
             BEQ     .PLAYER1_WIN
@@ -65,6 +65,7 @@ BOAPLOT
 .TXT1       DC.B    'PLAYER TURN: ',0
             DC.B    0            
 .TXT2       DC.B    'WINS PLAYER ',0
+
 
 
 

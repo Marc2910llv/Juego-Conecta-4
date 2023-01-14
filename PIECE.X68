@@ -327,78 +327,78 @@ CHKDIA
             MOVE.L  #1,D1
 .LOOP_TO_OTHER_SIDE 
            
+            MOVE.L  #7,D5
+            MOVE.L  #1,D2
+.LOOP_DIAGONALS_ROW1
+
             MOVE.L  A1,A2
-            ;DIAGONAL OF (0,0) AND (6,0)            
-            MOVE.L  #2,D2
+            ;DIAGONAL OF (0,0) AND (6,0) / (1,0) AND (5,0)            
+            MOVE.L  #2,D3
 .LOOP1
             MOVE.L  A2,A3
             ADD.L   D6,A2
             
-            CLR.L   D0
-            MOVE.B  (A3),D0
-            ADD.L   D6,A3
-            ADD.B   (A3),D0
-            ADD.L   D6,A3
-            ADD.B   (A3),D0
-            ADD.L   D6,A3
-            ADD.B   (A3),D0
-            
-            CMP.B   #4,D0
-            BEQ     .PLAYERWINS_DIA
-            CMP.B   #20,D0
-            BEQ     .PLAYERWINS_DIA
+            JSR     CHECK_DIAGONALS
+            CMP.B   #0,(WINNER)
+            BNE     .FINISH_DIA
            
-            DBRA    D2,.LOOP1
+            DBRA    D3,.LOOP1
             
-            ;DIAGONAL OF (0,1) AND (6,1)
+            ;DIAGONAL OF (0,1) AND (6,1) / (2,0) AND (4,0)
             MOVE.L  A1,A2
-            ADD.L   #7,A2
+            ADD.L   D5,A2
             
-            MOVE.L  #1,D2
+            MOVE.L  #1,D3
 .LOOP2
             MOVE.L  A2,A3
             ADD.L   D6,A2
             
-            CLR.L   D0
-            MOVE.B  (A3),D0
-            ADD.L   D6,A3
-            ADD.B   (A3),D0
-            ADD.L   D6,A3
-            ADD.B   (A3),D0
-            ADD.L   D6,A3
-            ADD.B   (A3),D0
-            
-            CMP.B   #4,D0
-            BEQ     .PLAYERWINS_DIA
-            CMP.B   #20,D0
-            BEQ     .PLAYERWINS_DIA
+            JSR     CHECK_DIAGONALS
+            CMP.B   #0,(WINNER)
+            BNE     .FINISH_DIA
            
-            DBRA    D2,.LOOP2
+            DBRA    D3,.LOOP2
             
-            ;DIAGONAL OF (0,2) AND (6,2)
+            ;DIAGONAL OF (0,2) AND (6,2) / (3,0)
             MOVE.L  A1,A3
-            ADD.L   #14,A3
+            ADD.L   D5,A3
+            ADD.L   D5,A3
             
-            CLR.L   D0
-            MOVE.B  (A3),D0
-            ADD.L   D6,A3
-            ADD.B  (A3),D0
-            ADD.L   D6,A3
-            ADD.B  (A3),D0
-            ADD.L   D6,A3
-            ADD.B  (A3),D0
+            JSR     CHECK_DIAGONALS
+            CMP.B   #0,(WINNER)
+            BNE     .FINISH_DIA          
             
-            CMP.B   #4,D0
-            BEQ     .PLAYERWINS_DIA
-            CMP.B   #20,D0
-            BEQ     .PLAYERWINS_DIA          
-
-            ADD.L   #6,A1
+            CMP.L   #0,D1
+            BEQ     .MINUS1
+            MOVE.L  #1,D5
+            BRA     .PASS_DIA
+.MINUS1     MOVE.L  #-1,D5
+.PASS_DIA   ADD.L   D5,A1
+            DBRA    D2,.LOOP_DIAGONALS_ROW1
+            
+            ADD.L   #5,A1
             MOVE.L  #6,D6
             DBRA    D1,.LOOP_TO_OTHER_SIDE
 
 .FINISH_DIA
             MOVEM.L (A7)+,D0-D6/A1-A3            
+            RTS
+
+CHECK_DIAGONALS
+            CLR.L   D0
+            MOVE.B  (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            ADD.L   D6,A3
+            ADD.B   (A3),D0
+            
+            CMP.B   #4,D0
+            BEQ     .PLAYERWINS_DIA
+            CMP.B   #20,D0
+            BEQ     .PLAYERWINS_DIA
+            
             RTS
            
 .PLAYERWINS_DIA
@@ -409,9 +409,9 @@ CHKDIA
             MOVE.B  #21,(A3)
             SUB.L   D6,A3
             DBRA    D0,.LOOP_DIA
-            
-            MOVEM.L (A7)+,D0-D6/A1-A3        
+                   
             RTS
+
 
 
 

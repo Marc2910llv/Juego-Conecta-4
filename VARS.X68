@@ -42,6 +42,11 @@ ISCTIMER    DS.W    1                       ;INTRO TIMER
 STACUR      DS.W    1                       ;CURRENT STATE
 STANEXT     DS.W    1                       ;NEXT STATE
 
+; --- FILE VARAIBLES ----------------------------------------------------------
+
+FILEID      DS.L    1                       ;ID OF THE OPENED FILE
+READED      DS.B    126                     ;MOVEMENTS READ (42 BOXES * 3)      
+
 
 
 

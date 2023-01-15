@@ -21,15 +21,15 @@
             INCLUDE "INTRO.X68"
             INCLUDE "INSTRUCT.X68"
             INCLUDE "STATES.X68"
-            
            
 START
 
 ; --- INITIALIZATION -----------------------------------------------------------
 
             JSR     SYSINIT
-            JSR     GAMINIT
             ;JSR     UTLINIT
+            JSR     ISCINIT
+            ;JSR     GAMINIT
             ;JSR     STAINIT
             
 .LOOP
@@ -43,17 +43,19 @@ START
 ; UPDATE GAME LOGIC
        
             ;JSR     STAUPD
-            JSR     GAMUPD    
+            ;JSR     GAMUPD 
+            JSR     ISCUPDT   
 
 ; --- PLOT ---------------------------------------------------------------------
 
+            JSR     ISCPLOT
             ;JSR     STAPLOT
-            JSR GAMPLOT
+            ;JSR GAMPLOT
 
             TRAP    #0                      ; ENABLE DOBLE BUFFER
             
             CMP.B   #0,(WINNER)
-            BEQ     .LOOP
+            BRA     .LOOP
 
             SIMHALT
             
@@ -61,6 +63,7 @@ START
             INCLUDE "SYSVARS.X68"
 
             END     START
+
 
 
 

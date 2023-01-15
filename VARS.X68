@@ -34,18 +34,25 @@ WINNER      DS.B    1                       ; 0 NONE, 1 OR 5 (PLAYER WHO WIN)
 
 ; --- INTRO STATE RELATED VARAIBLES --------------------------------------------
 
-ISCTIMER    DS.W    1                       ;INTRO TIMER
-
+ISCTIMER    DS.W    1                       ; INTRO TIMER
 
 ; --- STATE RELATED VARAIBLES --------------------------------------------------
 
-STACUR      DS.W    1                       ;CURRENT STATE
-STANEXT     DS.W    1                       ;NEXT STATE
+STACUR      DS.W    1                       ; CURRENT STATE
+STANEXT     DS.W    1                       ; NEXT STATE
 
-; --- FILE VARAIBLES ----------------------------------------------------------
+; --- FILE VARAIBLES -----------------------------------------------------------
 
-FILEID      DS.L    1                       ;ID OF THE OPENED FILE
-READED      DS.B    126                     ;MOVEMENTS READ (42 BOXES * 3)      
+FILEID      DS.L    1                       ; ID OF THE OPENED FILE
+READED      DS.B    126                     ; MOVEMENTS READ (42 BOXES * 3)    
+
+; --- INTRODUCTION VARAIBLES ---------------------------------------------------
+
+INTROX      DS.W    1                       ; SET THE X OF THE INTRO
+INTROY      DS.W    1                       ; SET THE Y OF THE INTRO   
+SHOWINTRO   DS.B    1                       ; IF IS 1 SHOWS INTRO, 0 IF NOT
+            DS.B    0
+
 
 
 

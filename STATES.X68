@@ -34,12 +34,12 @@ STAUPD
             MOVE.W  (STACUR),D0
             LSL.L   #2,D0
             MOVE.L  D0,A0
-            MOVE.L  .UPDTBL(A0),A0
+;            MOVE.L  .UPDTBL(A0),A0
             JSR     (A0)
             MOVEM.L (A7)+,D0/A0
             RTS
 .INITBL     DC.L    ISCINIT,INSINIT,GAMINIT
-.UPDTBL     DC.L    ISCUPD,INSUPD,GAMUPD
+;.UPDTBL     DC.L    ISCUPD,INSUPD,GAMUPD
 
 ; -----------------------------------------------------------------------------
 STAPLOT
@@ -68,6 +68,7 @@ STAEMPTY
 ; NOTE     - JUST A PLACEHOLDER. NOTHING TO DO.
 ; -----------------------------------------------------------------------------
             RTS
+
 
 
 

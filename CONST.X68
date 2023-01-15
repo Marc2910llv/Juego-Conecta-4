@@ -29,11 +29,11 @@ TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 ; --- BOARD RELATED CONSTANTS ---------------------------------------------
 
 BOAFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
-BOALINE1    EQU     $0000                   ; FIRST TEXT LINE COORDINATES
 
 ; --- STATE RELATED CONSTANTS ---------------------------------------------------
 
 STANONE     EQU     -1                      ;NON-EXISTENT STATE NUMBER
+
 
 
 

@@ -5,7 +5,7 @@
 ; -----------------------------------------------------------------------------
 UTLINIT
 ; INITIALIZES UTILITY CODE
-; INPUT    - NONE
+*; INPUT    - NONE
 ; OUTPUT   - NONE
 ; MODIFIES - NONE
 ; -----------------------------------------------------------------------------
@@ -27,12 +27,12 @@ UTLPRINT
             
             CLR.B   D1
             MOVE.L  A0,A1
-.LOOP       TST.B   (A0)+
-            BEQ     .ENDLOOP
+.LOOP1      TST.B   (A0)+
+            BEQ     .ENDLOOP1
             ADDQ.B  #1,D1
-            BRA     .LOOP
+            BRA     .LOOP1
             
-.ENDLOOP    LSR.B   #1,D1
+.ENDLOOP1   LSR.B   #1,D1
             SUB.B   #(SCRWIDTH/UTLCHRWD)/2,D1
             NEG.B   D1
             ASL.W   #8,D1
@@ -44,6 +44,30 @@ UTLPRINT
             RTS
 
 ; -----------------------------------------------------------------------------
+UTLSTRLEN
+; GET THE LENGTH OF A STRING
+; INPUT    : A0 POINTER TO ZERO-TERMINATED STRING
+; OUTPUT   : D0.B STRING LEN
+; MODIFIES : NONE (ASIDE OF OUTPUT)
+; -----------------------------------------------------------------------------
+
+            MOVEM.L A0,-(A7)
+            
+            CLR.L   D0
+.LOOP       TST.B   (A0)+
+            BEQ     .ENDLOOP
+            ADDQ.B  #1,D0
+            BRA     .LOOP
+.ENDLOOP            
+            MOVEM.L (A7)+,A0
+            RTS
+
+
+
+
+
+
+
 
 
 

@@ -17,9 +17,9 @@ BOAPLOT
             MOVE.L  #BOAFCOL,D1
             TRAP    #15
             
-            ; SET FIRST LINE POSITION
+            ; SET FIRST LINE POSITION (SCREEN ARRAY COLUMNS = 120 ROWS = 47)
             MOVE.B  #11,D0
-            MOVE.W  #BOALINE1,D1
+            MOVE.W  #$0000,D1
             TRAP    #15
             
             CMP.B   #0,(WINNER)
@@ -65,6 +65,7 @@ BOAPLOT
 .TXT1       DC.B    'PLAYER TURN: ',0
             DC.B    0            
 .TXT2       DC.B    'WINS PLAYER ',0
+
 
 
 

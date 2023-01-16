@@ -16,15 +16,6 @@ BOXINIT
             RTS
             
 ; ------------------------------------------------------------------------------
-BOXUPD
-; UPDATES THE BOX.
-; INPUT    : NONE 
-; OUTPUT   : NONE
-; MODIFIES : NONE
-; ------------------------------------------------------------------------------
-            RTS
-            
-; ------------------------------------------------------------------------------
 BOXPLOT
 ; PLOT THE BOX.
 ; INPUT    : NONE 
@@ -65,17 +56,19 @@ BOXPLOT
             MOVE.B  #88,D0
             TRAP    #15
             
-            LEA.L   ROW1,A1
+            ; CHECK IF THERE IS A PIECE INSIDE
+            LEA     ROW1,A1
             MOVE.W  (BOXCOL),D3
             MOVE.W  (BOXROW),D4
             SUBQ.W  #1,D3
             SUBQ.W  #1,D4
             ADD.W   D3,A1   
             MULS.W  #7,D4
-            ADD.W   D4,A1
-            
+            ADD.W   D4,A1 
             CMP.B   #0,(A1)
             BEQ     .EMPTY
+            
+            ; PLOT THE PIECE WITH THE RIGHT COLOR
             MOVE.W  D1,D5
             ADD.W   #BOXRAD,D5
             MOVE.W  D2,D6
@@ -83,10 +76,10 @@ BOXPLOT
             MOVE.B  (A1),D0
             JSR     PIEPLOT
             
-.EMPTY
-            MOVEM.L (A7)+,D0-D6/A1
+.EMPTY      MOVEM.L (A7)+,D0-D6/A1
 
             RTS
+
 
 
 

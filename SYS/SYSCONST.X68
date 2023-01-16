@@ -6,7 +6,7 @@
 
 SCRWIDTH    EQU     960                     ; SCREEN WIDTH
 SCRHEIGH    EQU     720                     ; SCREEN HEIGHT
-SCRFPS      EQU     60                       ; SCREEN FRAMES PER SECOND
+SCRFPS      EQU     60                      ; SCREEN FRAMES PER SECOND
 
 ; --- KEYCODES -----------------------------------------------------------------
 
@@ -35,6 +35,7 @@ SNDPLTN     EQU     2                       ; SOUND PLAY TRAP NUMBER
 ; --- INTERRUPT NUMBERS  -------------------------------------------------------
 
 SCRINTN     EQU     1                       ; TIMED INTERRUPT NUMBER
+
 
 
 *~Font name~Fixedsys~

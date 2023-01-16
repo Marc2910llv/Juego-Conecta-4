@@ -18,7 +18,6 @@ PIEPCOL2    EQU     $0000AAAA               ; PIECE CONTOUR COLOR TURN 2
 PIEFCOL2    EQU     $0000FFFF               ; PIECE FILL COLOR TURN 2               
 PIEPCOL3    EQU     $00000000               ; PIECE CONTOUR COLOR WIN
 PIEFCOL3    EQU     $003FEB1D               ; PIECE FILL COLOR WIN
-PIESPEED    EQU     3                       ; MAGNITUDE OF THE FALL VEL.
 PIERAD      EQU     35                      ; PIECE RADIUS
 
 ; --- TABLE RELATED CONSTANTS ----------------------------------------------------
@@ -34,6 +33,7 @@ STANONE     EQU     -1                      ; NON-EXISTENT STATE NUMBER
 
 FILE        DC.B    'automaticgame.txt',0   ; FILE NAME
             DS.W    0
+
 
 
 

@@ -10,7 +10,7 @@ ISCINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
-            CLR.W   (TIMER)
+            CLR.W   (TIMER)                 ; RESET TIMER
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -21,14 +21,17 @@ ISCUPD
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
-            BTST.B  #4,(KBDEDGE)
+            ; JUMP TO THE GAME IF WE PRESS FIRE1
+            BTST.B  #4,(KBDEDGE)           
             BEQ     .CONT
             MOVE.W  #1,(STANEXT)
-
+            BRA     .DONE
+            
+            ; STAY IN THIS STATE FOR 10 SECONDS THEN GO AUTOGAME STATE
 .CONT       MOVE.B  #SNDMUSIC,D7
             TRAP    #SNDPLTN
             ADDQ.W  #1,(TIMER)
-            CMP.W   #600,(TIMER)
+            CMP.W   #SCRFPS*10,(TIMER)
             BLT     .DONE
             MOVE.W  #3,(STANEXT)
 .DONE       
@@ -49,6 +52,7 @@ ISCPLOT
             MOVE.L  #00000000,D1
             TRAP    #15
             
+            ; PLOT ALL THE INTRODUCTION TO THE GAME
             MOVE.B  #11,D0
             
             LEA     .TXT1,A0
@@ -62,7 +66,7 @@ ISCPLOT
             JSR     UTLPRINT
             BRA    .LOOP
 .DONE1            
-            BTST.B   #4,(SCRCYCCT)
+            BTST.B   #4,(SCRCYCCT)          ; PLOT AN INTERMITENT TEXT
             BEQ     .DONE2
             
             LEA     .TXT7,A0
@@ -82,6 +86,10 @@ ISCPLOT
 .TXT7       DC.B    'PRESS SPACE TO START',0
             DS.W    0
 .TXTLST     DC.L    .TXT2,.TXT3,.TXT4,.TXT5,.TXT6,0
+
+
+
+
 
 
 

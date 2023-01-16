@@ -22,7 +22,7 @@ FALLING     DS.B    1                       ; 1 A PIECE IS FALLING, 0 NOT
 
 ; --- COLUMN RELATED VARIABLES -------------------------------------------------
 
-ROW1        DS.B    7
+ROW1        DS.B    7                       ; REPRESENTS THE MATRIX
 ROW2        DS.B    7
 ROW3        DS.B    7
 ROW4        DS.B    7
@@ -36,9 +36,9 @@ TURN        DS.B    1                       ; PLAYER WHO PLAY IN THAT TURN
 WINNER      DS.B    1                       ; 0 NONE, 1 OR 5 (PLAYER WHO WIN)
             DS.W    0
 
-; --- INTRO STATE RELATED VARAIBLES --------------------------------------------
+; --- TIME STATE RELATED VARAIBLES ---------------------------------------------
 
-TIMER       DS.W    1                       ; INTRO TIMER 
+TIMER       DS.W    1                       ; TIMER
 
 ; --- STATE RELATED VARAIBLES --------------------------------------------------
 
@@ -51,6 +51,7 @@ FILEID      DS.L    1                       ; ID OF THE OPENED FILE
 READED      DS.B    126                     ; MOVEMENTS READ (42 BOXES * 3) 
 INDEXREAD   DS.B    1                       ; INDEX TO TRAVEL READED   
             DS.W    0 
+
 
 
 

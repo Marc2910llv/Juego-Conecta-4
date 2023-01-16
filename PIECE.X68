@@ -16,8 +16,8 @@ PIEINIT
             MOVE.W  (BOXPOSX),(PIEVELX)
             MOVE.W  #100,(PIEVELY)
             
-            MOVE.W  #3,(POSX)
-            MOVE.W  #-1,(POSY)
+            MOVE.W  #3,(POSX)               ; IN THE MIDDLE
+            MOVE.W  #-1,(POSY)              ; OUTSIDE THE MATRIX
             
             CLR.B   (FALLING)
             
@@ -33,6 +33,7 @@ PIEUPD
             
             MOVEM.W  D0-D3,-(A7)
             
+            ; CHECK IF THE PIECE STILL HAVE TO FALL
             CMP.B   #0,(FALLING)
             BEQ     .PASS1
             MOVE.B  (SCRCYCCT),D3
@@ -52,7 +53,7 @@ PIEUPD
             JSR     PRESSLEFT
             BRA     .DONE
             
-            ;CHECK  RIGHT ARROW KEY
+            ;CHECK RIGHT ARROW KEY
 .CHKRIGHT   BTST.B  #2,(KBDEDGE)
             BEQ     .CHKSPACE
             JSR     PRESSRIGHT
@@ -74,7 +75,7 @@ PIEUPD
 
             RTS
 
-PRESSLEFT
+PRESSLEFT   ; LEFT ARROW PRESSED
             MOVE.B  #SNDMOVE,D7
             TRAP    #SNDPLTN
             SUB.W   (PIEVELX),D0
@@ -89,7 +90,7 @@ PRESSLEFT
             CLR.W   (POSX)
 .DONELEFT   RTS   
 
-PRESSRIGHT
+PRESSRIGHT  ; RIGHT ARROW PRESSED
             MOVE.B  #SNDMOVE,D7
             TRAP    #SNDPLTN
             ADD.W   (PIEVELX),D0
@@ -116,7 +117,7 @@ PIEPLOT
 
             CMP.B   #1,D0
             BEQ     .COLOR1
-            CMP.B   #21,D0
+            CMP.B   #21,D0                  ; CHECK IF ITS WIN TO PLOT GREEN
             BEQ     .COLORWINNER
             
             ; SET PEN COLOR
@@ -181,7 +182,7 @@ PIEPLOT
             
 ; ------------------------------------------------------------------------------
 PIEFALL
-; LET A PIECE FALL IN A COLUMN
+; LET A PIECE FALL ONE POSITION IN A COLUMN
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -198,12 +199,15 @@ PIEFALL
             MOVE.W  (POSX),D0
             ADD.W   D0,A1
             
+            ; CHECK IF THE BOTTOM POSITION IS THE FINAL
             CMP.W   #6,(POSY)
             BEQ     .END 
             
+            ; CHECK IF THE BOTTOM POSITION HVAE OTHER PIECE
             CMP.B   #0,(A1)
             BNE     .END
             
+            ; MOVE THE PIECE 1 POSITION DOWN
             MOVE.W  (PIEVELY),D1
             ADD.W   D1,(PIEPOSY)
             CMP.W   #0,(POSY)
@@ -213,6 +217,7 @@ PIEFALL
 
             RTS
 
+            ; CAN'T FALL MORE
 .END        SUBQ.L  #7,A1
             SUBQ.W  #1,(POSY)
             MOVE.B  (TURN),(A1)
@@ -242,8 +247,9 @@ CHKCOL
             MOVE.L  A1,A2
             ADD.L   #1,A1
             MOVE.L  #BOXNROW-3-1,D1
-            
-.CHECK_POSITION_COL
+           
+            ; ONLY 3 POSITIONS OF THE COLUMN CAN CONNECT 4 PIECES 
+.CHECK_POSITION_COL                         
             MOVE.L  A2,A3
             ADD.L   #7,A2
             
@@ -269,6 +275,7 @@ CHKCOL
             
             RTS
             
+            ; THERE IS 4 PIECES CONNECTED
 .PLAYERWINS_COL
             MOVE.B  (TURN),(WINNER)
             MOVE.B  #SNDWIN,D7
@@ -300,6 +307,7 @@ CHKROW
             ADD.L   #7,A1
             MOVE.L  #BOXNCOL-3-1,D1
             
+            ; ONLY 4 POSITIONS OF THE ROW CAN CONNECT 4 PIECES
 .CHECK_POSITION_ROW
             MOVE.L  A2,A3
             ADD.L   #1,A2
@@ -323,6 +331,7 @@ CHKROW
             
             RTS
 
+            ; THERE IS 4 PIECES CONNECTED
 .PLAYERWINS_ROW
             MOVE.B  (TURN),(WINNER)
             MOVE.B  #SNDWIN,D7
@@ -411,6 +420,7 @@ CHKDIA
             MOVEM.L (A7)+,D0-D6/A1-A3            
             RTS
 
+            ; CHECK THE DIAGONAL OF THE SELECTED POSITION
 CHECK_DIAGONALS
             CLR.L   D0
             MOVE.B  (A3),D0
@@ -427,7 +437,8 @@ CHECK_DIAGONALS
             BEQ     .PLAYERWINS_DIA
             
             RTS
-           
+            
+            ; THERE 4 PIECES CONNECTED
 .PLAYERWINS_DIA
             MOVE.B  (TURN),(WINNER)
             MOVE.B  #SNDWIN,D7
@@ -440,6 +451,8 @@ CHECK_DIAGONALS
             DBRA    D0,.LOOP_DIA
                    
             RTS
+
+
 
 
 

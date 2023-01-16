@@ -13,6 +13,7 @@ GAMINIT
             JSR     BOXINIT
             JSR     PIEINIT
             JSR     PLAINIT
+            CLR.W   (TIMER)                 ; RESET TIMER
             RTS
 
 ; ------------------------------------------------------------------------------
@@ -22,16 +23,18 @@ GAMUPD
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-                        
+            
+            ; IF THERE IS NO WINNER DON'T CHANGE THE STATE            
             CMP.B   #0,(WINNER)
             BEQ     .CONTINUE
             
+            ; CHANGE STATE WITH FIRE1 OR IN 3 SECONDS
             BTST.B  #4,(KBDEDGE)
             BEQ     .CONT
             MOVE.W  #2,(STANEXT)
             BRA     .DONE
 .CONT       ADDQ.W  #1,(TIMER)
-            CMP.W   #180,(TIMER)
+            CMP.W   #SCRFPS*3,(TIMER)
             BLT     .DONE
             MOVE.W  #2,(STANEXT)                      
 .CONTINUE   JSR     PIEUPD
@@ -47,8 +50,10 @@ GAMPLOT
 ; ------------------------------------------------------------------------------
             MOVEM.L D0-D6/A1,-(A7)
             
+            ; PLOT TABLE
             JSR     TABPLOT
             
+            ; PLOT EVERY BOX OF THE TABLE, REPRESENTS POSITIONS OF THE MATRIX
             MOVE.W  #BOXNCOL-1,D0
 .PLOT_NEXT_COL
             MOVE.W  #BOXNCOL,D2
@@ -66,6 +71,7 @@ GAMPLOT
             DBRA    D1,.PLOT_NEXT_ROW
             DBRA    D0,.PLOT_NEXT_COL
             
+            ; PRINT THE PIECE IN HIS RIGHT POSITION AND THE BOARD INFORMATION
             MOVE.W  (PIEPOSX),D5
             MOVE.W  (PIEPOSY),D6
             MOVE.B  (TURN),D0
@@ -79,6 +85,8 @@ GAMPLOT
 
 .TXT        DC.B    'PLAYER TURN: ',0            
             DS.W    0
+
+
 
 
 

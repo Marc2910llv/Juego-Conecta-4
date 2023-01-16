@@ -30,6 +30,7 @@ SNDINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
+            
             MOVEM.L D0-D1/A0-A1,-(A7)            
             CLR.B   D1
             LEA     .SNDLIST,A0
@@ -56,6 +57,7 @@ SNDPLAY
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
+            
             MOVEM.L D0-D1,-(A7)             
             MOVE.B  #72,D0
             MOVE.B  D7,D1
@@ -114,6 +116,7 @@ SCRPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
+            
             MOVEM.W D0-D1,-(A7)
 
             ; SWITCH BUFFERS
@@ -148,6 +151,7 @@ KBDINIT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
+            
             CLR.B   (KBDVAL)
             CLR.B   (KBDEDGE)
             RTS
@@ -206,6 +210,7 @@ KBDUPD
 
             
             
+
 
 
 

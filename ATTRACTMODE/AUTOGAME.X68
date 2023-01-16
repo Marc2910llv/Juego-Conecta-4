@@ -4,7 +4,7 @@
 
 ; ------------------------------------------------------------------------------
 AUTOINIT
-; INITIALIZES GAME.
+; INITIALIZES AUTOGAME.
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -15,12 +15,13 @@ AUTOINIT
             JSR     PLAINIT
             JSR     FILEINIT
             JSR     READFILE
-            CLR.B   (INDEXREAD)
+            CLR.B   (INDEXREAD)             ; RESET INDEX ARRAY MOVEMENTS
+            CLR.W   (TIMER)                 ; RESET TIMER
             RTS
 
 ; ------------------------------------------------------------------------------
 AUTOUPD
-; UPDATES THE GAME
+; UPDATES THE AUTOGAME
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -30,19 +31,20 @@ AUTOUPD
             
             CLR.L   D0
             CLR.L   D3
-    
+            
+            ; RETURN TO START STATE IF WE PRESS SPACE
             BTST.B  #4,(KBDEDGE)
             BEQ     .PASS
             MOVE.W  #0,(STANEXT)
             BRA     .DONE
-.PASS
+.PASS       ; CHECK IF THERE IS A WINNER TO RETURN TO THE START STATE
             CMP.B   #0,(WINNER)
             BEQ     .CONTINUE
             ADDQ.W  #1,(TIMER)
-            CMP.W   #180,(TIMER)
+            CMP.W   #SCRFPS*3,(TIMER)
             BLT     .DONE
             MOVE.W  #0,(STANEXT)                      
-.CONTINUE   
+.CONTINUE   ; CHECK IF A PIECE IS FALLING
             MOVE.B  (SCRCYCCT),D3
             AND.B   #$F8,D3
             CMP.B   (SCRCYCCT),D3
@@ -51,12 +53,12 @@ AUTOUPD
             BEQ     .PASS1
             JSR     PIEFALL
             BRA     .DONE
-.PASS1            
+.PASS1      ; CHECK IF THE ARRAY OF MOVEMENTS IS FINISHED
             CMP.B   #125,(INDEXREAD)
             BLS     .PASS2
             MOVE.W  #0,(STANEXT)
             BRA     .DONE
-.PASS2      
+.PASS2      ; MAKE THE MOVES
             MOVE.W  (PIEPOSX),D0      
             LEA     READED,A1
             MOVE.B  (INDEXREAD),D3
@@ -78,14 +80,14 @@ AUTOUPD
 .AUTORIGHT  JSR     PRESSRIGHT
             
 .JUMP       MOVE.W  D0,(PIEPOSX)
-            ADDQ.B  #1,(INDEXREAD)
+            ADDQ.B  #1,(INDEXREAD)          ; GO TO THE NEXT MOVE
             
 .DONE       MOVEM.L  (A7)+,D0-D3/A1
             RTS
 
 ; ------------------------------------------------------------------------------
 AUTOPLOT
-; PLOTS THE GAME
+; PLOTS THE AUTOGAME
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
@@ -122,8 +124,12 @@ AUTOPLOT
             
             RTS
 
-.TXT        DC.B    'AUTOMATIC GAME /// PLAYER TURN: ',0            
+.TXT        DC.B    'ATTRACT MODE /// PLAYER TURN: ',0            
             DS.W    0
+
+
+
+
 
 
 

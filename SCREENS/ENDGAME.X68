@@ -10,8 +10,8 @@ ENDINIT
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
-            CLR.W   (TIMER)
-            
+            CLR.W   (TIMER)                 ; RESET TIMER
+            ; PUT THE PIECE OF THE WINNER IN THE MIDDLE OF THE SCREEN
             MOVE.W  #SCRWIDTH/2,(PIEPOSX)
             MOVE.W  #SCRHEIGH/2,(PIEPOSY)
             
@@ -25,14 +25,17 @@ ENDUPD
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
+            ; JUMP TO THE INTRO IF WE PRESS FIRE1
             BTST.B  #4,(KBDEDGE)
             BEQ     .CONT
             MOVE.W  #0,(STANEXT)
-
+            BRA     .DONE
+            
+            ; STAY IN THIS STATE FOR 10 SECONDS, THEN GO TO INTRO
 .CONT       MOVE.B  #SNDMUSIC,D7
             TRAP    #SNDPLTN
             ADDQ.W  #1,(TIMER)
-            CMP.W   #600,(TIMER)
+            CMP.W   #SCRFPS*10,(TIMER)
             BLT     .DONE
             MOVE.W  #0,(STANEXT)
 .DONE     
@@ -78,6 +81,9 @@ ENDPLOT
 .TXT1       DC.B    '¡¡¡¡¡ PLAYER 1 WINS !!!!!',0
 .TXT2       DC.B    '¡¡¡¡¡ PLAYER 2 WINS !!!!!',0
             DS.W    0
+
+
+
 
 
 

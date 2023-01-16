@@ -31,7 +31,7 @@ GAMUPD
             MOVE.W  #2,(STANEXT)
             BRA     .DONE
 .CONT       ADDQ.W  #1,(TIMER)
-            CMP.W   #120,(TIMER)
+            CMP.W   #150,(TIMER)
             BLT     .DONE
             MOVE.W  #2,(STANEXT)                      
 .CONTINUE   JSR     PIEUPD
@@ -45,7 +45,7 @@ GAMPLOT
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-            MOVEM.L D0-D6,-(A7)
+            MOVEM.L D0-D6/A1,-(A7)
             
             JSR     TABPLOT
             
@@ -70,11 +70,15 @@ GAMPLOT
             MOVE.W  (PIEPOSY),D6
             MOVE.B  (TURN),D0
             JSR     PIEPLOT
+            LEA     .TXT,A1
             JSR     BOAPLOT                 
             
-            MOVEM.L (A7)+,D0-D6
+            MOVEM.L (A7)+,D0-D6/A1
             
             RTS
+
+.TXT        DC.B    'PLAYER TURN: ',0            
+            DS.W    0
 
 
 

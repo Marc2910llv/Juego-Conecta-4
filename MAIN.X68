@@ -31,7 +31,7 @@ START
             ORI.W   #$0700,SR
             JSR     SYSINIT
             JSR     STAINIT
-            
+
 .LOOP
 
 ; --- UPDATE -------------------------------------------------------------------
@@ -64,6 +64,7 @@ START
             INCLUDE "SYS/SYSVARS.X68"
 
             END     START
+
 
 
 

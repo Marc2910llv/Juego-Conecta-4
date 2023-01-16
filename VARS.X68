@@ -48,8 +48,10 @@ STANEXT     DS.W    1                       ; NEXT STATE
 ; --- FILE VARAIBLES -----------------------------------------------------------
 
 FILEID      DS.L    1                       ; ID OF THE OPENED FILE
-READED      DS.B    126                     ; MOVEMENTS READ (42 BOXES * 3)    
+READED      DS.B    126                     ; MOVEMENTS READ (42 BOXES * 3) 
+INDEXREAD   DS.B    1                       ; INDEX TO TRAVEL READED   
             DS.W    0 
+
 
 
 

@@ -36,7 +36,7 @@ PIEUPD
             CMP.B   #0,(FALLING)
             BEQ     .PASS1
             MOVE.B  (SCRCYCCT),D3
-            AND.B   #$F8,D3
+            AND.B   #$F0,D3
             CMP.B   (SCRCYCCT),D3
             BNE     .DONE2
             JSR     PIEFALL
@@ -96,11 +96,11 @@ PRESSRIGHT
             ADDQ.W  #1,(POSX)
             
             ; CHECK COLISIONS RIGHT
-            MOVE.W  #SCRWIDTH,D2
-            SUB.W   D1,D2
-            CMP.W   D2,D0
+            MOVE.W  #SCRWIDTH+BOXRAD-1,D1
+            SUB.W   (PIEVELX),D1
+            CMP.W   D1,D0
             BLE     .DONERIGHT
-            MOVE.W  D2,D0
+            MOVE.W  D1,D0
             MOVE.W  #6,(POSX)
 .DONERIGHT  RTS            
 
@@ -440,6 +440,7 @@ CHECK_DIAGONALS
             DBRA    D0,.LOOP_DIA
                    
             RTS
+
 
 
 

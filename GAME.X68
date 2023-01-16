@@ -31,7 +31,7 @@ GAMUPD
             MOVE.W  #2,(STANEXT)
             BRA     .DONE
 .CONT       ADDQ.W  #1,(TIMER)
-            CMP.W   #150,(TIMER)
+            CMP.W   #180,(TIMER)
             BLT     .DONE
             MOVE.W  #2,(STANEXT)                      
 .CONTINUE   JSR     PIEUPD
@@ -79,6 +79,7 @@ GAMPLOT
 
 .TXT        DC.B    'PLAYER TURN: ',0            
             DS.W    0
+
 
 
 

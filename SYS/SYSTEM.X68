@@ -12,15 +12,57 @@ SYSINIT
             
             MOVE.L  #SCRPLOT,($80+SCRUPTN*4)
             MOVE.L  #KBDUPD,($80+KBDUPTN*4)
+            MOVE.L  #SNDPLAY,($80+SNDPLTN*4)
             MOVE.L  #SCRTIM,($60+SCRINTN*4)
             
             JSR     SCRINIT
             JSR     KBDINIT
+            JSR     SNDINIT
             
             MOVE.W  SR,-(A7)
             ANDI.W  #$D8FF,(A7)
             RTE
+   
+; ------------------------------------------------------------------------------
+SNDINIT
+; SOUND SYSTEM INIT
+; INPUT    : NONE
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            MOVEM.L D0-D1/A0-A1,-(A7)            
+            CLR.B   D1
+            LEA     .SNDLIST,A0
+.LOOP       MOVE.L  (A0)+,D0
+            BEQ     .DONE
+            MOVE.L  D0,A1
+            MOVE.B  #71,D0
+            TRAP    #15
+            ADDQ.B  #1,D1
+            BRA     .LOOP
+.DONE       MOVEM.L (A7)+,D0-D1/A0-A1      
+            RTS
+.SNDMOVE    DC.B    'SND/MOVEPIECE.wav',0
+.SNDFALL    DC.B    'SND/PIECEFALL.wav',0
+.SNDWIN     DC.B    'SND/WIN.wav',0
+.SNDMUSIC   DC.B    'SND/MUSIC.wav',0
+            DS.W    0
+.SNDLIST    DC.L    .SNDMOVE,.SNDFALL,.SNDWIN,.SNDMUSIC,0
             
+; ------------------------------------------------------------------------------
+SNDPLAY
+; PLAY SOUND
+; INPUT    : D7 SOUND ID
+; OUTPUT   : NONE
+; MODIFIES : NONE
+; ------------------------------------------------------------------------------
+            MOVEM.L D0-D1,-(A7)             
+            MOVE.B  #72,D0
+            MOVE.B  D7,D1
+            TRAP    #15
+            MOVEM.L (A7)+,D0-D1
+            RTE
+         
 ; ------------------------------------------------------------------------------
 SCRINIT
 ; INIT SCREEN. SET SCREEN RESOLUTION, SET WINDOWED MODE, CLEAR SCREEN,
@@ -164,6 +206,7 @@ KBDUPD
 
             
             
+
 
 
 

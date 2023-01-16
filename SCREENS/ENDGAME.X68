@@ -29,7 +29,9 @@ ENDUPD
             BEQ     .CONT
             MOVE.W  #0,(STANEXT)
 
-.CONT       ADDQ.W  #1,(TIMER)
+.CONT       MOVE.B  #SNDMUSIC,D7
+            TRAP    #SNDPLTN
+            ADDQ.W  #1,(TIMER)
             CMP.W   #600,(TIMER)
             BLT     .DONE
             MOVE.W  #0,(STANEXT)
@@ -76,6 +78,7 @@ ENDPLOT
 .TXT1       DC.B    '¡¡¡¡¡ PLAYER 1 WINS !!!!!',0
 .TXT2       DC.B    '¡¡¡¡¡ PLAYER 2 WINS !!!!!',0
             DS.W    0
+
 
 
 

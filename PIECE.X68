@@ -36,7 +36,7 @@ PIEUPD
             CMP.B   #0,(FALLING)
             BEQ     .PASS1
             MOVE.B  (SCRCYCCT),D3
-            AND.B   #$F0,D3
+            AND.B   #$F8,D3
             CMP.B   (SCRCYCCT),D3
             BNE     .DONE2
             JSR     PIEFALL
@@ -61,6 +61,8 @@ PIEUPD
             ; CHECK SPACE KEY
 .CHKSPACE   BTST.B  #4,(KBDEDGE)
             BEQ     .DONE2
+            MOVE.B  #SNDFALL,D7
+            TRAP    #SNDPLTN
             MOVE.B  #1,(FALLING)
             JSR     PIEFALL
             BRA     .DONE2
@@ -73,6 +75,8 @@ PIEUPD
             RTS
 
 PRESSLEFT
+            MOVE.B  #SNDMOVE,D7
+            TRAP    #SNDPLTN
             SUB.W   (PIEVELX),D0
             SUBQ.W  #1,(POSX)
             
@@ -86,6 +90,8 @@ PRESSLEFT
 .DONELEFT   RTS   
 
 PRESSRIGHT
+            MOVE.B  #SNDMOVE,D7
+            TRAP    #SNDPLTN
             ADD.W   (PIEVELX),D0
             ADDQ.W  #1,(POSX)
             
@@ -264,7 +270,9 @@ CHKCOL
             RTS
             
 .PLAYERWINS_COL
-            MOVE.B  (TURN),(WINNER)  
+            MOVE.B  (TURN),(WINNER)
+            MOVE.B  #SNDWIN,D7
+            TRAP    #SNDPLTN  
 
             MOVE.L  #3,D0
 .LOOP_COL
@@ -317,6 +325,8 @@ CHKROW
 
 .PLAYERWINS_ROW
             MOVE.B  (TURN),(WINNER)
+            MOVE.B  #SNDWIN,D7
+            TRAP    #SNDPLTN
             
             MOVE.L  #3,D0
 .LOOP_ROW
@@ -419,7 +429,9 @@ CHECK_DIAGONALS
             RTS
            
 .PLAYERWINS_DIA
-            MOVE.B  (TURN),(WINNER)  
+            MOVE.B  (TURN),(WINNER)
+            MOVE.B  #SNDWIN,D7
+            TRAP    #SNDPLTN  
 
             MOVE.L  #3,D0
 .LOOP_DIA
@@ -428,6 +440,7 @@ CHECK_DIAGONALS
             DBRA    D0,.LOOP_DIA
                    
             RTS
+
 
 
 

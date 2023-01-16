@@ -44,7 +44,7 @@ AUTOUPD
             MOVE.W  #0,(STANEXT)                      
 .CONTINUE   
             MOVE.B  (SCRCYCCT),D3
-            AND.B   #$F0,D3
+            AND.B   #$F8,D3
             CMP.B   (SCRCYCCT),D3
             BNE     .DONE
             CMP.B   #0,(FALLING)
@@ -68,6 +68,8 @@ AUTOUPD
             CMP.B   #3,(A1)
             BEQ     .AUTORIGHT
             ; 1 EQUALS PRESS FIRE 1
+            MOVE.B  #SNDFALL,D7
+            TRAP    #SNDPLTN
             MOVE.B  #1,(FALLING)
             JSR     PIEFALL
             BRA     .JUMP            
@@ -122,6 +124,7 @@ AUTOPLOT
 
 .TXT        DC.B    'AUTOMATIC GAME /// PLAYER TURN: ',0            
             DS.W    0
+
 
 
 *~Font name~Fixedsys~

@@ -25,11 +25,13 @@ ISCUPD
             BEQ     .CONT
             MOVE.W  #1,(STANEXT)
 
-.CONT       ADDQ.W  #1,(TIMER)
+.CONT       MOVE.B  #SNDMUSIC,D7
+            TRAP    #SNDPLTN
+            ADDQ.W  #1,(TIMER)
             CMP.W   #600,(TIMER)
             BLT     .DONE
             MOVE.W  #3,(STANEXT)
-.DONE     
+.DONE       
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -80,6 +82,7 @@ ISCPLOT
 .TXT7       DC.B    'PRESS SPACE TO START',0
             DS.W    0
 .TXTLST     DC.L    .TXT2,.TXT3,.TXT4,.TXT5,.TXT6,0
+
 
 
 

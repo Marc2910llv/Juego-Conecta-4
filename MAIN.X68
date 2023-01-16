@@ -1,13 +1,14 @@
 ; ==============================================================================
-; TITLE       : CUATRO EN RAYA
-; AUTHOR      :
+; TITLE : CUATRO EN RAYA
+; AUTHOR: MARC LLOBERA VILLALONGA
+;         PERE ROIG VERDERA
 ; ==============================================================================
 
             ORG     $1000
             
             INCLUDE "CONST.X68"
-            INCLUDE "SYSCONST.X68"
-            INCLUDE "SYSTEM.X68"
+            INCLUDE "SYS/SYSCONST.X68"
+            INCLUDE "SYS/SYSTEM.X68"
             INCLUDE "LIB/UTLCONST.X68"
             INCLUDE "LIB/UTLCODE.X68"
             INCLUDE "LIB/UTLVARS.X68"
@@ -16,21 +17,20 @@
             INCLUDE "PIECE.X68"
             INCLUDE "PLAYER.X68"
             INCLUDE "BOARD.X68"
-            INCLUDE "FILE.X68"
             INCLUDE "GAME.X68"
-            INCLUDE "INTRO.X68"
-            INCLUDE "INSTRUCT.X68"
+            INCLUDE "SCREENS/INTRO.X68"
+            INCLUDE "SCREENS/ENDGAME.X68"
+            INCLUDE "ATTRACTMODE/FILE.X68"
+            INCLUDE "ATTRACTMODE/AUTOGAME.X68"
             INCLUDE "STATES.X68"
            
 START
 
 ; --- INITIALIZATION -----------------------------------------------------------
-
+            
+            ORI.W   #$0700,SR
             JSR     SYSINIT
-            ;JSR     UTLINIT
-            JSR     ISCINIT
-            ;JSR     GAMINIT
-            ;JSR     STAINIT
+            JSR     STAINIT
             
 .LOOP
 
@@ -38,31 +38,34 @@ START
 
 ; READ INPUT DEVICES
 
-            TRAP    #1
+            TRAP    #KBDUPTN
 
 ; UPDATE GAME LOGIC
-       
-            ;JSR     STAUPD
-            ;JSR     GAMUPD 
-            JSR     ISCUPDT   
+
+            JSR     STAUPD   
+                    
+; --- SYNC ---------------------------------------------------------------------
+
+.WINT       TST.B   (SCRINTCT)
+            BEQ     .WINT
+            CLR.B   (SCRINTCT)
 
 ; --- PLOT ---------------------------------------------------------------------
 
-            JSR     ISCPLOT
-            ;JSR     STAPLOT
-            ;JSR GAMPLOT
+            JSR    STAPLOT
 
-            TRAP    #0                      ; ENABLE DOBLE BUFFER
+            TRAP    #SCRUPTN                ; UPDATE DOBLE BUFFER
             
-            CMP.B   #0,(WINNER)
             BRA     .LOOP
 
             SIMHALT
             
             INCLUDE "VARS.X68"
-            INCLUDE "SYSVARS.X68"
+            INCLUDE "SYS/SYSVARS.X68"
 
             END     START
+
+
 
 
 

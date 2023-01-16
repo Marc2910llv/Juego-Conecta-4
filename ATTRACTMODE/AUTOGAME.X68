@@ -1,9 +1,9 @@
 ; ==============================================================================
-; GAME MANAGEMENT
+; AUTOMATIC GAME MANAGEMENT
 ; ==============================================================================
 
 ; ------------------------------------------------------------------------------
-GAMINIT
+AUTOINIT
 ; INITIALIZES GAME.
 ; INPUT    : NONE
 ; OUTPUT   : NONE
@@ -13,33 +13,35 @@ GAMINIT
             JSR     BOXINIT
             JSR     PIEINIT
             JSR     PLAINIT
+            JSR     FILEINIT
+            JSR     READFILE
             RTS
 
 ; ------------------------------------------------------------------------------
-GAMUPD
+AUTOUPD
 ; UPDATES THE GAME
 ; INPUT    : NONE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
-                        
+                                    
+            BTST.B  #4,(KBDEDGE)
+            BEQ     .PASS
+            MOVE.W  #0,(STANEXT)
+            BRA     .DONE
+.PASS
             CMP.B   #0,(WINNER)
             BEQ     .CONTINUE
-            
-            BTST.B  #4,(KBDEDGE)
-            BEQ     .CONT
-            MOVE.W  #2,(STANEXT)
-            BRA     .DONE
-.CONT       ADDQ.W  #1,(TIMER)
+            ADDQ.W  #1,(TIMER)
             CMP.W   #120,(TIMER)
             BLT     .DONE
-            MOVE.W  #2,(STANEXT)                      
+            MOVE.W  #0,(STANEXT)                      
 .CONTINUE   JSR     PIEUPD
 .DONE
             RTS
 
 ; ------------------------------------------------------------------------------
-GAMPLOT
+AUTOPLOT
 ; PLOTS THE GAME
 ; INPUT    : NONE
 ; OUTPUT   : NONE
@@ -75,8 +77,6 @@ GAMPLOT
             MOVEM.L (A7)+,D0-D6
             
             RTS
-
-
 
 *~Font name~Fixedsys~
 *~Font size~9~

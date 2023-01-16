@@ -26,13 +26,16 @@ PIERAD      EQU     35                      ; PIECE RADIUS
 TABPCOL     EQU     $00FF0000               ; TAB CONTOUR COLOR
 TABFCOL     EQU     $00AA0000               ; TAB FILL COLOR
 
-; --- BOARD RELATED CONSTANTS ---------------------------------------------
+; --- STATE RELATED CONSTANTS ----------------------------------------------------
 
-BOAFCOL     EQU     $00000000               ; TEXT BACKGROUND COLOR
+STANONE     EQU     -1                      ; NON-EXISTENT STATE NUMBER
 
-; --- STATE RELATED CONSTANTS ---------------------------------------------------
+; --- FILE CONSTANTS -------------------------------------------------------------
 
-STANONE     EQU     -1                      ;NON-EXISTENT STATE NUMBER
+FILE        DC.B    'automaticgame.txt',0   ; FILE NAME
+            DS.W    0
+
+
 
 
 

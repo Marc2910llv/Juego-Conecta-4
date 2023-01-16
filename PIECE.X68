@@ -19,6 +19,8 @@ PIEINIT
             MOVE.W  #3,(POSX)
             MOVE.W  #-1,(POSY)
             
+            CLR.B   (FALLING)
+            
             RTS
             
 ; ------------------------------------------------------------------------------
@@ -29,67 +31,78 @@ PIEUPD
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
-            MOVEM.W  D0-D2,-(A7)
+            MOVEM.W  D0-D3,-(A7)
             
+            CMP.B   #0,(FALLING)
+            BEQ     .PASS1
+            MOVE.B  (SCRCYCCT),D3
+            AND.B   #$F0,D3
+            CMP.B   (SCRCYCCT),D3
+            BNE     .DONE2
+            JSR     PIEFALL
+            BRA     .DONE2
+            
+.PASS1             
             ; UPDATE X POSITION
             MOVE.W  (PIEPOSX),D0
             
             ; CHECK LEFT ARROW KEY
             BTST.B  #0,(KBDEDGE)
             BEQ     .CHKRIGHT
-            SUB.W   (PIEVELX),D0
-            SUBQ.W  #1,(POSX)
+            JSR     PRESSLEFT
+            BRA     .DONE
             
             ;CHECK  RIGHT ARROW KEY
 .CHKRIGHT   BTST.B  #2,(KBDEDGE)
             BEQ     .CHKSPACE
-            ADD.W   (PIEVELX),D0
-            ADDQ.W  #1,(POSX)
+            JSR     PRESSRIGHT
+            BRA     .DONE
             
             ; CHECK SPACE KEY
 .CHKSPACE   BTST.B  #4,(KBDEDGE)
-            BEQ     .CONT
+            BEQ     .DONE2
+            MOVE.B  #1,(FALLING)
             JSR     PIEFALL
-            JSR     CHKCOL                  ;CHECK 4 CONNECT IN COLUMNS
-            JSR     CHKROW                  ;CHECK 4 CONNECT IN ROWS
-            JSR     CHKDIA                  ;CHECK 4 CONNECT IN DIAGONALS
-            JSR     PLAUPD
             BRA     .DONE2
-            
-            ; CHECK COLISIONS
-.CONT       MOVE.W  (PIEVELX),D1
-            SUB.W   #BOXRAD-1,D1
-            CMP.W   D1,D0
-            BGE     .CONT2
-            MOVE.W  D1,D0
-            CLR.W   (POSX)
-            BRA     .DONE
-            
-.CONT2      MOVE.W  #SCRWIDTH,D2
-            SUB.W   D1,D2
-            CMP.W   D2,D0
-            BLE     .DONE
-            MOVE.W  D2,D0
-            MOVE.W  #6,(POSX)
 
             ; UPDATE VARIABLE
 .DONE       MOVE.W  D0,(PIEPOSX) 
 
-            MOVEM.W  (A7)+,D0-D2             
+.DONE2      MOVEM.W  (A7)+,D0-D3             
 
             RTS
-            
-.DONE2      JSR     PIEINIT
 
-            MOVEM.W  (A7)+,D0-D2          
-
-            RTS
+PRESSLEFT
+            SUB.W   (PIEVELX),D0
+            SUBQ.W  #1,(POSX)
             
+            ; CHECK COLISIONS LEFT
+            MOVE.W  (PIEVELX),D1
+            SUB.W   #BOXRAD-1,D1
+            CMP.W   D1,D0
+            BGE     .DONELEFT
+            MOVE.W  D1,D0
+            CLR.W   (POSX)
+.DONELEFT   RTS   
+
+PRESSRIGHT
+            ADD.W   (PIEVELX),D0
+            ADDQ.W  #1,(POSX)
+            
+            ; CHECK COLISIONS RIGHT
+            MOVE.W  #SCRWIDTH,D2
+            SUB.W   D1,D2
+            CMP.W   D2,D0
+            BLE     .DONERIGHT
+            MOVE.W  D2,D0
+            MOVE.W  #6,(POSX)
+.DONERIGHT  RTS            
+
 ; ------------------------------------------------------------------------------
 PIEPLOT
 ; PLOT THE PIECE.
-; INPUT    : D5 AS COORDINATE X OF PIECE, D6 AS COORDINATE Y OF PIECE,
-;            D0 INDICATES COLOR OF THE PIECE
+; INPUT    : D5.W AS COORDINATE X OF PIECE, D6.W AS COORDINATE Y OF PIECE,
+;            D0.B INDICATES COLOR OF THE PIECE
 ; OUTPUT   : NONE
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
@@ -168,41 +181,44 @@ PIEFALL
 ; MODIFIES : NONE
 ; ------------------------------------------------------------------------------
             
-            MOVEM.L D0-D4/A1,-(A7)
+            MOVEM.L D0-D1/A1,-(A7)
             
-            MOVE.W  (PIEVELY),D3
-            MOVE.W  #5,D2
-            MOVE.W  #5,D1                  ;WAIT TO SEE THE PIECE FALL (MS)
-            
-.FALLAGAIN  LEA.L   ROW1,A1
+            CLR.L   D0
+            LEA.L   ROW1,A1
             ADDQ.W  #1,(POSY)
-            MOVE.W  (POSY),D4
-            MULS.W  #7,D4
-            ADD.W   D4,A1
-            MOVE.W  (POSX),D4
-            ADD.W   D4,A1
-            CMP.B   #0,(A1)
-            BNE     .OTHERPIE
+            MOVE.W  (POSY),D0
+            MULS.W  #7,D0
+            ADD.W   D0,A1
+            MOVE.W  (POSX),D0
+            ADD.W   D0,A1
             
-            MOVE.W  #23,D0
-            TRAP    #15
-            ADD.W   D3,(PIEPOSY)
+            CMP.W   #6,(POSY)
+            BEQ     .END 
+            
+            CMP.B   #0,(A1)
+            BNE     .END
+            
+            MOVE.W  (PIEVELY),D1
+            ADD.W   D1,(PIEPOSY)
             CMP.W   #0,(POSY)
             BNE     .PASS
-            ADDQ.W  #5,(PIEPOSY)
-.PASS       JSR     GAMPLOT
-            TRAP    #0
-            DBRA    D2,.FALLAGAIN
-            
-.END        MOVE.B  (TURN),(A1)
-
-            MOVEM.L (A7)+,D0-D4/A1
+            ADDQ.W  #5,(PIEPOSY) 
+.PASS       MOVEM.L (A7)+,D0-D1/A1
 
             RTS
 
-.OTHERPIE   SUB.W   #7,A1
+.END        SUBQ.L  #7,A1
             SUBQ.W  #1,(POSY)
-            BRA     .END
+            MOVE.B  (TURN),(A1)
+            JSR     CHKCOL                  ;CHECK 4 CONNECT IN COLUMNS
+            JSR     CHKROW                  ;CHECK 4 CONNECT IN ROWS
+            JSR     CHKDIA                  ;CHECK 4 CONNECT IN DIAGONALS
+            JSR     PLAUPD
+            JSR     PIEINIT
+            
+            MOVEM.L (A7)+,D0-D1/A1
+
+            RTS
             
 ; ------------------------------------------------------------------------------
 CHKCOL
@@ -376,7 +392,8 @@ CHKDIA
 .PASS_DIA   ADD.L   D5,A1
             DBRA    D2,.LOOP_DIAGONALS_ROW1
             
-            ADD.L   #5,A1
+            LEA     ROW1,A1
+            ADDQ.L  #6,A1
             MOVE.L  #6,D6
             DBRA    D1,.LOOP_TO_OTHER_SIDE
 
@@ -411,6 +428,7 @@ CHECK_DIAGONALS
             DBRA    D0,.LOOP_DIA
                    
             RTS
+
 
 
 
